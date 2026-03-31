@@ -137,29 +137,82 @@ const DIRECTIONS = [
 const PROJECTS = [
   {
     tag: "ФЛАГМАН",
+    icon: "Hexagon",
     name: "КриптоМетры",
-    type: "Платформа коллективного инвестирования",
-    desc: "Первая в России платформа виртуального девелопмента. Объединяет землевладельцев, девелоперов и инвесторов в единую экосистему через механизм токенизации недвижимости.",
-    features: ["Токенизация объектов", "Коллективное участие", "AI-аналитика рынка", "Прозрачный аудит"],
+    type: "Система распределённого девелопмента",
+    desc: "Флагманская платформа АО КСИ. Цифровая архитектура участия в недвижимости: объединяет землевладельцев, девелоперов и профессиональных участников в единой управляемой среде с прозрачной логикой проектов.",
+    features: [
+      { icon: "GitBranch", text: "Распределённая модель девелопмента" },
+      { icon: "Users", text: "Многостороннее участие: земля, капитал, экспертиза" },
+      { icon: "BrainCircuit", text: "ИИ-аналитика и поддержка решений" },
+      { icon: "ShieldCheck", text: "Прозрачная структура проекта" },
+      { icon: "FileText", text: "Цифровое сопровождение сделки" },
+    ],
     status: "Активна",
     color: "cyan",
   },
   {
-    tag: "ИНФРАСТРУКТУРА",
-    name: "KSI Analytics",
-    type: "Аналитическая платформа",
-    desc: "Интеллектуальная система мониторинга и прогнозирования рынка недвижимости. Обрабатывает данные по 150+ регионам в режиме реального времени.",
-    features: ["Рыночные прогнозы", "Тепловые карты", "Risk-scoring", "API для партнёров"],
-    status: "Beta",
+    tag: "ИИ-СЕРВИС",
+    icon: "BrainCircuit",
+    name: "Лаборатория ИИ",
+    type: "Специализированные ИИ-решения для рынка",
+    desc: "R&D-подразделение экосистемы. Разрабатывает и внедряет ИИ-инструменты для земельного рынка, девелопмента, аналитики активов, управления объектами и цифровых интерфейсов взаимодействия.",
+    features: [
+      { icon: "Map", text: "ИИ-анализ земельных активов" },
+      { icon: "BarChart2", text: "Аналитические модели и прогнозирование" },
+      { icon: "Cpu", text: "Агенты автоматизации due diligence" },
+      { icon: "Layers", text: "Цифровые интерфейсы управления" },
+      { icon: "PackageCheck", text: "Лицензирование ИИ-решений партнёрам" },
+    ],
+    status: "R&D",
     color: "purple",
   },
   {
-    tag: "СЕРВИС",
-    name: "DevHub",
-    type: "B2B платформа для девелоперов",
-    desc: "Цифровой хаб для девелоперских компаний: управление проектами, взаимодействие с подрядчиками, документооборот и финансовый контроль.",
-    features: ["Проектный менеджмент", "Электронный документооборот", "Финансовый контроль", "Маркетплейс услуг"],
-    status: "Разработка",
+    tag: "DATA-СЕРВИС",
+    icon: "Search",
+    name: "Служба земельного поиска LSS",
+    type: "Land Search Service · Аналитика активов",
+    desc: "Сервис аналитического поиска, фильтрации и предварительной структуризации земельных активов. Работает с объектами под девелопмент, инвестиции и редевелопмент по всей России.",
+    features: [
+      { icon: "ScanSearch", text: "Многопараметрическая фильтрация участков" },
+      { icon: "DatabaseZap", text: "Цифровые досье и земельная аналитика" },
+      { icon: "MapPin", text: "Картографические решения и тепловые карты" },
+      { icon: "ClipboardList", text: "Предварительная структуризация активов" },
+      { icon: "RefreshCw", text: "Редевелопмент и репозиционирование" },
+    ],
+    status: "Beta",
+    color: "cyan",
+  },
+  {
+    tag: "МЕДИА",
+    icon: "Clapperboard",
+    name: "ИИ-продакшн",
+    type: "Digital Media · AI Avatars & Content",
+    desc: "Создание корпоративных цифровых персонажей, ИИ-аватаров, видеопрезентаций и объясняющих интерфейсов. Медийная оболочка для девелоперских проектов, брендов и цифровых продуктов.",
+    features: [
+      { icon: "Bot", text: "ИИ-аватары и цифровые персонажи" },
+      { icon: "Video", text: "Видеопрезентации и объясняющий контент" },
+      { icon: "Sparkles", text: "Визуальные коммуникации бренда" },
+      { icon: "Monitor", text: "Объясняющие интерфейсы и UX-нарративы" },
+      { icon: "Globe", text: "Медийная оболочка для проектов" },
+    ],
+    status: "Активна",
+    color: "purple",
+  },
+  {
+    tag: "ОПЕРАТОР",
+    icon: "Settings2",
+    name: "Fee-Dev Платформа",
+    type: "Девелоперский оператор · Среда для профи",
+    desc: "АО КСИ как оператор профессиональной девелоперской среды. Упаковка активов, структурирование проектов, интеграция подрядчиков и экспертов, логика реализации под ключ.",
+    features: [
+      { icon: "Package", text: "Упаковка и позиционирование активов" },
+      { icon: "Network", text: "Подключение профессиональных исполнителей" },
+      { icon: "Workflow", text: "Структурирование логики реализации" },
+      { icon: "FileCheck", text: "Сопровождение сделок и документации" },
+      { icon: "TrendingUp", text: "Контроль экономики проекта" },
+    ],
+    status: "Активна",
     color: "cyan",
   },
 ];
@@ -669,59 +722,112 @@ function EcosystemSection() {
 }
 
 function ProjectsSection() {
-  const [activeProject, setActiveProject] = useState(0);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const project = PROJECTS[activeIdx];
+  const isCyan = project.color === "cyan";
+  const accentColor = isCyan ? "#00d4ff" : "#7b2fff";
+  const statusColor = project.status === "Активна" ? "#00d4ff" : project.status === "Beta" ? "#7b2fff" : project.status === "R&D" ? "#c050ff" : "rgba(255,255,255,0.3)";
 
   return (
     <section id="projects" className="py-32 relative">
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <div className="section-label mb-4">◆ Проекты</div>
+        <div className="text-center mb-14">
+          <div className="section-label mb-4">◆ Проекты & Продукты</div>
           <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white">
             Цифровые продукты <span className="text-gradient-cyan">экосистемы</span>
           </h2>
+          <p className="font-ibm text-white/50 text-lg mt-4 max-w-xl mx-auto">
+            Пять ключевых продуктов, составляющих операционное ядро АО КСИ
+          </p>
         </div>
 
-        <div className="flex gap-3 mb-8 flex-wrap justify-center">
+        {/* Табы */}
+        <div className="flex gap-2 mb-8 flex-wrap justify-center">
           {PROJECTS.map((p, i) => (
-            <button key={i} onClick={() => setActiveProject(i)} className={`font-oswald text-sm px-5 py-2.5 rounded-sm tracking-widest uppercase transition-all ${activeProject === i ? "bg-ksi-cyan text-ksi-dark" : "border border-ksi-border text-white/40 hover:text-white hover:border-white/20"}`}>
+            <button
+              key={i}
+              onClick={() => setActiveIdx(i)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-sm font-oswald text-xs tracking-widest uppercase transition-all duration-200"
+              style={activeIdx === i
+                ? { background: p.color === "cyan" ? "rgba(0,212,255,0.12)" : "rgba(123,47,255,0.12)", color: p.color === "cyan" ? "#00d4ff" : "#7b2fff", border: `1px solid ${p.color === "cyan" ? "rgba(0,212,255,0.35)" : "rgba(123,47,255,0.35)"}` }
+                : { background: "transparent", color: "rgba(255,255,255,0.35)", border: "1px solid rgba(255,255,255,0.08)" }
+              }
+            >
+              <Icon name={p.icon} size={13} />
               {p.name}
             </button>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
-          {PROJECTS.map((project, i) => (
-            <div key={i} className={`card-ksi p-7 rounded-sm cursor-pointer transition-all duration-300 ${activeProject === i ? project.color === "cyan" ? "border-glow-cyan" : "border-glow-purple" : ""}`} onClick={() => setActiveProject(i)}>
-              <div className="flex items-center justify-between mb-6">
-                <span className="font-mono-ibm text-xs px-2.5 py-1 rounded-sm tracking-widest" style={{ background: project.color === "cyan" ? "rgba(0,212,255,0.1)" : "rgba(123,47,255,0.1)", color: project.color === "cyan" ? "#00d4ff" : "#7b2fff", border: `1px solid ${project.color === "cyan" ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)"}` }}>
-                  {project.tag}
-                </span>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: project.status === "Активна" ? "#00d4ff" : project.status === "Beta" ? "#7b2fff" : "rgba(255,255,255,0.2)" }} />
-                  <span className="font-mono-ibm text-xs text-white/30">{project.status}</span>
+        {/* Основной блок */}
+        <div className="grid lg:grid-cols-5 gap-6 transition-all duration-300">
+
+          {/* Левая панель — детали активного проекта */}
+          <div className="lg:col-span-3 card-ksi rounded-sm p-8 flex flex-col" style={{ borderColor: isCyan ? "rgba(0,212,255,0.25)" : "rgba(123,47,255,0.25)", boxShadow: `0 0 50px ${isCyan ? "rgba(0,212,255,0.06)" : "rgba(123,47,255,0.06)"}` }}>
+            {/* Шапка */}
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: isCyan ? "rgba(0,212,255,0.1)" : "rgba(123,47,255,0.1)", border: `1px solid ${isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)"}` }}>
+                  <Icon name={project.icon} size={22} style={{ color: accentColor }} />
+                </div>
+                <div>
+                  <span className="font-mono-ibm text-xs tracking-widest px-2 py-0.5 rounded-sm" style={{ background: isCyan ? "rgba(0,212,255,0.08)" : "rgba(123,47,255,0.08)", color: accentColor, border: `1px solid ${isCyan ? "rgba(0,212,255,0.18)" : "rgba(123,47,255,0.18)"}` }}>
+                    {project.tag}
+                  </span>
                 </div>
               </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full pulse-dot" style={{ background: statusColor }} />
+                <span className="font-mono-ibm text-xs" style={{ color: statusColor }}>{project.status}</span>
+              </div>
+            </div>
 
-              <h3 className="font-oswald font-semibold text-white text-2xl mb-1">{project.name}</h3>
-              <div className="font-ibm text-white/30 text-xs tracking-wide uppercase mb-4">{project.type}</div>
-              <p className="font-ibm text-white/55 text-sm leading-relaxed mb-6">{project.desc}</p>
+            <h3 className="font-oswald font-semibold text-white text-3xl mb-1">{project.name}</h3>
+            <div className="font-ibm text-white/30 text-xs tracking-widest uppercase mb-5">{project.type}</div>
+            <p className="font-ibm text-white/65 text-base leading-relaxed mb-8 flex-1">{project.desc}</p>
 
-              <div className="space-y-2">
-                {project.features.map((feat, fi) => (
-                  <div key={fi} className="flex items-center gap-3">
-                    <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: project.color === "cyan" ? "#00d4ff" : "#7b2fff" }} />
-                    <span className="font-ibm text-white/40 text-xs">{feat}</span>
-                  </div>
+            <a href="#contacts" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm inline-block self-start cursor-pointer" style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
+              Узнать подробнее
+            </a>
+          </div>
+
+          {/* Правая панель — возможности */}
+          <div className="lg:col-span-2 flex flex-col gap-3">
+            <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-1 px-1">КЛЮЧЕВЫЕ ВОЗМОЖНОСТИ</div>
+            {project.features.map((feat, fi) => (
+              <div
+                key={fi}
+                className="flex items-center gap-4 p-4 rounded-sm transition-all"
+                style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+              >
+                <div className="w-8 h-8 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: isCyan ? "rgba(0,212,255,0.07)" : "rgba(123,47,255,0.07)", border: `1px solid ${isCyan ? "rgba(0,212,255,0.15)" : "rgba(123,47,255,0.15)"}` }}>
+                  <Icon name={feat.icon} size={14} style={{ color: accentColor }} />
+                </div>
+                <span className="font-ibm text-white/60 text-sm">{feat.text}</span>
+              </div>
+            ))}
+
+            {/* Мини-навигация по проектам */}
+            <div className="mt-auto pt-4 border-t border-ksi-border/40">
+              <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-3">ДРУГИЕ ПРОДУКТЫ</div>
+              <div className="space-y-1">
+                {PROJECTS.filter((_, i) => i !== activeIdx).slice(0, 3).map((p, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveIdx(PROJECTS.indexOf(p))}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-sm text-left transition-all hover:bg-white/3 group"
+                    style={{ background: "transparent" }}
+                  >
+                    <Icon name={p.icon} size={13} className="text-white/25 group-hover:text-white/50 transition-colors" />
+                    <span className="font-ibm text-white/30 text-xs group-hover:text-white/55 transition-colors">{p.name}</span>
+                    <Icon name="ArrowRight" size={11} className="ml-auto text-white/15 group-hover:text-white/35 transition-colors" />
+                  </button>
                 ))}
               </div>
-
-              <button className={`mt-6 w-full py-2.5 rounded-sm font-oswald text-sm tracking-widest uppercase transition-all ${activeProject === i ? "btn-primary-ksi" : "border border-ksi-border text-white/30 hover:border-white/20 hover:text-white/50"}`}>
-                Узнать подробнее
-              </button>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
