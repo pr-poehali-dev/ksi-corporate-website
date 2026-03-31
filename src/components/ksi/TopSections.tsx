@@ -176,7 +176,9 @@ export function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-16 w-full">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <div className="section-label mb-6 fade-in-up stagger-1">◆ Головная платформа экосистемы</div>
+            <div className="section-label mb-6 fade-in-up stagger-1">
+              ◆ Цифровая девелоперская группа &nbsp;·&nbsp; АО КСИ
+            </div>
             <h1 className="font-oswald font-bold text-5xl md:text-6xl xl:text-7xl leading-none mb-2 fade-in-up stagger-2">
               <span className="text-white glitch-text" data-text="КРИПТО">КРИПТО</span>
             </h1>
@@ -184,34 +186,35 @@ export function HeroSection() {
               <span className="text-gradient-main">СТРОЙ</span>
               <span className="text-white"> ИНВЕСТ</span>
             </h1>
-            <p className="font-ibm text-white/50 text-sm tracking-widest uppercase mb-8 fade-in-up stagger-3">
-              АО КСИ &nbsp;·&nbsp; Виртуальный девелопер &nbsp;·&nbsp; Цифровая экосистема
+            <p className="font-ibm text-white/45 text-sm tracking-widest uppercase mb-8 fade-in-up stagger-3">
+              Девелопмент &nbsp;·&nbsp; Цифровая инфраструктура &nbsp;·&nbsp; ИИ &nbsp;·&nbsp; Аналитика
             </p>
             <p className="font-ibm text-white/70 text-lg leading-relaxed mb-10 max-w-lg fade-in-up stagger-4">
-              Первый виртуальный девелопер в России. Технологическая платформа, объединяющая
-              недвижимость, искусственный интеллект, блокчейн и коллективное инвестирование
-              в единую цифровую экосистему.
+              Головная структура экосистемы в сфере недвижимости и цифровой девелоперской
+              инфраструктуры. Объединяет профессиональные компетенции, технологические
+              платформы и операционные сервисы полного цикла.
             </p>
 
             <div className="flex flex-wrap gap-4 fade-in-up stagger-5">
-              <a href="#ecosystem" className="btn-primary-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
-                Изучить экосистему
+              <a href="#directions" className="btn-primary-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
+                Направления деятельности
               </a>
-              <a href="#investors" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
-                Инвесторам
+              <a href="#contacts" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
+                Связаться
               </a>
             </div>
 
-            <div className="mt-12 flex items-center gap-6 fade-in-up stagger-6">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-ksi-cyan pulse-dot" />
-                <span className="font-mono-ibm text-xs text-white/40">Платформа активна</span>
-              </div>
-              <div className="w-px h-4 bg-ksi-border" />
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-ksi-purple pulse-dot" style={{ animationDelay: "0.5s" }} />
-                <span className="font-mono-ibm text-xs text-white/40">3 продукта в разработке</span>
-              </div>
+            <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 fade-in-up stagger-6">
+              {[
+                { color: "bg-ksi-cyan", label: "Девелопмент и недвижимость" },
+                { color: "bg-ksi-purple", label: "ИИ и цифровые сервисы" },
+                { color: "bg-white/30", label: "Аналитика и данные" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${item.color} pulse-dot`} style={{ animationDelay: `${i * 0.3}s` }} />
+                  <span className="font-mono-ibm text-xs text-white/35">{item.label}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -254,46 +257,53 @@ export function AboutSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-start">
           <div>
             <div className="section-label mb-6">◆ О компании</div>
             <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-8">
-              Виртуальный девелопер —<br />
-              <span className="text-gradient-cyan">новая парадигма</span>
+              Цифровая девелоперская<br />
+              <span className="text-gradient-cyan">группа нового типа</span>
             </h2>
-            <p className="font-ibm text-white/60 text-lg leading-relaxed mb-6">
-              АО «КриптоСтройИнвест» — головная структура экосистемы, объединяющей
-              недвижимость, технологии и капитал. Мы не строим физически — мы создаём
-              цифровую инфраструктуру, которая меняет правила игры в девелопменте.
+            <p className="font-ibm text-white/65 text-lg leading-relaxed mb-6">
+              АО «КриптоСтройИнвест» — головная структура многопрофильной группы, работающей
+              на пересечении рынка недвижимости, цифровых технологий и профессиональной
+              девелоперской экспертизы.
+            </p>
+            <p className="font-ibm text-white/50 text-base leading-relaxed mb-6">
+              Компания не является строительной организацией в традиционном смысле.
+              АО КСИ формирует и управляет инфраструктурой, в которой взаимодействуют
+              землевладельцы, девелоперы, аналитические системы, технологические сервисы
+              и профессиональные операторы.
             </p>
             <p className="font-ibm text-white/50 text-base leading-relaxed mb-10">
-              Наша модель позволяет землевладельцам, девелоперам и инвесторам взаимодействовать
-              через цифровые платформы, минуя традиционные барьеры входа. АО КСИ выступает
-              технологической и стратегической надстройкой, обеспечивающей работу всей экосистемы.
+              Горизонт работы — долгий цикл. Модель — системная, а не проектная.
+              Ценность — в инфраструктуре, данных и компетенциях, которые накапливаются
+              и масштабируются.
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {[
-                { icon: "Layers", text: "Головная платформа мультинаправленной экосистемы" },
-                { icon: "Globe", text: "Оператор цифровой девелоперской инфраструктуры" },
-                { icon: "Zap", text: "Интеллектуальный центр: недвижимость + ИИ + блокчейн" },
+                { icon: "Layers", text: "Головная холдинговая структура мультинаправленной группы" },
+                { icon: "Globe", text: "Оператор цифровой девелоперской инфраструктуры полного цикла" },
+                { icon: "BrainCircuit", text: "ИИ-компетенции, земельная аналитика и data-продукты" },
+                { icon: "Scale", text: "Структурирование сложных сделок и партнёрских механизмов" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: "rgba(0,212,255,0.08)", border: "1px solid rgba(0,212,255,0.15)" }}>
-                    <Icon name={item.icon} size={18} className="text-ksi-cyan" />
+                  <div className="w-9 h-9 rounded-sm flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.12)" }}>
+                    <Icon name={item.icon} size={16} className="text-ksi-cyan" />
                   </div>
-                  <p className="font-ibm text-white/70 text-sm leading-relaxed pt-2.5">{item.text}</p>
+                  <p className="font-ibm text-white/60 text-sm leading-relaxed pt-2">{item.text}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative space-y-4">
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: "Год основания", value: "2023", color: "cyan" },
                 { label: "Форма", value: "АО", color: "purple" },
-                { label: "Направлений", value: "6+", color: "cyan" },
+                { label: "Направлений", value: "12+", color: "cyan" },
                 { label: "Регионов охвата", value: "150+", color: "purple" },
               ].map((item, i) => (
                 <div key={i} className="card-ksi p-6 rounded-sm text-center" style={{ borderColor: item.color === "cyan" ? "rgba(0,212,255,0.15)" : "rgba(123,47,255,0.15)" }}>
@@ -305,11 +315,20 @@ export function AboutSection() {
               ))}
             </div>
 
-            <div className="mt-4 card-ksi p-6 rounded-sm" style={{ borderColor: "rgba(0,212,255,0.1)" }}>
-              <div className="font-mono-ibm text-ksi-cyan/60 text-xs mb-3 tracking-widest">МИССИЯ</div>
-              <p className="font-ibm text-white/65 text-sm leading-relaxed italic">
-                "Сделать участие в девелопменте доступным для каждого через технологии,
-                прозрачность и цифровую инфраструктуру нового поколения."
+            <div className="card-ksi p-6 rounded-sm" style={{ borderColor: "rgba(0,212,255,0.1)" }}>
+              <div className="font-mono-ibm text-ksi-cyan/50 text-xs mb-3 tracking-widest">ПОЗИЦИОНИРОВАНИЕ</div>
+              <p className="font-ibm text-white/60 text-sm leading-relaxed">
+                Investment holding &nbsp;·&nbsp; Digital infrastructure &nbsp;·&nbsp;
+                PropTech platform &nbsp;·&nbsp; AI-enabled real estate operator
+              </p>
+            </div>
+
+            <div className="card-ksi p-6 rounded-sm" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+              <div className="font-mono-ibm text-white/20 text-xs mb-3 tracking-widest">ПРАВОВАЯ ОГОВОРКА</div>
+              <p className="font-ibm text-white/35 text-xs leading-relaxed">
+                Компания не осуществляет публичного привлечения денежных средств.
+                Отдельные модели участия реализуются в рамках специальных юридических
+                конструкций и партнёрских механизмов.
               </p>
             </div>
           </div>
