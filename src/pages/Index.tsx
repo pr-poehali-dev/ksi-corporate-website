@@ -13,58 +13,124 @@ const NAV_ITEMS = [
 
 const DIRECTIONS = [
   {
-    id: "dev",
-    icon: "Building2",
-    title: "Виртуальный девелопмент",
-    subtitle: "PropTech & Digital RE",
-    desc: "Цифровая инфраструктура для создания, управления и монетизации девелоперских проектов без физического присутствия. Новая модель участия в недвижимости.",
+    id: "cryptometry",
+    icon: "Hexagon",
+    title: "КриптоМетры",
+    subtitle: "Flagship · Distributed Development",
+    desc: "Флагманская система распределённого девелопмента и цифровой архитектуры участия в недвижимости. Объединяет землевладельцев, девелоперов и участников в единой среде.",
     color: "cyan",
-    stat: "12+ объектов",
+    stat: "Флагман",
+    tags: ["Распределённый девелопмент", "Цифровое участие", "Платформа"],
   },
   {
-    id: "ai",
+    id: "ai-lab",
     icon: "BrainCircuit",
-    title: "Искусственный интеллект",
-    subtitle: "AI & Analytics",
-    desc: "Аналитические платформы, прогнозирование рынков недвижимости, автоматизация due diligence и интеллектуальные агенты принятия решений.",
+    title: "Лаборатория ИИ",
+    subtitle: "AI Lab · PropTech Intelligence",
+    desc: "Разработка специализированных ИИ-решений для недвижимости, земельного рынка, девелопмента, аналитики, управления и цифровых интерфейсов.",
     color: "purple",
-    stat: "AI-first",
+    stat: "AI R&D",
+    tags: ["Земельный рынок", "Аналитика", "Цифровые интерфейсы"],
   },
   {
-    id: "blockchain",
-    icon: "Link",
-    title: "Блокчейн & Токенизация",
-    subtitle: "DeFi & RWA",
-    desc: "Токенизация реальных активов, цифровые права собственности, смарт-контракты для коллективного инвестирования в недвижимость.",
-    color: "cyan",
-    stat: "RWA токены",
-  },
-  {
-    id: "invest",
-    icon: "TrendingUp",
-    title: "Инвестиционная архитектура",
-    subtitle: "Capital & Deals",
-    desc: "Структурирование сделок, привлечение капитала, управление портфелем активов через цифровые инструменты коллективного участия.",
-    color: "purple",
-    stat: "₽ 2.4 млрд",
-  },
-  {
-    id: "production",
+    id: "ai-production",
     icon: "Clapperboard",
-    title: "Digital Production",
-    subtitle: "Content & Brand",
-    desc: "Создание контента, брендинг, медиапродакшн для девелоперских проектов. Визуализация, VR-туры, цифровые презентации объектов.",
+    title: "ИИ-продакшн",
+    subtitle: "AI Production · Digital Media",
+    desc: "Создание ИИ-аватаров, корпоративных цифровых персонажей, видеопрезентаций, медийных оболочек и объясняющих визуальных коммуникаций для бизнеса.",
     color: "cyan",
-    stat: "360° медиа",
+    stat: "AI Media",
+    tags: ["ИИ-аватары", "Видеопрезентации", "Digital Brand"],
   },
   {
-    id: "manage",
-    icon: "Settings2",
-    title: "Управление & Операции",
-    subtitle: "PM & Operations",
-    desc: "Операционное управление проектами, контроль сроков и бюджетов, цифровой мониторинг строительства и эксплуатации объектов.",
+    id: "invest-models",
+    icon: "Network",
+    title: "Коллективные инвестиционные модели",
+    subtitle: "Collective Models · Structured Participation",
+    desc: "Проектирование юридически корректных моделей коллективного участия в проектах недвижимости и инфраструктуры. Акцент — на структуре, логике и архитектуре, а не на привлечении средств.",
     color: "purple",
-    stat: "24/7 контроль",
+    stat: "Структуры",
+    tags: ["Инвестиционная логика", "Юридические модели", "Архитектура участия"],
+  },
+  {
+    id: "property-mgmt",
+    icon: "Building2",
+    title: "Управление недвижимостью",
+    subtitle: "Property Management · Digital Ops",
+    desc: "Цифровое и операционное управление объектами: эксплуатация, постдевелоперское сопровождение, сервисные и доходные процессы на базе цифровых инструментов.",
+    color: "cyan",
+    stat: "Операции",
+    tags: ["Эксплуатация", "Постдевелопмент", "Доходные объекты"],
+  },
+  {
+    id: "lss",
+    icon: "Search",
+    title: "Служба земельного поиска LSS",
+    subtitle: "Land Search Service · Analytics",
+    desc: "Аналитический поиск, фильтрация и предварительная структуризация земельных активов для девелопмента, инвестиций и редевелопмента.",
+    color: "purple",
+    stat: "LSS",
+    tags: ["Поиск участков", "Фильтрация активов", "Редевелопмент"],
+  },
+  {
+    id: "land-data",
+    icon: "DatabaseZap",
+    title: "Земельная аналитика & Data",
+    subtitle: "Land Intelligence · Data Products",
+    desc: "Базы данных, цифровые досье, картографические решения, аналитические панели и data-продукты для работы с земельными и девелоперскими активами.",
+    color: "cyan",
+    stat: "Data",
+    tags: ["Базы данных", "Картография", "Аналитические панели"],
+  },
+  {
+    id: "fee-dev",
+    icon: "Settings2",
+    title: "Девелоперский оператор",
+    subtitle: "Fee-Development Platform · Operator",
+    desc: "АО КСИ как оператор среды для профессиональных девелоперов: упаковка активов, структурирование проектов, логика реализации и интеграция исполнителей.",
+    color: "purple",
+    stat: "Fee-Dev",
+    tags: ["Упаковка активов", "Структурирование", "Исполнители"],
+  },
+  {
+    id: "licensing",
+    icon: "PackageCheck",
+    title: "Лицензирование технологий",
+    subtitle: "Tech Licensing · Digital Solutions",
+    desc: "Передача внешним партнёрам разработанных ИИ-сервисов, аналитических интерфейсов, медийных и цифровых решений по лицензионным моделям.",
+    color: "cyan",
+    stat: "Лицензии",
+    tags: ["ИИ-сервисы", "White-label", "API & SaaS"],
+  },
+  {
+    id: "media",
+    icon: "Newspaper",
+    title: "Медиа & Аналитический центр",
+    subtitle: "Media Hub · Research & Insights",
+    desc: "Публикации, исследования, рыночные обзоры, аналитические позиции и интеллектуальное сопровождение отрасли недвижимости и девелопмента.",
+    color: "purple",
+    stat: "Медиа",
+    tags: ["Исследования", "Рыночная аналитика", "Контент"],
+  },
+  {
+    id: "consulting",
+    icon: "Compass",
+    title: "Стратегический консалтинг",
+    subtitle: "Advisory · Strategic Development",
+    desc: "Экспертное сопровождение девелоперских и инвестиционных проектов: стратегия выхода на рынок, позиционирование активов, цифровая трансформация бизнеса.",
+    color: "cyan",
+    stat: "Advisory",
+    tags: ["Стратегия", "Трансформация", "Экспертиза"],
+  },
+  {
+    id: "edu",
+    icon: "GraduationCap",
+    title: "Образовательная платформа",
+    subtitle: "Education · PropTech Academy",
+    desc: "Программы, курсы и профессиональная среда для участников рынка недвижимости: от введения в цифровой девелопмент до продвинутых ИИ-инструментов.",
+    color: "purple",
+    stat: "Обучение",
+    tags: ["Курсы", "Профессиональная среда", "PropTech Academy"],
   },
 ];
 
@@ -439,43 +505,104 @@ function AboutSection() {
   );
 }
 
+function DirectionCard({ dir, i, featured = false }: { dir: typeof DIRECTIONS[0]; i: number; featured?: boolean }) {
+  const isCyan = dir.color === "cyan";
+  const accentColor = isCyan ? "#00d4ff" : "#7b2fff";
+  const bgAccent = isCyan ? "rgba(0,212,255,0.07)" : "rgba(123,47,255,0.07)";
+  const borderAccent = isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)";
+
+  return (
+    <div
+      className={`card-ksi rounded-sm group cursor-pointer flex flex-col ${featured ? "p-8 row-span-1" : "p-6"}`}
+      style={featured ? { borderColor: "rgba(0,212,255,0.3)", boxShadow: "0 0 40px rgba(0,212,255,0.07), 0 8px 32px rgba(0,0,0,0.4)" } : {}}
+    >
+      {featured && (
+        <div className="flex items-center gap-2 mb-5">
+          <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan pulse-dot" />
+          <span className="font-mono-ibm text-ksi-cyan text-xs tracking-widest">ФЛАГМАНСКОЕ НАПРАВЛЕНИЕ</span>
+        </div>
+      )}
+
+      <div className="flex items-start justify-between mb-4">
+        <div
+          className={`flex items-center justify-center rounded-sm flex-shrink-0 ${featured ? "w-14 h-14" : "w-11 h-11"}`}
+          style={{ background: bgAccent, border: `1px solid ${borderAccent}` }}
+        >
+          <Icon name={dir.icon} size={featured ? 26 : 20} style={{ color: accentColor }} />
+        </div>
+        <span
+          className="font-mono-ibm text-xs px-2 py-1 rounded-sm tracking-wider"
+          style={{ background: bgAccent, color: accentColor, border: `1px solid ${borderAccent}` }}
+        >
+          {dir.stat}
+        </span>
+      </div>
+
+      <div className="font-mono-ibm text-white/25 text-[10px] tracking-widest mb-1.5 uppercase">{dir.subtitle}</div>
+      <h3 className={`font-oswald font-medium text-white leading-tight mb-3 group-hover:text-ksi-cyan transition-colors ${featured ? "text-2xl" : "text-lg"}`}>
+        {dir.title}
+      </h3>
+      <p className={`font-ibm text-white/50 leading-relaxed flex-1 ${featured ? "text-base" : "text-sm"}`}>{dir.desc}</p>
+
+      <div className="flex flex-wrap gap-1.5 mt-4">
+        {dir.tags.map((tag) => (
+          <span
+            key={tag}
+            className="font-ibm text-[10px] px-2 py-0.5 rounded-sm"
+            style={{ background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.35)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-4 flex items-center gap-2 text-transparent group-hover:text-ksi-cyan/60 transition-all">
+        <span className="font-mono-ibm text-xs tracking-widest">ПОДРОБНЕЕ</span>
+        <Icon name="ArrowRight" size={13} />
+      </div>
+    </div>
+  );
+}
+
 function DirectionsSection() {
   return (
     <section id="directions" className="py-32 relative">
-      <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
+      <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <div className="section-label mb-4">◆ Направления деятельности</div>
           <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white">
-            Шесть векторов <span className="text-gradient-purple">роста</span>
+            12 направлений <span className="text-gradient-purple">экосистемы</span>
           </h2>
           <p className="font-ibm text-white/50 text-lg mt-4 max-w-2xl mx-auto">
-            Каждое направление — самостоятельная компетенция, усиливающая всю экосистему
+            Каждое направление — самостоятельная компетенция. Вместе они образуют полный цикл цифрового девелопмента
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {DIRECTIONS.map((dir, i) => (
-            <div key={dir.id} className="card-ksi p-6 rounded-sm group cursor-pointer" style={{ animationDelay: `${i * 0.1}s` }}>
-              <div className="flex items-start justify-between mb-5">
-                <div className="w-12 h-12 rounded-sm flex items-center justify-center" style={{ background: dir.color === "cyan" ? "rgba(0,212,255,0.08)" : "rgba(123,47,255,0.08)", border: `1px solid ${dir.color === "cyan" ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)"}` }}>
-                  <Icon name={dir.icon} size={22} className={dir.color === "cyan" ? "text-ksi-cyan" : "text-ksi-purple"} />
-                </div>
-                <span className="font-mono-ibm text-xs px-2 py-1 rounded-sm" style={{ background: dir.color === "cyan" ? "rgba(0,212,255,0.08)" : "rgba(123,47,255,0.08)", color: dir.color === "cyan" ? "#00d4ff" : "#7b2fff", border: `1px solid ${dir.color === "cyan" ? "rgba(0,212,255,0.15)" : "rgba(123,47,255,0.15)"}` }}>
-                  {dir.stat}
-                </span>
-              </div>
+        {/* Флагман — широкая карточка на всю ширину */}
+        <div className="mb-5">
+          <DirectionCard dir={DIRECTIONS[0]} i={0} featured={true} />
+        </div>
 
-              <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-2">{dir.subtitle}</div>
-              <h3 className="font-oswald font-medium text-white text-xl mb-3 group-hover:text-ksi-cyan transition-colors">{dir.title}</h3>
-              <p className="font-ibm text-white/50 text-sm leading-relaxed">{dir.desc}</p>
+        {/* Основной блок 2×2 + правая колонка из 2 */}
+        <div className="grid lg:grid-cols-3 gap-5 mb-5">
+          <div className="lg:col-span-2 grid sm:grid-cols-2 gap-5">
+            {DIRECTIONS.slice(1, 5).map((dir, i) => (
+              <DirectionCard key={dir.id} dir={dir} i={i + 1} />
+            ))}
+          </div>
+          <div className="grid gap-5">
+            {DIRECTIONS.slice(5, 7).map((dir, i) => (
+              <DirectionCard key={dir.id} dir={dir} i={i + 5} />
+            ))}
+          </div>
+        </div>
 
-              <div className="mt-5 flex items-center gap-2 text-transparent group-hover:text-ksi-cyan/70 transition-all">
-                <span className="font-mono-ibm text-xs tracking-widest">ПОДРОБНЕЕ</span>
-                <Icon name="ArrowRight" size={14} />
-              </div>
-            </div>
+        {/* Нижний ряд — 5 карточек */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+          {DIRECTIONS.slice(7).map((dir, i) => (
+            <DirectionCard key={dir.id} dir={dir} i={i + 7} />
           ))}
         </div>
       </div>
@@ -501,19 +628,20 @@ function EcosystemSection() {
               сервисы и технологические компоненты, создающие синергетический эффект.
             </p>
 
-            <div className="space-y-1 mb-10">
+            <div className="space-y-0 mb-10">
               {[
-                { node: "КриптоМетры", role: "Флагманская платформа коллективного инвестирования", color: "cyan" },
-                { node: "KSI Analytics", role: "Аналитика и прогнозирование рынка недвижимости", color: "purple" },
-                { node: "AI Engine", role: "Искусственный интеллект для принятия решений", color: "cyan" },
-                { node: "Blockchain Layer", role: "Токенизация активов и смарт-контракты", color: "purple" },
-                { node: "DevHub", role: "Операционная платформа для девелоперов", color: "cyan" },
-                { node: "Production", role: "Медиапродакшн и цифровой брендинг", color: "purple" },
+                { node: "КриптоМетры", role: "Флагманская система распределённого девелопмента", color: "cyan" },
+                { node: "Лаборатория ИИ", role: "ИИ-решения для недвижимости и девелопмента", color: "purple" },
+                { node: "ИИ-продакшн", role: "Цифровые аватары, медиа и визуальные коммуникации", color: "cyan" },
+                { node: "LSS", role: "Служба аналитического поиска земельных активов", color: "purple" },
+                { node: "Земельная аналитика", role: "Data-продукты и картографические решения", color: "cyan" },
+                { node: "Fee-Dev Оператор", role: "Среда для профессиональных девелоперов", color: "purple" },
+                { node: "Медиа & Аналитика", role: "Исследования и интеллектуальное сопровождение", color: "cyan" },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4 py-3 border-b border-ksi-border/40">
-                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: item.color === "cyan" ? "#00d4ff" : "#7b2fff" }} />
-                  <span className="font-oswald text-white/80 text-sm font-medium w-36 flex-shrink-0">{item.node}</span>
-                  <span className="font-ibm text-white/40 text-sm">{item.role}</span>
+                <div key={i} className="flex items-center gap-4 py-2.5 border-b border-ksi-border/30">
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.color === "cyan" ? "#00d4ff" : "#7b2fff" }} />
+                  <span className="font-oswald text-white/75 text-sm font-medium w-40 flex-shrink-0">{item.node}</span>
+                  <span className="font-ibm text-white/35 text-xs">{item.role}</span>
                 </div>
               ))}
             </div>
