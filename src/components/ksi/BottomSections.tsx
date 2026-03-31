@@ -425,11 +425,11 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-7 h-7 flex-shrink-0">
-                <div className="absolute inset-0 border border-ksi-cyan/60 rotate-45" />
-                <div className="absolute inset-1 border border-ksi-purple/60 rotate-12" />
-                <div className="absolute inset-2 bg-ksi-cyan/20 rotate-45" />
-              </div>
+              <img
+                src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
+                alt="КСИ"
+                className="h-10 w-auto flex-shrink-0"
+              />
               <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs">

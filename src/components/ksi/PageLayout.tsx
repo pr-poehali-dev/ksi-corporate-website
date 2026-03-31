@@ -18,15 +18,12 @@ function SiteNavBar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-ksi-dark/95 backdrop-blur-md border-b border-ksi-border" : "bg-ksi-dark/80 backdrop-blur-sm border-b border-ksi-border/50"}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="/" className="flex items-center gap-3">
-          <div className="relative w-8 h-8 flex-shrink-0">
-            <div className="absolute inset-0 border border-ksi-cyan/60 rotate-45" />
-            <div className="absolute inset-1 border border-ksi-purple/60 rotate-12" />
-            <div className="absolute inset-2 bg-ksi-cyan/20 rotate-45" />
-          </div>
-          <div>
-            <div className="font-oswald font-semibold text-white text-sm tracking-widest uppercase">АО КСИ</div>
-            <div className="font-mono-ibm text-ksi-cyan text-[9px] tracking-widest opacity-60">КриптоСтройИнвест</div>
-          </div>
+          <img
+            src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
+            alt="КСИ"
+            className="h-9 w-auto flex-shrink-0"
+          />
+          <div className="font-mono-ibm text-white/50 text-[9px] tracking-widest hidden sm:block">КриптоСтройИнвест</div>
         </a>
 
         <div className="hidden lg:flex items-center gap-7">
@@ -74,11 +71,11 @@ function SiteFooter() {
         <div className="grid md:grid-cols-4 gap-8 mb-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-7 h-7 flex-shrink-0">
-                <div className="absolute inset-0 border border-ksi-cyan/60 rotate-45" />
-                <div className="absolute inset-1 border border-ksi-purple/60 rotate-12" />
-                <div className="absolute inset-2 bg-ksi-cyan/20 rotate-45" />
-              </div>
+              <img
+                src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
+                alt="КСИ"
+                className="h-10 w-auto flex-shrink-0"
+              />
               <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs mb-4">

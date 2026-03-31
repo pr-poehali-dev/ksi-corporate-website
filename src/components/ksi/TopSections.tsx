@@ -121,15 +121,12 @@ export function NavBar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-ksi-dark/95 backdrop-blur-md border-b border-ksi-border" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#" className="flex items-center gap-3">
-          <div className="relative w-8 h-8 flex-shrink-0">
-            <div className="absolute inset-0 border border-ksi-cyan/60 rotate-45" />
-            <div className="absolute inset-1 border border-ksi-purple/60 rotate-12" />
-            <div className="absolute inset-2 bg-ksi-cyan/20 rotate-45" />
-          </div>
-          <div>
-            <div className="font-oswald font-semibold text-white text-sm tracking-widest uppercase">АО КСИ</div>
-            <div className="font-mono-ibm text-ksi-cyan text-[9px] tracking-widest opacity-60">КриптоСтройИнвест</div>
-          </div>
+          <img
+            src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
+            alt="КСИ"
+            className="h-9 w-auto flex-shrink-0"
+          />
+          <div className="font-mono-ibm text-white/50 text-[9px] tracking-widest hidden sm:block">КриптоСтройИнвест</div>
         </a>
 
         <div className="hidden lg:flex items-center gap-8">
@@ -218,13 +215,23 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="relative h-[450px] lg:h-[560px]">
-            <div className="absolute inset-0 rounded-sm overflow-hidden" style={{ border: "1px solid rgba(0,212,255,0.1)" }}>
-              <div className="absolute inset-0 shimmer pointer-events-none" />
-              <EcosystemCanvas />
+          <div className="flex flex-col gap-6">
+            <div className="flex justify-center lg:justify-end fade-in-up stagger-2">
+              <img
+                src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
+                alt="КСИ"
+                className="h-32 w-auto opacity-80"
+                style={{ filter: "drop-shadow(0 0 24px rgba(0,212,255,0.25))" }}
+              />
             </div>
-            <div className="absolute -top-3 -right-1 font-mono-ibm text-ksi-cyan/25 text-xs tracking-widest">
-              ECOSYSTEM MAP v1.0
+            <div className="relative h-[380px] lg:h-[440px]">
+              <div className="absolute inset-0 rounded-sm overflow-hidden" style={{ border: "1px solid rgba(0,212,255,0.1)" }}>
+                <div className="absolute inset-0 shimmer pointer-events-none" />
+                <EcosystemCanvas />
+              </div>
+              <div className="absolute -top-3 -right-1 font-mono-ibm text-ksi-cyan/25 text-xs tracking-widest">
+                ECOSYSTEM MAP v1.0
+              </div>
             </div>
           </div>
         </div>
