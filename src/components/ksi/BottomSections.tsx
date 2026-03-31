@@ -39,7 +39,7 @@ export function EcosystemSection() {
               ))}
             </div>
 
-            <a href="#contacts" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm inline-block cursor-pointer">
+            <a href="/contacts" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm inline-block cursor-pointer">
               Стать частью экосистемы
             </a>
           </div>
@@ -101,7 +101,7 @@ export function InvestorsSection() {
               ))}
             </div>
 
-            <a href="#contacts" className="btn-primary-ksi px-8 py-3.5 rounded-sm text-sm inline-block cursor-pointer">
+            <a href="/contacts" className="btn-primary-ksi px-8 py-3.5 rounded-sm text-sm inline-block cursor-pointer">
               Запросить информационный меморандум
             </a>
           </div>
@@ -275,7 +275,7 @@ export function PartnersSection() {
               </div>
             </div>
             <p className="font-ibm text-white/60 text-base leading-relaxed mb-8">{aud.desc}</p>
-            <a href="#contacts" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm inline-block cursor-pointer" style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
+            <a href="/contacts" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm inline-block cursor-pointer" style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
               Начать диалог
             </a>
           </div>

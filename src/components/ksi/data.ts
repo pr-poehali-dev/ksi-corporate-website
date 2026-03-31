@@ -1,11 +1,11 @@
 export const NAV_ITEMS = [
-  { label: "О компании", href: "#about" },
-  { label: "Направления", href: "#directions" },
-  { label: "Экосистема", href: "#ecosystem" },
-  { label: "Проекты", href: "#projects" },
-  { label: "Инвесторам", href: "#investors" },
-  { label: "Партнёрам", href: "#partners" },
-  { label: "Контакты", href: "#contacts" },
+  { label: "О компании", href: "/about" },
+  { label: "Направления", href: "/directions" },
+  { label: "Экосистема", href: "/ecosystem" },
+  { label: "Проекты", href: "/projects" },
+  { label: "Партнёрам", href: "/partners" },
+  { label: "Медиацентр", href: "/media" },
+  { label: "Контакты", href: "/contacts" },
 ];
 
 export const DIRECTIONS = [

@@ -174,7 +174,7 @@ export function ProjectsSection() {
             <div className="font-ibm text-white/30 text-xs tracking-widest uppercase mb-5">{project.type}</div>
             <p className="font-ibm text-white/65 text-base leading-relaxed mb-8 flex-1">{project.desc}</p>
 
-            <a href="#contacts" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm inline-block self-start cursor-pointer" style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
+            <a href="/contacts" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm inline-block self-start cursor-pointer" style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
               Узнать подробнее
             </a>
           </div>

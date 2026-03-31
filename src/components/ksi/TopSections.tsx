@@ -138,7 +138,7 @@ export function NavBar() {
           ))}
         </div>
 
-        <a href="#contacts" className="hidden lg:block btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
+        <a href="/contacts" className="hidden lg:block btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
           Связаться
         </a>
 
@@ -154,7 +154,7 @@ export function NavBar() {
               {item.label}
             </a>
           ))}
-          <a href="#contacts" className="block btn-primary-ksi px-5 py-2 text-sm rounded-sm text-center mt-4" onClick={() => setMobileOpen(false)}>
+          <a href="/contacts" className="block btn-primary-ksi px-5 py-2 text-sm rounded-sm text-center mt-4" onClick={() => setMobileOpen(false)}>
             Связаться
           </a>
         </div>
@@ -196,10 +196,10 @@ export function HeroSection() {
             </p>
 
             <div className="flex flex-wrap gap-4 fade-in-up stagger-5">
-              <a href="#directions" className="btn-primary-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
+              <a href="/directions" className="btn-primary-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
                 Направления деятельности
               </a>
-              <a href="#contacts" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
+              <a href="/contacts" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
                 Связаться
               </a>
             </div>
