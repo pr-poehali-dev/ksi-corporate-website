@@ -110,11 +110,12 @@ function SiteFooter() {
               ))}
             </div>
             <div className="mt-6">
-              <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-2">ПРАВОВОЕ</div>
+              <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-2">СПРАВОЧНЫЕ РАЗДЕЛЫ</div>
               <div className="space-y-1">
                 {[
+                  { label: "Дорожная карта", href: "/roadmap" },
+                  { label: "Глоссарий", href: "/glossary" },
                   { label: "Документы", href: "/documents" },
-                  { label: "Политика конфиденциальности", href: "/documents" },
                 ].map((l) => (
                   <a key={l.href} href={l.href} className="block font-ibm text-white/25 text-xs hover:text-white/45 transition-colors">{l.label}</a>
                 ))}

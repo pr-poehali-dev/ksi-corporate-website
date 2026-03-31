@@ -13,6 +13,8 @@ import Partners from "./pages/Partners";
 import Media from "./pages/Media";
 import Documents from "./pages/Documents";
 import Contacts from "./pages/Contacts";
+import Roadmap from "./pages/Roadmap";
+import Glossary from "./pages/Glossary";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +44,8 @@ const App = () => (
           <Route path="/media" element={<Media />} />
           <Route path="/documents" element={<Documents />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route path="/roadmap" element={<Roadmap />} />
+          <Route path="/glossary" element={<Glossary />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

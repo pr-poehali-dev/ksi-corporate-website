@@ -71,17 +71,23 @@ export default function About() {
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.04) 0%, transparent 60%)" }} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
-            <div className="section-label mb-5">◆ О компании</div>
+            <div className="section-label mb-5">◆ Головная структура группы</div>
             <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
               АО «КриптоСтройИнвест»
             </h1>
-            <p className="font-ibm text-white/60 text-xl leading-relaxed mb-4">
-              Цифровая девелоперская группа нового типа.
+            <p className="font-ibm text-white/65 text-xl leading-relaxed mb-4">
+              Оператор цифровой девелоперской инфраструктуры. Головная управляющая
+              структура группы на пересечении рынка недвижимости, технологий и профессиональной экспертизы.
             </p>
-            <p className="font-ibm text-white/45 text-lg leading-relaxed">
-              Акционерное общество, зарегистрированное в соответствии с российским
-              корпоративным законодательством. Основана в 2023 году.
+            <p className="font-ibm text-white/40 text-base leading-relaxed mb-8">
+              Акционерное общество, зарегистрированное по российскому корпоративному законодательству.
+              Основана в 2023 году. Не строительная компания. Не фонд. Платформа нового типа.
             </p>
+            <div className="flex flex-wrap gap-3">
+              <a href="/ecosystem" className="btn-primary-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Архитектура экосистемы</a>
+              <a href="/roadmap" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Дорожная карта</a>
+              <a href="/glossary" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Глоссарий</a>
+            </div>
           </div>
         </div>
       </section>
@@ -183,16 +189,50 @@ export default function About() {
       {/* Ценности */}
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="section-label mb-5">◆ Принципы работы</div>
-          <h2 className="font-oswald text-4xl font-semibold text-white mb-12">Как мы работаем</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="section-label mb-5">◆ Корпоративные принципы</div>
+          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">Основания, на которых мы работаем</h2>
+          <p className="font-ibm text-white/40 text-base mb-12 max-w-2xl">
+            Принципы — не декларация. Это операционные ограничения, которым мы следуем при принятии решений.
+          </p>
+          <div className="grid md:grid-cols-2 gap-5 mb-8">
             {VALUES.map((v, i) => (
-              <div key={i} className="card-ksi p-6 rounded-sm">
-                <div className="w-10 h-10 rounded-sm flex items-center justify-center mb-4" style={{ background: "rgba(0,212,255,0.07)", border: "1px solid rgba(0,212,255,0.15)" }}>
+              <div key={i} className="card-ksi p-6 rounded-sm flex gap-5">
+                <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: "rgba(0,212,255,0.07)", border: "1px solid rgba(0,212,255,0.15)" }}>
                   <Icon name={v.icon} size={18} className="text-ksi-cyan" />
                 </div>
-                <div className="font-oswald text-white font-medium text-lg mb-2">{v.title}</div>
-                <p className="font-ibm text-white/45 text-sm leading-relaxed">{v.desc}</p>
+                <div>
+                  <div className="font-oswald text-white font-medium text-lg mb-2">{v.title}</div>
+                  <p className="font-ibm text-white/45 text-sm leading-relaxed">{v.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Дополнительные принципы */}
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              {
+                icon: "Eye",
+                title: "Прозрачность зрелости",
+                desc: "Мы публично обозначаем стадию каждого направления. Активна, Beta, R&D или формируется — без преувеличения готовности.",
+              },
+              {
+                icon: "HandshakeIcon",
+                title: "Профессиональный диалог",
+                desc: "Работаем только с профессиональными участниками рынка. Уровень диалога и требования к партнёрам соответствуют этому стандарту.",
+              },
+              {
+                icon: "GitBranch",
+                title: "Синергия над автономией",
+                desc: "Каждое направление создаёт ценность как часть системы. Данные, инфраструктура и компетенции разделяются между направлениями.",
+              },
+            ].map((p, i) => (
+              <div key={i} className="p-5 rounded-sm" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="w-9 h-9 rounded-sm flex items-center justify-center mb-3" style={{ background: "rgba(123,47,255,0.08)", border: "1px solid rgba(123,47,255,0.15)" }}>
+                  <Icon name={p.icon} size={16} style={{ color: "#7b2fff" }} />
+                </div>
+                <div className="font-oswald text-white font-medium text-sm mb-2">{p.title}</div>
+                <p className="font-ibm text-white/40 text-xs leading-relaxed">{p.desc}</p>
               </div>
             ))}
           </div>

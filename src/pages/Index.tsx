@@ -1,6 +1,6 @@
 import { NavBar, HeroSection, AboutSection } from "@/components/ksi/TopSections";
 import { DirectionsSection, ProjectsSection } from "@/components/ksi/DirectionsProjects";
-import { EcosystemSection, InvestorsSection, PartnersSection, ContactsSection, Footer } from "@/components/ksi/BottomSections";
+import { EcosystemSection, MaturitySection, InvestorsSection, PartnersSection, ContactsSection, Footer } from "@/components/ksi/BottomSections";
 
 export default function Index() {
   return (
@@ -9,6 +9,7 @@ export default function Index() {
       <HeroSection />
       <AboutSection />
       <DirectionsSection />
+      <MaturitySection />
       <EcosystemSection />
       <ProjectsSection />
       <InvestorsSection />
