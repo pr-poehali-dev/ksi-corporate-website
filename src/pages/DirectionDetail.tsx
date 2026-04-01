@@ -107,6 +107,43 @@ export default function DirectionDetail({ slug }: Props) {
         </div>
       </section>
 
+      {/* Клиентские сценарии */}
+      {detail.clientScenarios && detail.clientScenarios.length > 0 && (
+        <section className="py-20 border-t border-ksi-border/30">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="section-label mb-4">◆ Клиентские сценарии</div>
+            <h2 className="font-oswald text-3xl font-semibold text-white mb-3">С каким запросом к нам обращаются</h2>
+            <p className="font-ibm text-white/40 text-base mb-10 max-w-2xl">Выберите сценарий, который соответствует вашей задаче — и мы сразу сориентируем по формату и срокам работы.</p>
+            <div className="grid md:grid-cols-3 gap-5">
+              {detail.clientScenarios.map((scenario, i) => (
+                <div key={i} className="card-ksi p-6 rounded-sm flex flex-col" style={{ borderColor: `${accentColor}20` }}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-mono-ibm font-bold" style={{ background: bgAccent, color: accentColor, border: `1px solid ${borderAccent}` }}>
+                      {i + 1}
+                    </div>
+                    <span className="font-oswald text-white font-semibold text-base">{scenario.label}</span>
+                  </div>
+                  <p className="font-ibm text-white/45 text-sm leading-relaxed flex-1 mb-5">{scenario.description}</p>
+                  <a
+                    href="/contacts"
+                    className="w-full text-center py-2.5 px-4 rounded-sm text-sm font-ibm transition-all"
+                    style={{ background: bgAccent, color: accentColor, border: `1px solid ${borderAccent}` }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLAnchorElement).style.background = `${accentColor}20`;
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLAnchorElement).style.background = bgAccent;
+                    }}
+                  >
+                    {scenario.cta} →
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Ключевые возможности */}
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
