@@ -61,46 +61,120 @@ function DirectionCard({ dir, i, featured = false }: { dir: typeof DIRECTIONS[0]
   );
 }
 
+const DIRECTION_CLUSTERS = [
+  {
+    id: "core",
+    label: "Ядро и платформы",
+    desc: "Флагман и операционный центр группы",
+    color: "cyan",
+    accentColor: "rgba(0,212,255,0.5)",
+    borderColor: "rgba(0,212,255,0.15)",
+    bgColor: "rgba(0,212,255,0.03)",
+    indices: [0, 1, 2, 3],
+  },
+  {
+    id: "analytics",
+    label: "Аналитика и операционный контур",
+    desc: "Данные, земельный поиск, девелоперский оператор",
+    color: "purple",
+    accentColor: "rgba(123,47,255,0.5)",
+    borderColor: "rgba(123,47,255,0.15)",
+    bgColor: "rgba(123,47,255,0.03)",
+    indices: [4, 5, 6, 7],
+  },
+  {
+    id: "services",
+    label: "Расширяющие сервисы",
+    desc: "Лицензирование, консалтинг, медиа, образование",
+    color: "dim",
+    accentColor: "rgba(255,255,255,0.3)",
+    borderColor: "rgba(255,255,255,0.08)",
+    bgColor: "rgba(255,255,255,0.015)",
+    indices: [8, 9, 10, 11],
+  },
+];
+
 export function DirectionsSection() {
   return (
     <section id="directions" className="py-32 relative">
-      <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
+      <div className="absolute inset-0 parcel-bg opacity-50 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
+        <div className="mb-16">
           <div className="section-label mb-4">◆ Направления деятельности</div>
-          <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white">
-            12 направлений <span className="text-gradient-purple">экосистемы</span>
-          </h2>
-          <p className="font-ibm text-white/50 text-lg mt-4 max-w-2xl mx-auto">
-            Каждое направление — самостоятельная компетенция. Вместе они образуют полный цикл цифрового девелопмента
-          </p>
-        </div>
-
-        {/* Флагман — широкая карточка на всю ширину */}
-        <div className="mb-5">
-          <DirectionCard dir={DIRECTIONS[0]} i={0} featured={true} />
-        </div>
-
-        {/* Основной блок 2×2 + правая колонка из 2 */}
-        <div className="grid lg:grid-cols-3 gap-5 mb-5">
-          <div className="lg:col-span-2 grid sm:grid-cols-2 gap-5">
-            {DIRECTIONS.slice(1, 5).map((dir, i) => (
-              <DirectionCard key={dir.id} dir={dir} i={i + 1} />
-            ))}
-          </div>
-          <div className="grid gap-5">
-            {DIRECTIONS.slice(5, 7).map((dir, i) => (
-              <DirectionCard key={dir.id} dir={dir} i={i + 5} />
-            ))}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white">
+              Карта группы: <span className="text-gradient-purple">12 направлений</span>
+            </h2>
+            <p className="font-ibm text-white/45 text-base max-w-sm">
+              Три уровня экосистемы — от операционного ядра до расширяющих сервисов
+            </p>
           </div>
         </div>
 
-        {/* Нижний ряд — 5 карточек */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
-          {DIRECTIONS.slice(7).map((dir, i) => (
-            <DirectionCard key={dir.id} dir={dir} i={i + 7} />
+        {/* Кластеры */}
+        <div className="space-y-10">
+          {DIRECTION_CLUSTERS.map((cluster) => (
+            <div key={cluster.id}>
+              {/* Cluster header */}
+              <div className="flex items-center gap-4 mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="w-3 h-3 rounded-sm flex-shrink-0" style={{ background: cluster.accentColor }} />
+                  <span className="font-oswald text-white text-lg font-semibold">{cluster.label}</span>
+                </div>
+                <div className="flex-1 h-px" style={{ background: cluster.borderColor }} />
+                <span className="font-ibm text-xs flex-shrink-0" style={{ color: "rgba(255,255,255,0.3)" }}>{cluster.desc}</span>
+              </div>
+
+              {/* Cards grid */}
+              <div className={`grid gap-4 ${cluster.id === "core" ? "grid-cols-1 lg:grid-cols-4" : "grid-cols-2 lg:grid-cols-4"}`}>
+                {cluster.indices.map((idx) => {
+                  const dir = DIRECTIONS[idx];
+                  if (!dir) return null;
+                  const isFeature = idx === 0;
+                  return (
+                    <a key={dir.id} href={`/directions/${dir.id}`}
+                      className={`group rounded-sm cursor-pointer flex flex-col transition-all ${isFeature ? "lg:col-span-2 p-7" : "p-5"}`}
+                      style={{ background: cluster.bgColor, border: `1px solid ${cluster.borderColor}` }}
+                      onMouseEnter={e => (e.currentTarget.style.borderColor = cluster.accentColor)}
+                      onMouseLeave={e => (e.currentTarget.style.borderColor = cluster.borderColor)}
+                    >
+                      {isFeature && (
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan pulse-dot" />
+                          <span className="font-mono-ibm text-ksi-cyan text-xs tracking-widest">ФЛАГМАН</span>
+                        </div>
+                      )}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0"
+                          style={{ background: `${cluster.accentColor}18`, border: `1px solid ${cluster.accentColor}40` }}>
+                          <Icon name={dir.icon} size={18} style={{ color: cluster.accentColor }} />
+                        </div>
+                        <span className="font-mono-ibm text-xs px-2 py-0.5 rounded-sm"
+                          style={{ color: cluster.accentColor, background: `${cluster.accentColor}12`, border: `1px solid ${cluster.accentColor}30` }}>
+                          {dir.stat}
+                        </span>
+                      </div>
+                      <h3 className={`font-oswald font-medium text-white leading-tight mb-2 group-hover:text-ksi-cyan transition-colors ${isFeature ? "text-xl" : "text-base"}`}>
+                        {dir.title}
+                      </h3>
+                      <p className="font-ibm text-white/45 text-xs leading-relaxed flex-1">{dir.desc.slice(0, 90)}{dir.desc.length > 90 ? "…" : ""}</p>
+                      <div className="mt-3 flex items-center gap-1.5 opacity-0 group-hover:opacity-60 transition-opacity">
+                        <span className="font-mono-ibm text-xs text-white tracking-widest">Подробнее</span>
+                        <Icon name="ArrowRight" size={11} className="text-white" />
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <a href="/directions" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
+            Все направления →
+          </a>
         </div>
       </div>
     </section>
@@ -119,14 +193,16 @@ export function ProjectsSection() {
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-14">
-          <div className="section-label mb-4">◆ Проекты & Продукты</div>
-          <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white">
-            Цифровые продукты <span className="text-gradient-cyan">экосистемы</span>
-          </h2>
-          <p className="font-ibm text-white/50 text-lg mt-4 max-w-xl mx-auto">
-            Пять ключевых продуктов, составляющих операционное ядро АО КСИ
-          </p>
+        <div className="mb-14">
+          <div className="section-label mb-4">◆ Прикладные продукты</div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white">
+              Операционное ядро <span className="text-gradient-cyan">группы</span>
+            </h2>
+            <p className="font-ibm text-white/45 text-base max-w-sm">
+              Пять прикладных продуктов для работы с земельными активами, девелоперской средой и цифровой инфраструктурой
+            </p>
+          </div>
         </div>
 
         {/* Табы */}
@@ -181,7 +257,7 @@ export function ProjectsSection() {
 
           {/* Правая панель — возможности */}
           <div className="lg:col-span-2 flex flex-col gap-3">
-            <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-1 px-1">КЛЮЧЕВЫЕ ВОЗМОЖНОСТИ</div>
+            <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-1 px-1">Применение</div>
             {project.features.map((feat, fi) => (
               <div
                 key={fi}
