@@ -67,8 +67,24 @@ export default function About() {
   return (
     <PageLayout breadcrumb={[{ label: "О компании" }]}>
       {/* Hero */}
-      <section className="py-24 relative overflow-hidden grid-bg">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.04) 0%, transparent 60%)" }} />
+      <section className="py-24 relative overflow-hidden">
+        {/* Горизонтальные строительные отметки */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.02) 79px, rgba(255,255,255,0.02) 80px)",
+        }} />
+        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.035) 0%, transparent 60%)" }} />
+        {/* Парцельный мотив правого края */}
+        <div className="absolute right-0 top-0 bottom-0 w-64 pointer-events-none opacity-[0.04]">
+          <svg width="100%" height="100%" viewBox="0 0 256 400" preserveAspectRatio="xMaxYMid slice">
+            <rect x="10" y="20" width="100" height="80" fill="none" stroke="white" strokeWidth="1"/>
+            <rect x="120" y="20" width="120" height="38" fill="none" stroke="white" strokeWidth="0.7"/>
+            <rect x="120" y="66" width="120" height="34" fill="none" stroke="white" strokeWidth="0.7"/>
+            <rect x="10" y="110" width="230" height="60" fill="none" stroke="white" strokeWidth="0.8"/>
+            <rect x="10" y="180" width="110" height="200" fill="none" stroke="white" strokeWidth="0.7"/>
+            <rect x="130" y="180" width="110" height="95" fill="none" stroke="white" strokeWidth="0.7"/>
+            <rect x="130" y="285" width="110" height="95" fill="none" stroke="white" strokeWidth="0.7"/>
+          </svg>
+        </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
             <div className="section-label mb-5">◆ Головная структура группы</div>
@@ -165,23 +181,39 @@ export default function About() {
           <p className="font-ibm text-white/50 text-lg mb-12 max-w-2xl">
             Единая управляемая структура с синергией между направлениями
           </p>
-          <div className="space-y-3">
-            {STRUCTURE.map((item, i) => (
-              <div key={i} className="flex items-start gap-6 p-5 rounded-sm card-ksi group">
-                <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0" style={{ background: item.color === "cyan" ? "#00d4ff" : "#7b2fff" }} />
-                <div className="flex-1 grid md:grid-cols-3 gap-4">
-                  <div>
-                    <div className="font-mono-ibm text-white/30 text-[10px] tracking-widest uppercase mb-1">{item.level}</div>
+          {/* Архитектурная таблица структуры — без card-ksi, строгие горизонтальные линии */}
+          <div className="overflow-hidden rounded-sm" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+            {STRUCTURE.map((item, i) => {
+              const isCyan = item.color === "cyan";
+              const accentColor = isCyan ? "#00d4ff" : "#7b2fff";
+              const indentPx = i * 16;
+              return (
+                <div key={i} className="flex items-stretch group"
+                  style={{ borderBottom: i < STRUCTURE.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                  {/* Цветной акцент-бар слева */}
+                  <div className="w-0.5 flex-shrink-0" style={{ background: accentColor, opacity: 0.35 + i * 0.05 }} />
+                  {/* Номер */}
+                  <div className="flex items-center px-4 flex-shrink-0 w-10"
+                    style={{ background: "rgba(255,255,255,0.01)" }}>
+                    <span className="font-ibm text-[9px]" style={{ color: accentColor, opacity: 0.5 }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                   </div>
-                  <div>
-                    <div className="font-oswald text-white font-medium text-base group-hover:text-ksi-cyan transition-colors">{item.name}</div>
-                  </div>
-                  <div>
-                    <div className="font-ibm text-white/40 text-sm">{item.desc}</div>
+                  {/* Контент с отступом (иерархия) */}
+                  <div className="flex-1 grid md:grid-cols-3 gap-4 py-4 pr-6" style={{ paddingLeft: indentPx }}>
+                    <div className="flex items-center">
+                      <span className="font-ibm text-[10px] tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.25)" }}>{item.level}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="font-oswald text-white font-medium text-sm group-hover:text-ksi-cyan transition-colors">{item.name}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="font-ibm text-white/38 text-xs">{item.desc}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -139,11 +139,12 @@
     box-shadow: 0 0 15px rgba(123, 47, 255, 0.1);
   }
 
+  /* grid-bg — приглушён, используется только в legacy-секциях */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-    background-size: 80px 80px;
+      linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+    background-size: 100px 100px;
   }
 
   /* Architectural / parcel-map layer */
@@ -234,11 +235,10 @@
   }
 
   .card-ksi:hover {
-    border-color: rgba(0, 212, 255, 0.25);
+    border-color: rgba(0, 212, 255, 0.18);
     box-shadow:
-      0 0 30px rgba(0, 212, 255, 0.08),
-      0 8px 32px rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
+      0 0 20px rgba(0, 212, 255, 0.05),
+      0 4px 24px rgba(0, 0, 0, 0.35);
   }
 
   .btn-primary-ksi {

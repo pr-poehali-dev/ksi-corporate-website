@@ -1,148 +1,313 @@
 import Icon from "@/components/ui/icon";
 import { STATS } from "./data";
 
-function ParcelMapVisual() {
+/* ─── Aerial Masterplan Visual ─────────────────────────────────────────────
+   Тип B: схема квартала/участка с контурами, изометрическими объёмами,
+   аналитическими оверлеями и девелоперской разметкой.
+   Полностью средствами SVG — без зависимостей.
+────────────────────────────────────────────────────────────────────────── */
+function AerialMasterplan() {
   return (
-    <div className="relative w-full h-full overflow-hidden" style={{ background: "#080810" }}>
-      {/* Masterplan SVG — urban block parcels with analytics overlay */}
-      <svg viewBox="0 0 520 460" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice">
+    <div className="relative w-full h-full overflow-hidden" style={{ background: "#060609" }}>
+      <svg
+        viewBox="0 0 600 520"
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="xMidYMid slice"
+      >
         <defs>
-          <linearGradient id="parcelCyan" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.18" />
+          {/* Land parcel fills */}
+          <linearGradient id="gLand1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.13" />
+            <stop offset="100%" stopColor="#00d4ff" stopOpacity="0.03" />
+          </linearGradient>
+          <linearGradient id="gLand2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.03" />
+          </linearGradient>
+          <linearGradient id="gLand3" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.03" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0.008" />
+          </linearGradient>
+          {/* Isometric face fills */}
+          <linearGradient id="gIsoTop" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#00d4ff" stopOpacity="0.1" />
+          </linearGradient>
+          <linearGradient id="gIsoFront" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.12" />
             <stop offset="100%" stopColor="#00d4ff" stopOpacity="0.04" />
           </linearGradient>
-          <linearGradient id="parcelPurple" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.05" />
+          <linearGradient id="gIsoSide" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#00d4ff" stopOpacity="0.02" />
           </linearGradient>
-          <linearGradient id="parcelDim" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.04" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0.01" />
+          <linearGradient id="gIso2Top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.1" />
           </linearGradient>
-          <linearGradient id="scanLine" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="gIso2Front" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.14" />
+            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.04" />
+          </linearGradient>
+          <linearGradient id="gIso2Side" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.09" />
+            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.02" />
+          </linearGradient>
+          <linearGradient id="gScan" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="transparent" />
-            <stop offset="50%" stopColor="rgba(0,212,255,0.12)" />
+            <stop offset="50%" stopColor="rgba(0,212,255,0.08)" />
             <stop offset="100%" stopColor="transparent" />
           </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <filter id="fSoft">
+            <feGaussianBlur stdDeviation="1.5" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
         </defs>
 
-        {/* Base urban grid — street network */}
-        {[0,80,160,240,320,400,480].map(x => (
-          <line key={`vg${x}`} x1={x} y1="0" x2={x} y2="460" stroke="rgba(255,255,255,0.04)" strokeWidth="0.5"/>
+        {/* ── базовая сетка кадастрового плана ──────────────────────────── */}
+        {[0,60,120,180,240,300,360,420,480,540,600].map(x => (
+          <line key={`vb${x}`} x1={x} y1="0" x2={x} y2="520"
+            stroke="rgba(255,255,255,0.025)" strokeWidth="0.5" />
         ))}
-        {[0,60,120,180,240,300,360,420].map(y => (
-          <line key={`hg${y}`} x1="0" y1={y} x2="520" y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="0.5"/>
+        {[0,60,120,180,240,300,360,420,480,520].map(y => (
+          <line key={`hb${y}`} x1="0" y1={y} x2="600" y2={y}
+            stroke="rgba(255,255,255,0.025)" strokeWidth="0.5" />
         ))}
 
-        {/* Major roads — thicker */}
-        <line x1="0" y1="180" x2="520" y2="180" stroke="rgba(255,255,255,0.09)" strokeWidth="2"/>
-        <line x1="0" y1="300" x2="520" y2="300" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5"/>
-        <line x1="160" y1="0" x2="160" y2="460" stroke="rgba(255,255,255,0.09)" strokeWidth="2"/>
-        <line x1="320" y1="0" x2="320" y2="460" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5"/>
+        {/* ── красные линии / магистрали ────────────────────────────────── */}
+        <line x1="0" y1="200" x2="600" y2="200" stroke="rgba(255,255,255,0.07)" strokeWidth="2.5" />
+        <line x1="0" y1="360" x2="600" y2="360" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" />
+        <line x1="180" y1="0" x2="180" y2="520" stroke="rgba(255,255,255,0.07)" strokeWidth="2.5" />
+        <line x1="360" y1="0" x2="360" y2="520" stroke="rgba(255,255,255,0.05)" strokeWidth="1.5" />
 
-        {/* BLOCK 1 — флагманский актив (highlighted cyan) */}
-        <rect x="168" y="188" width="140" height="100" fill="url(#parcelCyan)" stroke="#00d4ff" strokeWidth="1.2" strokeOpacity="0.5"/>
-        <rect x="172" y="192" width="132" height="92" fill="none" stroke="#00d4ff" strokeWidth="0.4" strokeOpacity="0.25" strokeDasharray="4,4"/>
-        {/* Inner blocks */}
-        <rect x="172" y="192" width="62" height="42" fill="rgba(0,212,255,0.08)" stroke="#00d4ff" strokeWidth="0.5" strokeOpacity="0.3"/>
-        <rect x="238" y="192" width="62" height="42" fill="rgba(0,212,255,0.05)" stroke="#00d4ff" strokeWidth="0.5" strokeOpacity="0.2"/>
-        <rect x="172" y="238" width="128" height="42" fill="rgba(0,212,255,0.06)" stroke="#00d4ff" strokeWidth="0.5" strokeOpacity="0.2"/>
+        {/* ── УЧАСТОК A — флагманский (cyan), зона КриптоМетры ─────────── */}
+        {/* Контур участка */}
+        <polygon
+          points="190,210 350,210 350,350 190,350"
+          fill="url(#gLand1)"
+          stroke="#00d4ff" strokeWidth="1.5" strokeOpacity="0.55"
+        />
+        {/* Внутренняя разметка участка A */}
+        <line x1="190" y1="270" x2="350" y2="270" stroke="#00d4ff" strokeWidth="0.5" strokeOpacity="0.2" strokeDasharray="6,4"/>
+        <line x1="270" y1="210" x2="270" y2="350" stroke="#00d4ff" strokeWidth="0.5" strokeOpacity="0.2" strokeDasharray="6,4"/>
 
-        {/* BLOCK 2 — purple zone */}
-        <rect x="8" y="8" width="140" height="160" fill="url(#parcelPurple)" stroke="#7b2fff" strokeWidth="0.8" strokeOpacity="0.4"/>
-        <rect x="12" y="12" width="64" height="72" fill="rgba(123,47,255,0.07)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.25"/>
-        <rect x="80" y="12" width="64" height="72" fill="rgba(123,47,255,0.05)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.2"/>
-        <rect x="12" y="88" width="132" height="72" fill="rgba(123,47,255,0.06)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.2"/>
+        {/* ИЗОМЕТРИЧЕСКИЙ ОБЪЁМ A — главное здание (КриптоМетры) */}
+        {/* top face */}
+        <polygon points="220,200 310,200 340,220 250,220"
+          fill="url(#gIsoTop)" stroke="#00d4ff" strokeWidth="1" strokeOpacity="0.6" filter="url(#fSoft)" />
+        {/* front face */}
+        <polygon points="250,220 340,220 340,275 250,275"
+          fill="url(#gIsoFront)" stroke="#00d4ff" strokeWidth="0.8" strokeOpacity="0.4" />
+        {/* side face */}
+        <polygon points="220,200 250,220 250,275 220,255"
+          fill="url(#gIsoSide)" stroke="#00d4ff" strokeWidth="0.8" strokeOpacity="0.3" />
+        {/* Окна — фасадный ритм */}
+        {[0,1,2,3].map(j => (
+          <rect key={`wa${j}`} x={257 + j * 20} y={228} width={10} height={16}
+            fill="rgba(0,212,255,0.15)" stroke="#00d4ff" strokeWidth="0.4" strokeOpacity="0.5" />
+        ))}
+        {[0,1,2,3].map(j => (
+          <rect key={`wa2${j}`} x={257 + j * 20} y={250} width={10} height={16}
+            fill="rgba(0,212,255,0.1)" stroke="#00d4ff" strokeWidth="0.4" strokeOpacity="0.4" />
+        ))}
+        {/* Метка объекта */}
+        <text x="295" y="245" textAnchor="middle"
+          fill="rgba(0,212,255,0.75)" fontSize="6.5" fontFamily="IBM Plex Mono" letterSpacing="1.5">
+          КриптоМетры
+        </text>
+        <text x="295" y="253" textAnchor="middle"
+          fill="rgba(0,212,255,0.4)" fontSize="5" fontFamily="IBM Plex Mono" letterSpacing="0.5">
+          ФЛАГМАН
+        </text>
 
-        {/* BLOCK 3 — dim right top */}
-        <rect x="328" y="8" width="180" height="160" fill="url(#parcelDim)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.6"/>
-        <rect x="332" y="12" width="84" height="152" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.4"/>
-        <rect x="420" y="12" width="84" height="72" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" strokeWidth="0.4"/>
-        <rect x="420" y="88" width="84" height="76" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.05)" strokeWidth="0.4"/>
+        {/* ── УЧАСТОК B — purple зона (Аналитика/LSS) ──────────────────── */}
+        <polygon
+          points="20,20 170,20 170,185 20,185"
+          fill="url(#gLand2)"
+          stroke="#7b2fff" strokeWidth="1.2" strokeOpacity="0.45"
+        />
+        {/* Внутренняя разметка участка B */}
+        <line x1="20" y1="100" x2="170" y2="100" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.2" strokeDasharray="5,4"/>
+        <line x1="95" y1="20" x2="95" y2="185" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.2" strokeDasharray="5,4"/>
 
-        {/* BLOCK 4 — bottom left */}
-        <rect x="8" y="308" width="140" height="144" fill="url(#parcelDim)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.6"/>
-        <rect x="12" y="312" width="132" height="64" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" strokeWidth="0.4"/>
-        <rect x="12" y="380" width="64" height="68" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.04)" strokeWidth="0.4"/>
-        <rect x="80" y="380" width="64" height="68" fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.04)" strokeWidth="0.4"/>
+        {/* ИЗОМЕТРИЧЕСКИЙ ОБЪЁМ B — меньший (LSS) */}
+        <polygon points="30,92 90,92 110,104 50,104"
+          fill="url(#gIso2Top)" stroke="#7b2fff" strokeWidth="0.9" strokeOpacity="0.55" />
+        <polygon points="50,104 110,104 110,148 50,148"
+          fill="url(#gIso2Front)" stroke="#7b2fff" strokeWidth="0.7" strokeOpacity="0.4" />
+        <polygon points="30,92 50,104 50,148 30,136"
+          fill="url(#gIso2Side)" stroke="#7b2fff" strokeWidth="0.7" strokeOpacity="0.3" />
+        {/* Окна */}
+        {[0,1,2].map(j => (
+          <rect key={`wb${j}`} x={57 + j * 17} y={110} width={9} height={12}
+            fill="rgba(123,47,255,0.18)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.5" />
+        ))}
+        {[0,1,2].map(j => (
+          <rect key={`wb2${j}`} x={57 + j * 17} y={128} width={9} height={12}
+            fill="rgba(123,47,255,0.12)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.35" />
+        ))}
+        <text x="70" y="122" textAnchor="middle"
+          fill="rgba(123,47,255,0.7)" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="1">
+          LSS
+        </text>
 
-        {/* BLOCK 5 — bottom right */}
-        <rect x="328" y="308" width="184" height="144" fill="rgba(123,47,255,0.03)" stroke="#7b2fff" strokeWidth="0.5" strokeOpacity="0.2"/>
-        <rect x="332" y="312" width="88" height="136" fill="rgba(123,47,255,0.04)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.15"/>
-        <rect x="424" y="312" width="84" height="64" fill="rgba(123,47,255,0.03)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.12"/>
-        <rect x="424" y="380" width="84" height="68" fill="rgba(123,47,255,0.02)" stroke="#7b2fff" strokeWidth="0.4" strokeOpacity="0.1"/>
+        {/* ── УЧАСТОК C — top right dim зона ───────────────────────────── */}
+        <polygon
+          points="370,20 580,20 580,185 370,185"
+          fill="url(#gLand3)"
+          stroke="rgba(255,255,255,0.12)" strokeWidth="0.8"
+        />
+        <line x1="370" y1="100" x2="580" y2="100" stroke="rgba(255,255,255,0.05)" strokeWidth="0.4" strokeDasharray="5,5"/>
+        <line x1="475" y1="20" x2="475" y2="185" stroke="rgba(255,255,255,0.05)" strokeWidth="0.4" strokeDasharray="5,5"/>
+        {/* Малые объёмы */}
+        <polygon points="380,78 430,78 445,88 395,88"
+          fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
+        <polygon points="395,88 445,88 445,120 395,120"
+          fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
+        <polygon points="380,78 395,88 395,120 380,110"
+          fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
+        <text x="412" y="102" textAnchor="middle"
+          fill="rgba(255,255,255,0.25)" fontSize="5.5" fontFamily="IBM Plex Mono">Fee-Dev</text>
 
-        {/* Analytics overlay — measurement lines */}
-        <line x1="168" y1="165" x2="308" y2="165" stroke="#00d4ff" strokeWidth="0.6" strokeOpacity="0.4" strokeDasharray="3,5"/>
-        <line x1="168" y1="160" x2="168" y2="170" stroke="#00d4ff" strokeWidth="0.8" strokeOpacity="0.5"/>
-        <line x1="308" y1="160" x2="308" y2="170" stroke="#00d4ff" strokeWidth="0.8" strokeOpacity="0.5"/>
+        {/* ── УЧАСТОК D — bottom left dim ──────────────────────────────── */}
+        <polygon
+          points="20,375 170,375 170,510 20,510"
+          fill="url(#gLand3)"
+          stroke="rgba(255,255,255,0.09)" strokeWidth="0.8"
+        />
+        <polygon points="35,390 85,390 100,400 50,400"
+          fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" />
+        <polygon points="50,400 100,400 100,435 50,435"
+          fill="rgba(255,255,255,0.025)" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
+        <polygon points="35,390 50,400 50,435 35,425"
+          fill="rgba(255,255,255,0.015)" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
+        <text x="68" y="415" textAnchor="middle"
+          fill="rgba(255,255,255,0.2)" fontSize="5.5" fontFamily="IBM Plex Mono">ИИ-лаб</text>
 
-        {/* Parcel labels */}
-        <text x="238" y="243" textAnchor="middle" fill="rgba(0,212,255,0.7)" fontSize="7" fontFamily="IBM Plex Mono" letterSpacing="1">КриптоМетры</text>
-        <text x="78" y="90" textAnchor="middle" fill="rgba(123,47,255,0.6)" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="0.5">LSS</text>
-        <text x="404" y="90" textAnchor="middle" fill="rgba(255,255,255,0.25)" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="0.5">Fee-Dev</text>
-        <text x="78" y="382" textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="0.5">Аналитика</text>
-        <text x="416" y="382" textAnchor="middle" fill="rgba(123,47,255,0.35)" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="0.5">ИИ-лаб</text>
+        {/* ── УЧАСТОК E — bottom right purple dim ──────────────────────── */}
+        <polygon
+          points="370,375 580,375 580,510 370,510"
+          fill="rgba(123,47,255,0.04)"
+          stroke="rgba(123,47,255,0.2)" strokeWidth="0.8"
+        />
+        <polygon points="385,385 455,385 475,398 405,398"
+          fill="rgba(123,47,255,0.06)" stroke="#7b2fff" strokeWidth="0.6" strokeOpacity="0.35" />
+        <polygon points="405,398 475,398 475,440 405,440"
+          fill="rgba(123,47,255,0.04)" stroke="#7b2fff" strokeWidth="0.5" strokeOpacity="0.25" />
+        <polygon points="385,385 405,398 405,440 385,427"
+          fill="rgba(123,47,255,0.025)" stroke="#7b2fff" strokeWidth="0.5" strokeOpacity="0.2" />
+        <text x="430" y="418" textAnchor="middle"
+          fill="rgba(123,47,255,0.45)" fontSize="5.5" fontFamily="IBM Plex Mono">Управление</text>
 
-        {/* Dimension labels */}
-        <text x="238" y="158" textAnchor="middle" fill="rgba(0,212,255,0.4)" fontSize="6" fontFamily="IBM Plex Mono">140 × 100 м</text>
+        {/* ── аналитические оверлеи ────────────────────────────────────── */}
+        {/* Размерная линия участка A */}
+        <line x1="190" y1="193" x2="350" y2="193"
+          stroke="#00d4ff" strokeWidth="0.7" strokeOpacity="0.4" strokeDasharray="3,4" />
+        <line x1="190" y1="189" x2="190" y2="197" stroke="#00d4ff" strokeWidth="1" strokeOpacity="0.5" />
+        <line x1="350" y1="189" x2="350" y2="197" stroke="#00d4ff" strokeWidth="1" strokeOpacity="0.5" />
+        <text x="270" y="190" textAnchor="middle"
+          fill="rgba(0,212,255,0.45)" fontSize="5.5" fontFamily="IBM Plex Mono">160 × 140 м</text>
 
-        {/* Data nodes overlay — analytics pins */}
-        <circle cx="238" cy="238" r="5" fill="#00d4ff" fillOpacity="0.2" stroke="#00d4ff" strokeWidth="1" strokeOpacity="0.6" filter="url(#glow)"/>
-        <circle cx="238" cy="238" r="2" fill="#00d4ff" fillOpacity="0.9"/>
-        <circle cx="78" cy="90" r="3.5" fill="#7b2fff" fillOpacity="0.3" stroke="#7b2fff" strokeWidth="0.8" strokeOpacity="0.5"/>
-        <circle cx="78" cy="90" r="1.5" fill="#7b2fff" fillOpacity="0.8"/>
+        {/* Размерная линия участка B */}
+        <line x1="9" y1="100" x2="9" y2="185"
+          stroke="#7b2fff" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="3,4" />
 
-        {/* Scan line animation */}
-        <rect x="0" y="0" width="520" height="30" fill="url(#scanLine)" opacity="0.6">
-          <animateTransform attributeName="transform" type="translate" from="0 -30" to="0 490" dur="5s" repeatCount="indefinite"/>
-        </rect>
+        {/* Аналитический pin A с пульсом */}
+        <circle cx="270" cy="280" r="8" fill="#00d4ff" fillOpacity="0.08"
+          stroke="#00d4ff" strokeWidth="0.6" strokeOpacity="0.25">
+          <animate attributeName="r" values="8;12;8" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="stroke-opacity" values="0.25;0;0.25" dur="3s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="270" cy="280" r="3.5" fill="#00d4ff" fillOpacity="0.3"
+          stroke="#00d4ff" strokeWidth="1" strokeOpacity="0.6" />
+        <circle cx="270" cy="280" r="1.5" fill="#00d4ff" fillOpacity="0.95" />
 
-        {/* Corner coordinates */}
-        <text x="4" y="12" fill="rgba(255,255,255,0.15)" fontSize="5.5" fontFamily="IBM Plex Mono">55.7522°N</text>
-        <text x="4" y="20" fill="rgba(255,255,255,0.15)" fontSize="5.5" fontFamily="IBM Plex Mono">37.6156°E</text>
+        {/* Аналитический pin B */}
+        <circle cx="70" cy="160" r="6" fill="#7b2fff" fillOpacity="0.08"
+          stroke="#7b2fff" strokeWidth="0.6" strokeOpacity="0.3">
+          <animate attributeName="r" values="6;10;6" dur="4s" repeatCount="indefinite" />
+          <animate attributeName="stroke-opacity" values="0.3;0;0.3" dur="4s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="70" cy="160" r="2.5" fill="#7b2fff" fillOpacity="0.9" />
 
-        {/* North arrow */}
-        <g transform="translate(490,20)">
-          <line x1="0" y1="8" x2="0" y2="-2" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8"/>
-          <polygon points="0,-4 -2,2 2,2" fill="rgba(255,255,255,0.3)"/>
-          <text x="0" y="16" textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="5" fontFamily="IBM Plex Mono">N</text>
+        {/* Callout A */}
+        <line x1="278" y1="276" x2="310" y2="258" stroke="#00d4ff" strokeWidth="0.6" strokeOpacity="0.35" strokeDasharray="2,3"/>
+        <text x="313" y="257" fill="rgba(0,212,255,0.55)" fontSize="6" fontFamily="IBM Plex Mono">актив №1</text>
+        <text x="313" y="265" fill="rgba(0,212,255,0.3)" fontSize="5" fontFamily="IBM Plex Mono">Оценка: A+</text>
+
+        {/* ── координаты ───────────────────────────────────────────────── */}
+        <text x="5" y="12" fill="rgba(255,255,255,0.13)" fontSize="5.5" fontFamily="IBM Plex Mono">55.7522°N</text>
+        <text x="5" y="20" fill="rgba(255,255,255,0.13)" fontSize="5.5" fontFamily="IBM Plex Mono">37.6156°E</text>
+
+        {/* ── север ────────────────────────────────────────────────────── */}
+        <g transform="translate(574,22)">
+          <circle cx="0" cy="0" r="9" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.6"/>
+          <line x1="0" y1="7" x2="0" y2="-2" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" />
+          <polygon points="0,-5 -2,1 2,1" fill="rgba(255,255,255,0.3)" />
+          <text x="0" y="18" textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="5" fontFamily="IBM Plex Mono">N</text>
         </g>
 
-        {/* Scale bar */}
-        <line x1="168" y1="450" x2="308" y2="450" stroke="rgba(255,255,255,0.2)" strokeWidth="0.8"/>
-        <line x1="168" y1="447" x2="168" y2="453" stroke="rgba(255,255,255,0.2)" strokeWidth="0.8"/>
-        <line x1="308" y1="447" x2="308" y2="453" stroke="rgba(255,255,255,0.2)" strokeWidth="0.8"/>
-        <text x="238" y="444" textAnchor="middle" fill="rgba(255,255,255,0.2)" fontSize="5.5" fontFamily="IBM Plex Mono">500 м</text>
+        {/* ── масштабная линейка ───────────────────────────────────────── */}
+        <line x1="20" y1="510" x2="120" y2="510" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" />
+        <line x1="20" y1="507" x2="20" y2="513" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" />
+        <line x1="70" y1="507" x2="70" y2="513" stroke="rgba(255,255,255,0.12)" strokeWidth="0.6" />
+        <line x1="120" y1="507" x2="120" y2="513" stroke="rgba(255,255,255,0.18)" strokeWidth="0.8" />
+        <text x="70" y="505" textAnchor="middle" fill="rgba(255,255,255,0.18)" fontSize="5" fontFamily="IBM Plex Mono">500 м</text>
+
+        {/* ── скан-линия ───────────────────────────────────────────────── */}
+        <rect x="0" y="0" width="600" height="40" fill="url(#gScan)" opacity="0.7">
+          <animateTransform attributeName="transform" type="translate"
+            from="0 -40" to="0 560" dur="7s" repeatCount="indefinite" />
+        </rect>
+
+        {/* ── подпись генплана ─────────────────────────────────────────── */}
+        <text x="300" y="516" textAnchor="middle"
+          fill="rgba(255,255,255,0.1)" fontSize="5" fontFamily="IBM Plex Mono" letterSpacing="2">
+          АО КСИ · ГЕНЕРАЛЬНЫЙ ПЛАН · МАСШТАБ 1:5000
+        </text>
       </svg>
 
-      {/* Gradient overlays — vignette */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(8,8,16,0.7) 100%)"
-      }} />
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: "linear-gradient(to right, rgba(8,8,16,0.5) 0%, transparent 20%, transparent 80%, rgba(8,8,16,0.3) 100%)"
-      }} />
+      {/* Виньетка по краям */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(6,6,9,0.65) 100%)" }} />
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(to right, rgba(6,6,9,0.55) 0%, transparent 18%, transparent 82%, rgba(6,6,9,0.4) 100%)" }} />
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, rgba(6,6,9,0.4) 0%, transparent 15%, transparent 85%, rgba(6,6,9,0.5) 100%)" }} />
     </div>
   );
 }
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "#0a0a0f" }}>
-      {/* Subtle architectural background */}
-      <div className="absolute inset-0 parcel-bg opacity-60 pointer-events-none" />
+    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "#080810" }}>
+      {/* Очень тихая тектоническая сетка — не айти, а кадастр */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: "linear-gradient(rgba(255,255,255,0.014) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.014) 1px, transparent 1px)",
+        backgroundSize: "120px 120px",
+      }} />
+      {/* Атмосферное свечение — не круги, а пятна */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full bg-ksi-cyan/3 blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/3 w-[400px] h-[400px] rounded-full bg-ksi-purple/4 blur-[100px]" />
+        <div style={{
+          position: "absolute", top: "20%", left: "5%",
+          width: 600, height: 400,
+          background: "radial-gradient(ellipse, rgba(0,212,255,0.035) 0%, transparent 70%)",
+        }} />
+        <div style={{
+          position: "absolute", bottom: "15%", right: "0%",
+          width: 500, height: 500,
+          background: "radial-gradient(ellipse, rgba(123,47,255,0.03) 0%, transparent 70%)",
+        }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-16 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-12 xl:gap-20 items-center">
+
+          {/* ── левая колонка — позиционирование ── */}
           <div>
             <div className="section-label mb-6 fade-in-up stagger-1">
               ◆ Головная структура группы &nbsp;·&nbsp; АО КСИ &nbsp;·&nbsp; Москва
@@ -154,10 +319,10 @@ export function HeroSection() {
               <span className="text-gradient-main">СТРОЙ</span>
               <span className="text-white"> ИНВЕСТ</span>
             </h1>
-            <p className="font-ibm text-white/40 text-xs tracking-widest uppercase mb-8 fade-in-up stagger-3">
-              Девелопмент &nbsp;·&nbsp; Цифровая инфраструктура &nbsp;·&nbsp; ИИ &nbsp;·&nbsp; Земельный рынок
+            <p className="font-ibm text-white/35 text-[11px] tracking-[0.22em] uppercase mb-8 fade-in-up stagger-3">
+              Девелопмент &nbsp;·&nbsp; Земельные активы &nbsp;·&nbsp; Цифровая инфраструктура &nbsp;·&nbsp; Аналитика
             </p>
-            <p className="font-ibm text-white/70 text-lg leading-relaxed mb-10 max-w-lg fade-in-up stagger-4">
+            <p className="font-ibm text-white/68 text-lg leading-relaxed mb-10 max-w-lg fade-in-up stagger-4">
               АО КСИ — оператор цифровой девелоперской инфраструктуры. Управляет экосистемой
               направлений на пересечении рынка недвижимости, технологий и профессиональной
               экспертизы. Не строительная компания. Не фонд. Платформа нового типа.
@@ -172,9 +337,9 @@ export function HeroSection() {
               </a>
             </div>
 
-            {/* Аудиторный роутер */}
+            {/* Вход по роли */}
             <div className="mt-12 fade-in-up stagger-6">
-              <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-4">Кто вы</div>
+              <div className="font-ibm text-white/20 text-xs mb-4">Кто вы</div>
               <div className="flex flex-wrap gap-2">
                 {[
                   { label: "Землевладельцам", href: "/partners", icon: "MapPin" },
@@ -194,30 +359,43 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Parcel map visual */}
-          <div className="relative h-[420px] lg:h-[480px] fade-in-up stagger-2">
-            <div className="absolute inset-0 rounded-sm overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-              <ParcelMapVisual />
+          {/* ── правая колонка — aerial masterplan ── */}
+          <div className="relative h-[440px] lg:h-[520px] fade-in-up stagger-2">
+            <div className="absolute inset-0 overflow-hidden" style={{
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: "2px",
+            }}>
+              <AerialMasterplan />
             </div>
-            {/* Corner labels */}
-            <div className="absolute top-3 left-3 asset-label">Генеральный план · АО КСИ</div>
+            {/* Corner meta-labels — стиль архитектурного чертежа */}
+            <div className="absolute top-3 left-3 font-ibm text-[10px] text-white/25 tracking-widest">
+              ГЕНПЛАН · АО КСИ
+            </div>
             <div className="absolute top-3 right-3 flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan pulse-dot" />
-              <span className="asset-label" style={{ color: "rgba(0,212,255,0.4)" }}>Активный актив</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan" style={{ boxShadow: "0 0 4px #00d4ff" }}>
+                <style>{`@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}`}</style>
+                <div style={{ animation: "blink 2s ease-in-out infinite" }} />
+              </div>
+              <span className="font-ibm text-[10px] text-ksi-cyan/40 tracking-widest">Активный актив</span>
             </div>
-            <div className="absolute bottom-3 left-3 asset-label">Масштаб 1:5000</div>
-            <div className="absolute bottom-3 right-3 asset-label">Московский регион</div>
+            <div className="absolute bottom-3 left-3 font-ibm text-[10px] text-white/18 tracking-widest">
+              Кадастровый overlay · M 1:5000
+            </div>
+            <div className="absolute bottom-3 right-3 font-ibm text-[10px] text-white/18 tracking-widest">
+              Московский регион
+            </div>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        {/* ── Статистика ── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
           {STATS.map((stat, i) => (
             <div key={i} className="fade-in-up" style={{ animationDelay: `${0.1 * i + 0.3}s`, opacity: 0 }}>
               <div className="font-oswald text-3xl font-semibold text-gradient-cyan">
                 {stat.value}<span className="text-xl">{stat.suffix}</span>
               </div>
-              <div className="font-ibm text-white/40 text-sm mt-1">{stat.label}</div>
+              <div className="font-ibm text-white/35 text-sm mt-1">{stat.label}</div>
             </div>
           ))}
         </div>

@@ -6,44 +6,80 @@ export function ContactsSection() {
   const [form, setForm] = useState({ name: "", org: "", email: "", message: "", role: "" });
 
   return (
-    <section id="contacts" className="py-32 relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ksi-border to-transparent pointer-events-none" />
+    <section id="contacts" className="py-28 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)" }} />
+      {/* Site-plan мотив на фоне */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <svg className="absolute right-0 bottom-0 opacity-[0.035]" width="480" height="380" viewBox="0 0 480 380">
+          {/* Абстрактный план участка — кварталы */}
+          <rect x="10" y="10" width="200" height="150" fill="none" stroke="white" strokeWidth="1" />
+          <rect x="220" y="10" width="250" height="70" fill="none" stroke="white" strokeWidth="0.7" />
+          <rect x="220" y="90" width="120" height="70" fill="none" stroke="white" strokeWidth="0.7" />
+          <rect x="350" y="90" width="120" height="70" fill="none" stroke="white" strokeWidth="0.7" />
+          <rect x="10" y="170" width="460" height="200" fill="none" stroke="white" strokeWidth="0.8" />
+          <line x1="10" y1="270" x2="470" y2="270" stroke="white" strokeWidth="0.5" strokeDasharray="8,6" />
+          <line x1="240" y1="170" x2="240" y2="370" stroke="white" strokeWidth="0.5" strokeDasharray="8,6" />
+          <circle cx="110" cy="85" r="6" fill="none" stroke="white" strokeWidth="0.8" />
+          <circle cx="335" cy="125" r="4" fill="none" stroke="white" strokeWidth="0.6" />
+          <circle cx="125" cy="320" r="5" fill="none" stroke="white" strokeWidth="0.7" />
+        </svg>
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-20">
-          <div>
-            <div className="section-label mb-6">◆ Контакты</div>
-            <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-6">
+        {/* Шапка блока */}
+        <div className="mb-12">
+          <div className="section-label mb-4">◆ Контакты</div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight">
               Начнём<br /><span className="text-gradient-main">предметный разговор</span>
             </h2>
-            <p className="font-ibm text-white/60 text-lg leading-relaxed mb-10">
-              АО КСИ ведёт диалог с профессиональными участниками рынка.
-              Укажите вашу роль и задачу — это поможет нам ответить по существу.
-            </p>
+            {/* Логика обращения */}
+            <div className="max-w-xs">
+              <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-3">Как мы работаем с запросами</div>
+              <div className="space-y-2">
+                {[
+                  { step: "01", text: "Укажите вашу роль и задачу" },
+                  { step: "02", text: "Мы изучим запрос и ответим по существу" },
+                  { step: "03", text: "Назначим формат: звонок, встреча или документ" },
+                ].map((s) => (
+                  <div key={s.step} className="flex items-center gap-3">
+                    <span className="font-ibm text-[9px] text-ksi-cyan/40 w-5 flex-shrink-0">{s.step}</span>
+                    <span className="font-ibm text-white/35 text-xs">{s.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
-            <div className="space-y-5 mb-10">
+        <div className="grid lg:grid-cols-5 gap-10 items-start">
+          {/* ── Контактные данные ── */}
+          <div className="lg:col-span-2">
+            <div className="space-y-4 mb-8">
               {[
                 { icon: "Mail", label: "Email", value: "info@ksi.ru" },
                 { icon: "Phone", label: "Телефон", value: "+7 (495) 000-00-00" },
                 { icon: "MapPin", label: "Адрес", value: "Москва, Россия" },
-                { icon: "Clock", label: "Режим ответа", value: "Рабочие дни, в течение 24 часов" },
+                { icon: "Clock", label: "Ответ", value: "Рабочие дни, до 24 часов" },
               ].map((item, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.12)" }}>
-                    <Icon name={item.icon} size={16} className="text-ksi-cyan" />
+                <div key={i} className="flex items-center gap-4 py-3"
+                  style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                  <div className="w-8 h-8 flex items-center justify-center flex-shrink-0"
+                    style={{ borderLeft: "2px solid rgba(0,212,255,0.3)" }}>
+                    <Icon name={item.icon} size={14} className="text-ksi-cyan opacity-65" />
                   </div>
                   <div>
-                    <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-0.5">{item.label}</div>
+                    <div className="font-ibm text-white/22 text-[10px] tracking-widest uppercase mb-0.5">{item.label}</div>
                     <div className="font-ibm text-white/65 text-sm">{item.value}</div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Дисклеймер */}
-            <div className="p-5 rounded-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-2">ПРАВОВАЯ ОГОВОРКА</div>
-              <p className="font-ibm text-white/30 text-xs leading-relaxed">
+            <div className="mt-6 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="font-ibm text-white/18 text-[10px] tracking-widest uppercase mb-3">Правовая оговорка</div>
+              <p className="font-ibm text-white/25 text-xs leading-relaxed">
                 Компания не осуществляет публичного привлечения денежных средств.
                 Отдельные модели участия реализуются в рамках специальных юридических
                 конструкций и партнёрских механизмов, формируемых индивидуально.
@@ -51,8 +87,10 @@ export function ContactsSection() {
             </div>
           </div>
 
-          <div className="card-ksi p-8 rounded-sm" style={{ borderColor: "rgba(0,212,255,0.1)" }}>
-            <div className="font-mono-ibm text-ksi-cyan/50 text-xs tracking-widest mb-6">ФОРМА ОБРАЩЕНИЯ</div>
+          {/* ── Форма ── */}
+          <div className="lg:col-span-3 p-8 rounded-sm"
+            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <div className="font-ibm text-white/25 text-xs tracking-[0.18em] uppercase mb-6">Форма обращения</div>
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">

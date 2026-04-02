@@ -1,52 +1,220 @@
 import Icon from "@/components/ui/icon";
 
-export function AboutSection() {
-  const hierarchy = [
+/* ─── Facade Rhythm SVG ─────────────────────────────────────────────────────
+   Визуализация иерархии группы как архитектурного фасадного ритма.
+   Уровни = этажи. Ширина = масштаб влияния. Окна = подсистемы.
+────────────────────────────────────────────────────────────────────────── */
+function GroupArchitectureDiagram() {
+  const levels = [
     {
-      level: "01",
-      title: "АО КСИ",
-      role: "Головная структура",
-      desc: "Управляющая и технологическая надстройка. Формирует стратегию, управляет инфраструктурой, координирует направления.",
-      color: "cyan",
+      label: "АО КСИ",
+      sublabel: "Головная структура · ЯДРО",
+      color: "#00d4ff",
+      width: 440,
+      x: 10,
+      y: 20,
+      h: 54,
+      windows: 8,
+      primary: true,
     },
     {
-      level: "02",
-      title: "КриптоМетры",
-      role: "Флагманский продукт",
-      desc: "Операционная среда распределённого девелопмента. Центральная платформа группы.",
-      color: "cyan",
+      label: "КриптоМетры",
+      sublabel: "Флагманский продукт",
+      color: "#00d4ff",
+      width: 360,
+      x: 50,
+      y: 84,
+      h: 46,
+      windows: 6,
+      primary: false,
     },
     {
-      level: "03",
-      title: "Технологические платформы",
-      role: "ИИ-лаб · ИИ-продакшн · Лицензирование",
-      desc: "Инфраструктура ИИ, цифровых медиапродуктов и передачи технологий партнёрам.",
-      color: "purple",
+      label: "Технологические платформы",
+      sublabel: "ИИ-лаб · ИИ-продакшн · Лицензирование",
+      color: "#7b2fff",
+      width: 300,
+      x: 80,
+      y: 140,
+      h: 42,
+      windows: 5,
+      primary: false,
     },
     {
-      level: "04",
-      title: "Аналитика и данные",
-      role: "LSS · Земельная аналитика · Медиацентр",
-      desc: "Data-продукты, земельный поиск, аналитические базы и интеллектуальное сопровождение.",
-      color: "purple",
+      label: "Аналитика и данные",
+      sublabel: "LSS · Земельная аналитика · Медиацентр",
+      color: "#7b2fff",
+      width: 300,
+      x: 80,
+      y: 192,
+      h: 42,
+      windows: 5,
+      primary: false,
     },
     {
-      level: "05",
-      title: "Операционные сервисы",
-      role: "Fee-Dev · Управление недвижимостью",
-      desc: "Девелоперский оператор, управление объектами и постдевелоперское сопровождение.",
-      color: "cyan",
+      label: "Операционные сервисы",
+      sublabel: "Fee-Dev · Управление недвижимостью",
+      color: "#5599cc",
+      width: 240,
+      x: 110,
+      y: 244,
+      h: 40,
+      windows: 4,
+      primary: false,
     },
   ];
 
   return (
-    <section id="about" className="relative py-32 overflow-hidden">
-      <div className="absolute right-0 top-0 w-1/2 h-full opacity-5 pointer-events-none">
-        <div className="w-full h-full" style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,212,255,0.3) 39px, rgba(0,212,255,0.3) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,212,255,0.3) 39px, rgba(0,212,255,0.3) 40px)" }} />
+    <div className="relative w-full" style={{ height: 320 }}>
+      <svg viewBox="0 0 460 310" className="w-full h-full" preserveAspectRatio="xMinYMid meet">
+        <defs>
+          <linearGradient id="agFill0" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.14" />
+            <stop offset="100%" stopColor="#00d4ff" stopOpacity="0.04" />
+          </linearGradient>
+          <linearGradient id="agFill1" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.09" />
+            <stop offset="100%" stopColor="#00d4ff" stopOpacity="0.03" />
+          </linearGradient>
+          <linearGradient id="agFill2" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.03" />
+          </linearGradient>
+          <linearGradient id="agFill3" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#7b2fff" stopOpacity="0.03" />
+          </linearGradient>
+          <linearGradient id="agFill4" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#5599cc" stopOpacity="0.08" />
+            <stop offset="100%" stopColor="#5599cc" stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+
+        {/* Земля / основание */}
+        <rect x="0" y="288" width="460" height="6" fill="rgba(255,255,255,0.04)" />
+        <line x1="0" y1="288" x2="460" y2="288" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+        <text x="5" y="300" fill="rgba(255,255,255,0.15)" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="1.5">ЗЕМЛЯ · ОСНОВАНИЕ · АКТИВЫ</text>
+
+        {levels.map((lv, i) => (
+          <g key={i}>
+            {/* Коннектор к предыдущему уровню */}
+            {i > 0 && (
+              <line
+                x1={lv.x + 16} y1={lv.y}
+                x2={levels[i-1].x + 16} y2={levels[i-1].y + levels[i-1].h}
+                stroke={lv.color} strokeWidth="0.6" strokeOpacity="0.3"
+                strokeDasharray="3,3"
+              />
+            )}
+
+            {/* Тело уровня */}
+            <rect
+              x={lv.x} y={lv.y}
+              width={lv.width} height={lv.h}
+              fill={`url(#agFill${i})`}
+              stroke={lv.color}
+              strokeWidth={lv.primary ? 1.2 : 0.7}
+              strokeOpacity={lv.primary ? 0.6 : 0.35}
+              rx="1"
+            />
+
+            {/* Фасадный ритм окон */}
+            {Array.from({ length: lv.windows }).map((_, j) => {
+              const ww = 18, wh = lv.h * 0.38;
+              const gap = (lv.width - 32 - lv.windows * ww) / (lv.windows - 1);
+              const wx = lv.x + 16 + j * (ww + gap);
+              const wy = lv.y + lv.h * 0.25;
+              return (
+                <rect key={j}
+                  x={wx} y={wy} width={ww} height={wh}
+                  fill={lv.color}
+                  fillOpacity={lv.primary ? 0.18 : 0.1}
+                  stroke={lv.color}
+                  strokeWidth="0.4"
+                  strokeOpacity="0.4"
+                  rx="0.5"
+                />
+              );
+            })}
+
+            {/* Лейбл — название уровня */}
+            <text
+              x={lv.x + 12} y={lv.y + 13}
+              fill={lv.primary ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.6)"}
+              fontSize={lv.primary ? 8.5 : 7}
+              fontFamily="Oswald, sans-serif"
+              fontWeight={lv.primary ? "600" : "400"}
+              letterSpacing="1"
+            >
+              {lv.label}
+            </text>
+            <text
+              x={lv.x + 12} y={lv.y + 22}
+              fill={lv.color}
+              fillOpacity="0.5"
+              fontSize="5.5"
+              fontFamily="IBM Plex Mono"
+              letterSpacing="0.3"
+            >
+              {lv.sublabel}
+            </text>
+
+            {/* Линейка ширины (правый край) */}
+            <line
+              x1={lv.x + lv.width + 4} y1={lv.y}
+              x2={lv.x + lv.width + 4} y2={lv.y + lv.h}
+              stroke={lv.color} strokeWidth="0.5" strokeOpacity="0.2"
+            />
+
+            {/* ЯДРО-бейдж для первого уровня */}
+            {lv.primary && (
+              <g>
+                <rect x={lv.x + lv.width - 38} y={lv.y + 6} width={30} height={12} rx="1"
+                  fill="rgba(0,212,255,0.12)" stroke="#00d4ff" strokeWidth="0.6" strokeOpacity="0.5" />
+                <text x={lv.x + lv.width - 23} y={lv.y + 14.5}
+                  textAnchor="middle" fill="#00d4ff" fontSize="6" fontFamily="IBM Plex Mono" letterSpacing="1">
+                  ЯДРО
+                </text>
+              </g>
+            )}
+          </g>
+        ))}
+
+        {/* Вертикальная шкала глубины (левый край) */}
+        <line x1="5" y1="20" x2="5" y2="284" stroke="rgba(255,255,255,0.08)" strokeWidth="0.6" />
+        {levels.map((lv, i) => (
+          <g key={`tick${i}`}>
+            <line x1="2" y1={lv.y} x2="8" y2={lv.y}
+              stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" />
+            <text x="0" y={lv.y + 3.5} fill="rgba(255,255,255,0.18)" fontSize="4.5" fontFamily="IBM Plex Mono">
+              {String(i + 1).padStart(2, "0")}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+export function AboutSection() {
+  return (
+    <section id="about" className="relative py-28 overflow-hidden">
+      {/* Девелоперский фон — горизонтальные уровни вместо глобальной сетки */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[0, 1, 2, 3, 4, 5, 6, 7].map(i => (
+          <div key={i} className="absolute left-0 right-0 h-px"
+            style={{
+              top: `${12 + i * 12}%`,
+              background: `rgba(255,255,255,${i % 2 === 0 ? "0.022" : "0.01"})`,
+            }} />
+        ))}
       </div>
+      <div className="absolute right-0 top-0 bottom-0 w-px pointer-events-none"
+        style={{ background: "linear-gradient(to bottom, transparent, rgba(0,212,255,0.08), transparent)" }} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-20 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-start">
+
+          {/* ── Левая колонка — текст ── */}
           <div>
             <div className="section-label mb-6">◆ Роль АО КСИ в экосистеме</div>
             <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-8">
@@ -73,11 +241,12 @@ export function AboutSection() {
                 { icon: "Scale", text: "Структурирование сложных партнёрских механизмов" },
                 { icon: "Shield", text: "Правовая корректность и прозрачность структур" },
               ].map((item, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div className="w-9 h-9 rounded-sm flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.12)" }}>
-                    <Icon name={item.icon} size={16} className="text-ksi-cyan" />
+                <div key={i} className="flex items-center gap-4">
+                  <div className="w-8 h-8 flex items-center justify-center flex-shrink-0"
+                    style={{ borderLeft: "2px solid rgba(0,212,255,0.3)" }}>
+                    <Icon name={item.icon} size={15} className="text-ksi-cyan opacity-70" />
                   </div>
-                  <p className="font-ibm text-white/60 text-sm leading-relaxed pt-2">{item.text}</p>
+                  <p className="font-ibm text-white/58 text-sm leading-relaxed">{item.text}</p>
                 </div>
               ))}
             </div>
@@ -87,62 +256,16 @@ export function AboutSection() {
             </a>
           </div>
 
-          {/* Layered hierarchy diagram */}
-          <div className="relative">
-            <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-6">Архитектура группы</div>
-
-            {/* SVG layered stack */}
-            <div className="relative">
-              {hierarchy.map((item, i) => {
-                const widths = ["100%", "92%", "84%", "84%", "76%"];
-                const indents = [0, 16, 32, 32, 48];
-                const isCyan = item.color === "cyan";
-                const borderCol = isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.15)";
-                const accentCol = isCyan ? "rgba(0,212,255,0.5)" : "rgba(123,47,255,0.5)";
-                const bgCol = isCyan ? "rgba(0,212,255,0.04)" : "rgba(123,47,255,0.03)";
-                return (
-                  <div key={i} style={{ marginLeft: indents[i], marginBottom: i < 4 ? 0 : 0, position: "relative" }}>
-                    {/* Connector line from previous */}
-                    {i > 0 && (
-                      <div style={{
-                        position: "absolute",
-                        left: -indents[i] + indents[i - 1] + 16,
-                        top: -16,
-                        width: 1,
-                        height: 20,
-                        background: `linear-gradient(to bottom, ${hierarchy[i-1].color === "cyan" ? "rgba(0,212,255,0.3)" : "rgba(123,47,255,0.25)"}, ${borderCol})`,
-                      }} />
-                    )}
-                    <div
-                      className="flex items-center gap-4 px-5 py-3.5 mb-2"
-                      style={{
-                        background: bgCol,
-                        border: `1px solid ${borderCol}`,
-                        borderRadius: "2px",
-                        width: widths[i],
-                      }}
-                    >
-                      <div className="font-mono-ibm text-xs flex-shrink-0 w-6" style={{ color: accentCol }}>{item.level}</div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <span className="font-oswald text-white text-sm font-medium">{item.title}</span>
-                          {i === 0 && (
-                            <span className="font-mono-ibm text-[9px] px-1.5 py-0.5 rounded-sm" style={{ color: "#00d4ff", background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.25)" }}>ЯДРО</span>
-                          )}
-                        </div>
-                        <div className="font-ibm text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>{item.role}</div>
-                      </div>
-                      {/* Width indicator bar */}
-                      <div className="flex-shrink-0 hidden sm:block" style={{ width: 32, height: 2, background: borderCol, borderRadius: 1 }} />
-                    </div>
-                  </div>
-                );
-              })}
+          {/* ── Правая колонка — архитектурная диаграмма ── */}
+          <div>
+            <div className="font-ibm text-white/20 text-xs tracking-[0.2em] uppercase mb-4">
+              Структурная архитектура группы
             </div>
-
-            <div className="p-4 rounded-sm mt-4" style={{ background: "rgba(255,255,255,0.01)", border: "1px solid rgba(255,255,255,0.05)" }}>
-              <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-2">ПРАВОВАЯ ОГОВОРКА</div>
-              <p className="font-ibm text-white/30 text-xs leading-relaxed">
+            <GroupArchitectureDiagram />
+            <div className="mt-4 pt-4 flex items-start gap-3"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="w-2 h-2 rounded-full bg-ksi-cyan/40 mt-1 flex-shrink-0" />
+              <p className="font-ibm text-white/28 text-xs leading-relaxed">
                 Компания не осуществляет публичного привлечения денежных средств.
                 Отдельные модели участия реализуются в рамках специальных юридических
                 конструкций и партнёрских механизмов, формируемых индивидуально.
