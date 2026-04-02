@@ -76,8 +76,11 @@ const CONNECTIONS_TEXT = [
 export default function Ecosystem() {
   return (
     <PageLayout breadcrumb={[{ label: "Экосистема" }]}>
-      <section className="py-24 relative overflow-hidden grid-bg">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 50% 30%, rgba(0,212,255,0.04) 0%, transparent 60%)" }} />
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/2116a75d-3959-4f90-b237-7e4a87ff500e.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.2 }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0.5) 0%, rgba(10,10,15,0.9) 100%)" }} />
+        </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
             <div className="section-label mb-5">◆ Архитектура экосистемы</div>
@@ -96,13 +99,12 @@ export default function Ecosystem() {
       <section className="py-16 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div className="relative h-[500px] rounded-sm overflow-hidden" style={{ border: "1px solid rgba(0,212,255,0.1)" }}>
-              <div className="absolute top-4 left-4 font-mono-ibm text-ksi-cyan/40 text-xs tracking-widest pointer-events-none z-10">ECOSYSTEM MAP</div>
-              <div className="absolute top-4 right-4 flex items-center gap-2 pointer-events-none z-10">
-                <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan pulse-dot" />
-                <span className="font-mono-ibm text-ksi-cyan/40 text-xs">LIVE</span>
+            <div className="relative h-[500px] rounded-sm overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)" }}>
+              <img src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/58a3bc6a-4e23-4813-a8ca-97ebbd7301a9.jpg" alt="Архитектура экосистемы" className="w-full h-full object-cover" style={{ opacity: 0.6 }} />
+              <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0.2) 0%, rgba(10,10,15,0.6) 100%)" }} />
+              <div className="absolute bottom-5 left-5">
+                <div className="font-ibm text-white/30 text-[10px] tracking-widest uppercase">Архитектура девелоперской группы</div>
               </div>
-              <BigEcosystemCanvas />
             </div>
             <div>
               <div className="section-label mb-5">◆ Состав экосистемы</div>

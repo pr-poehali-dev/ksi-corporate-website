@@ -68,22 +68,11 @@ export default function About() {
     <PageLayout breadcrumb={[{ label: "О компании" }]}>
       {/* Hero */}
       <section className="py-24 relative overflow-hidden">
-        {/* Горизонтальные строительные отметки */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.02) 79px, rgba(255,255,255,0.02) 80px)",
-        }} />
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.035) 0%, transparent 60%)" }} />
-        {/* Парцельный мотив правого края */}
-        <div className="absolute right-0 top-0 bottom-0 w-64 pointer-events-none opacity-[0.04]">
-          <svg width="100%" height="100%" viewBox="0 0 256 400" preserveAspectRatio="xMaxYMid slice">
-            <rect x="10" y="20" width="100" height="80" fill="none" stroke="white" strokeWidth="1"/>
-            <rect x="120" y="20" width="120" height="38" fill="none" stroke="white" strokeWidth="0.7"/>
-            <rect x="120" y="66" width="120" height="34" fill="none" stroke="white" strokeWidth="0.7"/>
-            <rect x="10" y="110" width="230" height="60" fill="none" stroke="white" strokeWidth="0.8"/>
-            <rect x="10" y="180" width="110" height="200" fill="none" stroke="white" strokeWidth="0.7"/>
-            <rect x="130" y="180" width="110" height="95" fill="none" stroke="white" strokeWidth="0.7"/>
-            <rect x="130" y="285" width="110" height="95" fill="none" stroke="white" strokeWidth="0.7"/>
-          </svg>
+        {/* Aerial masterplan фон */}
+        <div className="absolute inset-0">
+          <img src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/10c8e8f3-5bfd-4d3a-bc58-2c67d60c7c99.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.15 }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(10,10,15,0.9) 0%, rgba(10,10,15,0.6) 50%, rgba(10,10,15,0.85) 100%)" }} />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0.5) 0%, rgba(10,10,15,0.9) 100%)" }} />
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
