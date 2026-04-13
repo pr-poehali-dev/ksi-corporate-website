@@ -29,14 +29,14 @@ export function NavBar() {
           ))}
         </div>
 
-        {/* Центр — логотип, появляется при скролле */}
+        {/* Центр — логотип, всегда виден */}
         <div className="flex items-center justify-center mx-6 lg:mx-10">
-          <a href="#" className="block relative" style={{ width: 36, height: 36 }}>
+          <a href="#" className="block navbar-logo-link" style={{ width: 36, height: 36 }}>
             <img
               src={LOGO_URL}
               alt="КСИ"
-              className={`w-full h-full object-contain transition-all duration-700 ${scrolled ? "opacity-100 scale-100" : "opacity-0 scale-75"}`}
-              style={{ filter: scrolled ? "drop-shadow(0 0 8px rgba(0,212,255,0.3))" : "none" }}
+              className="w-full h-full object-contain"
+              style={{ filter: "drop-shadow(0 0 6px rgba(0,212,255,0.25))" }}
             />
           </a>
         </div>

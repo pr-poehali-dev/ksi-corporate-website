@@ -76,14 +76,14 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Правая колонка — большой логотип с неоновым проявлением */}
+          {/* Правая колонка — логотип с проявлением из темноты */}
           <div className="hidden lg:flex items-center justify-center">
             <div className="hero-logo-container relative">
               <img
                 src={LOGO_URL}
                 alt="КСИ"
                 className="hero-logo-neon"
-                style={{ width: 380, height: "auto", maxHeight: 450 }}
+                style={{ width: 190, height: "auto" }}
               />
               <div className="hero-logo-glow" />
             </div>
