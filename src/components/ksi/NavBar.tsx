@@ -15,19 +15,20 @@ export function NavBar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-ksi-dark/95 backdrop-blur-md border-b border-ksi-border" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-7">
           {NAV_ITEMS.map((item) => (
             <a key={item.href} href={item.href} className="nav-link">{item.label}</a>
           ))}
         </div>
 
-        <a href="/contacts" className="hidden lg:block btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
-          Связаться
-        </a>
-
-        <button className="lg:hidden text-white/60 hover:text-white ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
-          <Icon name={mobileOpen ? "X" : "Menu"} size={22} />
-        </button>
+        <div className="flex items-center gap-4 ml-auto lg:ml-0">
+          <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
+            Связаться
+          </a>
+          <button className="lg:hidden text-white/60 hover:text-white" onClick={() => setMobileOpen(!mobileOpen)}>
+            <Icon name={mobileOpen ? "X" : "Menu"} size={22} />
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
