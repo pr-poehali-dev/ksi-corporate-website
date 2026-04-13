@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
 
-const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/aa865952-a04a-4fb8-b8c0-6cf619baf76c.png";
+const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/93eb9bc4-b664-470c-ae35-71d7454ce9b4.png";
 
 export function NavBar() {
   const [scrolled, setScrolled] = useState(false);
