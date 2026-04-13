@@ -1,0 +1,29 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS returns CORS headers",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {}
+    },
+    {
+      "name": "POST without auth returns 401",
+      "method": "POST",
+      "path": "/",
+      "body": {"task_id": "test", "message": "hello"},
+      "expectedStatus": 401,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Unauthorized"}
+    },
+    {
+      "name": "GET not allowed",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    }
+  ]
+}

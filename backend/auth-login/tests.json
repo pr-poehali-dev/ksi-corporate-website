@@ -1,0 +1,38 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS returns CORS headers",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {}
+    },
+    {
+      "name": "Missing email returns 400",
+      "method": "POST",
+      "path": "/",
+      "body": {"password": "test123"},
+      "expectedStatus": 400,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Email and password are required"}
+    },
+    {
+      "name": "Missing password returns 400",
+      "method": "POST",
+      "path": "/",
+      "body": {"email": "test@example.com"},
+      "expectedStatus": 400,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Email and password are required"}
+    },
+    {
+      "name": "GET method not allowed",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    }
+  ]
+}

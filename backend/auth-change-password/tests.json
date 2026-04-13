@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS returns CORS headers",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {}
+    },
+    {
+      "name": "Missing token returns 401",
+      "method": "POST",
+      "path": "/",
+      "body": {"current_password": "old", "new_password": "newpass123"},
+      "expectedStatus": 401,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Authorization token is required"}
+    },
+    {
+      "name": "Missing passwords returns 400",
+      "method": "POST",
+      "path": "/",
+      "headers": {"X-Authorization": "Bearer faketoken"},
+      "body": {},
+      "expectedStatus": 400,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "current_password and new_password are required"}
+    },
+    {
+      "name": "GET method not allowed",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    }
+  ]
+}

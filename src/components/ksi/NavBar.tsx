@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
+import { useAuth } from "@/contexts/AuthContext";
 
 const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/93eb9bc4-b664-470c-ae35-71d7454ce9b4.png";
 
 export function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
+  const cabinetLink = user ? (user.user_type === "internal" ? "/admin" : "/cabinet") : "/auth/login";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -56,6 +59,10 @@ export function NavBar() {
           <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer ml-3">
             Связаться
           </a>
+          <a href={cabinetLink} className="flex items-center gap-1.5 text-white/50 hover:text-cyan-400 transition-colors text-sm ml-2">
+            <Icon name={user ? "LayoutDashboard" : "LogIn"} size={16} />
+            {user ? "Кабинет" : "Войти"}
+          </a>
         </div>
 
         {/* Мобильная кнопка */}
@@ -73,6 +80,10 @@ export function NavBar() {
           ))}
           <a href="/contacts" className="block btn-primary-ksi px-5 py-2 text-sm rounded-sm text-center mt-4" onClick={() => setMobileOpen(false)}>
             Связаться
+          </a>
+          <a href={cabinetLink} className="flex items-center gap-1.5 text-white/50 hover:text-cyan-400 transition-colors text-sm py-2 mt-2" onClick={() => setMobileOpen(false)}>
+            <Icon name={user ? "LayoutDashboard" : "LogIn"} size={16} />
+            {user ? "Кабинет" : "Войти"}
           </a>
         </div>
       )}

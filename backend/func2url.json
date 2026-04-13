@@ -1,0 +1,18 @@
+{
+  "api-task-comments": "https://functions.poehali.dev/8516b5a8-cb84-41bf-abad-7045117da932",
+  "api-km-balance": "https://functions.poehali.dev/845accff-553a-4de8-a13c-d0a3663dcb1e",
+  "api-company-detail": "https://functions.poehali.dev/1b5d9f8d-2b57-45be-9ec6-5cd2c4800cdb",
+  "api-users": "https://functions.poehali.dev/de27d472-bc35-48eb-8934-08622b0965b6",
+  "api-dashboard": "https://functions.poehali.dev/4c6c5013-3944-4f03-97cf-4c1cad779792",
+  "api-tasks": "https://functions.poehali.dev/967b902c-12ad-4726-b3e6-ea9b8d7d0f4c",
+  "api-companies": "https://functions.poehali.dev/1a91328e-b97c-468a-8e22-5d496247f460",
+  "api-task-detail": "https://functions.poehali.dev/00b65a6a-a92b-40ae-a1de-efa03b53c2c9",
+  "api-modules": "https://functions.poehali.dev/ef3e55f0-07e4-4b00-9d8d-ced46597f2ac",
+  "api-audit": "https://functions.poehali.dev/0e521cf3-3418-4d50-8bc5-694e87d31b54",
+  "api-km-operations": "https://functions.poehali.dev/7772c5a1-8fd5-402f-ab24-4c35c1662827",
+  "api-notifications": "https://functions.poehali.dev/1bced70c-36cc-42f3-8233-7875de1d27f1",
+  "auth-change-password": "https://functions.poehali.dev/6fd20213-d9b7-441f-be6f-8b51f9651add",
+  "auth-me": "https://functions.poehali.dev/1fd884a6-0ce0-4c7b-9cf8-95a09195f975",
+  "auth-logout": "https://functions.poehali.dev/efa036e3-d00e-4159-a196-e089c1a217ea",
+  "auth-login": "https://functions.poehali.dev/b71cec9c-a5e5-47dd-8fb0-afd40a67732d"
+}
