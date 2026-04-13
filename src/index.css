@@ -139,12 +139,8 @@
     box-shadow: 0 0 15px rgba(123, 47, 255, 0.1);
   }
 
-  /* grid-bg — практически убран, только для совместимости */
   .grid-bg {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.006) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.006) 1px, transparent 1px);
-    background-size: 120px 120px;
+    background: none;
   }
 
   /* Architectural / parcel-map layer */

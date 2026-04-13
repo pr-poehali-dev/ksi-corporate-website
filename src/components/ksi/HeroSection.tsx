@@ -1,7 +1,7 @@
 import Icon from "@/components/ui/icon";
 import { STATS } from "./data";
 
-const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/2116a75d-3959-4f90-b237-7e4a87ff500e.jpg";
+const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/4a21ac91-a1a0-42e5-85ac-4c4837a8ef21.jpeg";
 const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6dabea3b-bb29-4450-a60d-b56dafacbcc1.png";
 
 export function HeroSection() {

@@ -1,6 +1,6 @@
 import Icon from "@/components/ui/icon";
 
-const ISOMETRIC_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/58a3bc6a-4e23-4813-a8ca-97ebbd7301a9.jpg";
+const LAYERED_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/ddb45a2a-e1fc-411b-8a69-85a2fb877fc1.png";
 
 const HIERARCHY = [
   { level: "01", title: "АО КСИ", role: "Головная структура", color: "#00d4ff" },
@@ -60,19 +60,20 @@ export function AboutSection() {
 
           {/* Правая колонка — architectural visual + иерархия */}
           <div>
-            {/* Фоновый ассет — изометрия девелопмента */}
-            <div className="relative rounded-sm overflow-hidden mb-6" style={{ height: 240 }}>
+            {/* Многослойная архитектура группы */}
+            <div className="relative rounded-sm overflow-hidden mb-6" style={{ height: 320 }}>
               <img
-                src={ISOMETRIC_BG}
-                alt="Архитектурная визуализация"
-                className="w-full h-full object-cover"
-                style={{ opacity: 0.65 }}
+                src={LAYERED_BG}
+                alt="Послойная архитектура девелоперской группы"
+                className="w-full h-full object-contain"
+                style={{ opacity: 0.85 }}
               />
               <div className="absolute inset-0" style={{
-                background: "linear-gradient(to bottom, rgba(10,10,15,0.3) 0%, rgba(10,10,15,0.7) 100%)",
+                background: "linear-gradient(to bottom, transparent 0%, transparent 70%, rgba(10,10,15,0.6) 100%)",
               }} />
-              <div className="absolute bottom-4 left-5">
-                <div className="font-ibm text-white/25 text-[10px] tracking-widest uppercase">Архитектура девелоперской группы</div>
+              <div className="absolute bottom-4 left-5 right-5 flex items-end justify-between">
+                <div className="font-ibm text-white/30 text-[10px] tracking-widest uppercase">Послойная структура группы</div>
+                <div className="font-ibm text-white/15 text-[9px] tracking-wider">Земля → Проект → Платформа → Управление</div>
               </div>
             </div>
 

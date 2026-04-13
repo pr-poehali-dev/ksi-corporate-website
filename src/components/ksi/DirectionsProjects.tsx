@@ -99,7 +99,7 @@ export function DirectionsSection() {
     <section id="directions" className="py-32 relative">
       {/* Aerial masterplan фон вместо IT-grid */}
       <div className="absolute inset-0 pointer-events-none">
-        <img src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/2116a75d-3959-4f90-b237-7e4a87ff500e.jpg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.06 }} />
+        <img src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/4a21ac91-a1a0-42e5-85ac-4c4837a8ef21.jpeg" alt="" className="w-full h-full object-cover" style={{ opacity: 0.06 }} />
         <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0.7) 0%, rgba(10,10,15,0.4) 30%, rgba(10,10,15,0.4) 70%, rgba(10,10,15,0.8) 100%)" }} />
       </div>
 

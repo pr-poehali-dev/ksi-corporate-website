@@ -1,4 +1,4 @@
-const LAND_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/10c8e8f3-5bfd-4d3a-bc58-2c67d60c7c99.jpg";
+const LAND_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/4a21ac91-a1a0-42e5-85ac-4c4837a8ef21.jpeg";
 
 const STEPS = [
   { num: "01", label: "Земельный актив", desc: "Поиск, проверка, структуризация через LSS и Земельную аналитику" },
