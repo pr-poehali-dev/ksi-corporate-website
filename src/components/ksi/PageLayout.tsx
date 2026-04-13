@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
 
+const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/aa865952-a04a-4fb8-b8c0-6cf619baf76c.png";
+
 function SiteNavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -13,35 +15,45 @@ function SiteNavBar() {
   }, []);
 
   const current = typeof window !== "undefined" ? window.location.pathname : "";
+  const half = Math.ceil(NAV_ITEMS.length / 2);
+  const leftNav = NAV_ITEMS.slice(0, half);
+  const rightNav = NAV_ITEMS.slice(half);
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-ksi-dark/95 backdrop-blur-md border-b border-ksi-border" : "bg-ksi-dark/80 backdrop-blur-sm border-b border-ksi-border/50"}`}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-3">
-          <img
-            src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
-            alt="КСИ"
-            className="h-9 w-auto flex-shrink-0"
-          />
-          <div className="font-mono-ibm text-white/50 text-[9px] tracking-widest hidden sm:block">КриптоСтройИнвест</div>
-        </a>
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-        <div className="hidden lg:flex items-center gap-7">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="nav-link"
-              style={current === item.href ? { color: "var(--ksi-cyan)" } : {}}
-            >
+        <div className="hidden lg:flex items-center gap-6 flex-1 justify-end">
+          {leftNav.map((item) => (
+            <a key={item.href} href={item.href} className="nav-link"
+              style={current === item.href ? { color: "var(--ksi-cyan)" } : {}}>
               {item.label}
             </a>
           ))}
         </div>
 
-        <a href="/contacts" className="hidden lg:block btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
-          Написать нам
-        </a>
+        <div className="flex items-center justify-center mx-6 lg:mx-10">
+          <a href="/" className="block" style={{ width: 36, height: 36 }}>
+            <img
+              src={LOGO_URL}
+              alt="КСИ"
+              className="w-full h-full object-contain"
+              style={{ filter: "drop-shadow(0 0 6px rgba(0,212,255,0.25))" }}
+            />
+          </a>
+        </div>
+
+        <div className="hidden lg:flex items-center gap-6 flex-1">
+          {rightNav.map((item) => (
+            <a key={item.href} href={item.href} className="nav-link"
+              style={current === item.href ? { color: "var(--ksi-cyan)" } : {}}>
+              {item.label}
+            </a>
+          ))}
+          <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer ml-auto">
+            Написать нам
+          </a>
+        </div>
 
         <button className="lg:hidden text-white/60 hover:text-white" onClick={() => setMobileOpen(!mobileOpen)}>
           <Icon name={mobileOpen ? "X" : "Menu"} size={22} />
@@ -72,7 +84,7 @@ function SiteFooter() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6cc3c0d3-b169-4aea-b654-cf24515a3fb0.png"
+                src={LOGO_URL}
                 alt="КСИ"
                 className="h-10 w-auto flex-shrink-0"
               />
