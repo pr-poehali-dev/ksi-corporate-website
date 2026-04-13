@@ -2,7 +2,7 @@ import Icon from "@/components/ui/icon";
 import { STATS } from "./data";
 
 const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/2116a75d-3959-4f90-b237-7e4a87ff500e.jpg";
-const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/aa865952-a04a-4fb8-b8c0-6cf619baf76c.png";
+const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6dabea3b-bb29-4450-a60d-b56dafacbcc1.png";
 
 export function HeroSection() {
   return (
@@ -83,7 +83,7 @@ export function HeroSection() {
                 src={LOGO_URL}
                 alt="КСИ"
                 className="hero-logo-neon"
-                style={{ width: 320, height: 320 }}
+                style={{ width: 380, height: "auto", maxHeight: 450 }}
               />
               <div className="hero-logo-glow" />
             </div>
