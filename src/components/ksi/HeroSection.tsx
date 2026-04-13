@@ -6,7 +6,7 @@ const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden" style={{ background: "#080810" }}>
+    <section className="relative min-h-screen flex flex-col overflow-hidden" style={{ background: "#080810" }}>
       <div className="absolute inset-0">
         <img
           src={HERO_BG}
@@ -22,21 +22,23 @@ export function HeroSection() {
         }} />
       </div>
 
-      {/* Логотип по центру под меню */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20">
-        <div className="hero-logo-container">
-          <img
-            src={LOGO_URL}
-            alt="КСИ"
-            className="hero-logo-neon"
-            style={{ width: 190, height: "auto" }}
-          />
-          <div className="hero-logo-glow" />
-        </div>
-      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-20 w-full flex-1 flex flex-col">
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-28 pb-20 w-full">
-        <div className="max-w-2xl">
+        {/* Логотип по центру под меню */}
+        <div className="flex justify-center pt-4 pb-10">
+          <div className="hero-logo-container relative">
+            <img
+              src={LOGO_URL}
+              alt="КСИ"
+              className="hero-logo-neon"
+              style={{ width: 160, height: "auto" }}
+            />
+            <div className="hero-logo-glow" />
+          </div>
+        </div>
+
+        {/* Контент ниже логотипа */}
+        <div className="max-w-2xl flex-1 flex flex-col justify-center">
           <div className="section-label mb-6 fade-in-up stagger-1">
             ◆ Головная структура группы &nbsp;·&nbsp; АО КСИ &nbsp;·&nbsp; Москва
           </div>
@@ -87,7 +89,7 @@ export function HeroSection() {
         </div>
 
         {/* Статистика */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10"
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-10"
           style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
           {STATS.map((stat, i) => (
             <div key={i} className="fade-in-up" style={{ animationDelay: `${0.1 * i + 0.3}s`, opacity: 0 }}>

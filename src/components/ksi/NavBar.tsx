@@ -14,53 +14,42 @@ export function NavBar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const leftNav = NAV_ITEMS.slice(0, 4);
-  const rightNav = NAV_ITEMS.slice(4);
-
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-ksi-dark/95 backdrop-blur-md border-b border-ksi-border" : "bg-transparent"}`}>
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center relative">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center">
 
-        {/* На старте: все ссылки в одну строку по центру */}
-        {/* При скролле: разбиваются влево/вправо, по центру — логотип */}
-
-        {/* Левая группа */}
-        <div className={`hidden lg:flex items-center gap-6 transition-all duration-500 ${scrolled ? "flex-1 justify-end" : "flex-1 justify-center"}`}>
-          {scrolled
-            ? leftNav.map((item) => (
-                <a key={item.href} href={item.href} className="nav-link">{item.label}</a>
-              ))
-            : NAV_ITEMS.map((item) => (
-                <a key={item.href} href={item.href} className="nav-link">{item.label}</a>
-              ))
-          }
+        {/* Левая группа — первые 4 пункта */}
+        <div className="hidden lg:flex items-center gap-6 flex-1 justify-end">
+          {NAV_ITEMS.slice(0, 4).map((item) => (
+            <a key={item.href} href={item.href} className="nav-link whitespace-nowrap">{item.label}</a>
+          ))}
         </div>
 
-        {/* Центр — логотип, появляется при скролле */}
-        <div className={`hidden lg:flex items-center justify-center transition-all duration-500 ${scrolled ? "w-14 opacity-100" : "w-0 opacity-0 overflow-hidden"}`}>
-          <a href="/" className="navbar-logo-link block" style={{ width: 34, height: 34, flexShrink: 0 }}>
+        {/* Центр — логотип, всегда в DOM, при скролле раздвигает меню */}
+        <div
+          className="hidden lg:flex items-center justify-center transition-all duration-700 ease-in-out overflow-hidden"
+          style={{
+            width: scrolled ? 56 : 0,
+            opacity: scrolled ? 1 : 0,
+            margin: scrolled ? "0 12px" : "0",
+          }}
+        >
+          <a href="/" className="navbar-logo-link block flex-shrink-0" style={{ width: 32, height: 32 }}>
             <img
               src={LOGO_URL}
               alt="КСИ"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain transition-all duration-500"
               style={{ filter: "drop-shadow(0 0 6px rgba(0,212,255,0.3))" }}
             />
           </a>
         </div>
 
-        {/* Правая группа — только при скролле */}
-        <div className={`hidden lg:flex items-center gap-6 transition-all duration-500 ${scrolled ? "flex-1 opacity-100" : "flex-1 opacity-0 pointer-events-none w-0 overflow-hidden"}`}>
-          {rightNav.map((item) => (
-            <a key={item.href} href={item.href} className="nav-link">{item.label}</a>
+        {/* Правая группа — последние 3 пункта */}
+        <div className="hidden lg:flex items-center gap-6 flex-1">
+          {NAV_ITEMS.slice(4).map((item) => (
+            <a key={item.href} href={item.href} className="nav-link whitespace-nowrap">{item.label}</a>
           ))}
-          <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer ml-auto">
-            Связаться
-          </a>
-        </div>
-
-        {/* Кнопка "Связаться" на старте (без скролла) */}
-        <div className={`hidden lg:block transition-all duration-500 ${scrolled ? "opacity-0 pointer-events-none absolute" : "opacity-100"}`}>
-          <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
+          <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer ml-auto whitespace-nowrap">
             Связаться
           </a>
         </div>
