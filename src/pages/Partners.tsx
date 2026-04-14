@@ -4,116 +4,79 @@ import Icon from "@/components/ui/icon";
 
 const AUDIENCES = [
   {
-    icon: "MapPin",
-    title: "Землевладельцы",
-    role: "Ваш актив — основа проекта",
+    icon: "Building2",
+    title: "Девелоперам",
+    role: "Ваша компетенция + наша интеллектуальная инфраструктура",
     color: "cyan",
-    intro: "Если у вас есть земельный участок и вы ищете модель его реализации без самостоятельного управления девелоперским циклом — АО КСИ предлагает структурированные форматы вовлечения актива в проект.",
-    details: "Мы проводим предварительный анализ участка через LSS, оцениваем девелоперский потенциал и предлагаем модель участия, при которой актив работает без его продажи. Все механизмы структурируются юридически корректно.",
+    intro: "Профессиональным девелоперам АО КСИ предоставляет интеллектуальные контуры, аналитические инструменты и операторскую поддержку через систему КриптоМетры.",
+    details: "Вы можете подключать земельный поиск через LSS, использовать аналитику Лаборатории ИИ, получать операторскую поддержку Центра реализации — и участвовать в развитии системы.",
     offers: [
-      { icon: "Search", text: "Аналитический анализ участка через LSS" },
-      { icon: "FileText", text: "Структурирование модели вовлечения" },
-      { icon: "Settings2", text: "Подключение к Fee-Dev платформе" },
-      { icon: "Scale", text: "Юридическое оформление механизма" },
+      { icon: "Search", text: "Земельный поиск и аналитика через LSS" },
+      { icon: "BrainCircuit", text: "ИИ-инструменты анализа и due diligence" },
+      { icon: "TrendingUp", text: "Операторская поддержка Центра реализации" },
+      { icon: "FlaskConical", text: "Участие в бета-тестировании контуров" },
+    ],
+    cta: "Обсудить формат работы",
+  },
+  {
+    icon: "MapPin",
+    title: "Землевладельцам",
+    role: "Ваш актив — основа проекта",
+    color: "purple",
+    intro: "Если у вас есть земельный участок и вы ищете модель его реализации — АО КСИ предлагает структурированные форматы вовлечения актива в проект через контуры КриптоМетров.",
+    details: "Мы проводим анализ участка через Службу земельного поиска, оцениваем потенциал и предлагаем модель сопровождения через Центр реализации активов.",
+    offers: [
+      { icon: "Search", text: "Аналитический анализ участка" },
+      { icon: "FileText", text: "Формирование цифрового досье актива" },
+      { icon: "TrendingUp", text: "Структурирование модели реализации" },
+      { icon: "ShieldCheck", text: "Сопровождение через Центр реализации" },
     ],
     cta: "Предоставить информацию об участке",
-    disclaimer: null,
   },
   {
-    icon: "Building2",
-    title: "Девелоперы",
-    role: "Ваша компетенция + наша инфраструктура",
-    color: "purple",
-    intro: "Профессиональным девелоперам АО КСИ предоставляет операционную среду, аналитические инструменты и технологическую поддержку. Мы не конкурируем — мы расширяем возможности.",
-    details: "Fee-Dev платформа позволяет работать с активами, которые поступают через LSS и КриптоМетры. Лаборатория ИИ обеспечивает аналитику. Земельная аналитика даёт данные. Вы приносите девелоперскую экспертизу.",
-    offers: [
-      { icon: "Settings2", text: "Fee-Dev платформа и операционная среда" },
-      { icon: "Search", text: "Поток активов через LSS" },
-      { icon: "BrainCircuit", text: "ИИ-инструменты анализа и due diligence" },
-      { icon: "DatabaseZap", text: "Земельная аналитика и данные" },
-    ],
-    cta: "Обсудить формат сотрудничества",
-    disclaimer: null,
-  },
-  {
-    icon: "TrendingUp",
-    title: "Инвесторы",
-    role: "Участие в группе с долгим горизонтом",
+    icon: "BarChart3",
+    title: "Владельцам активов",
+    role: "Структурирование и вывод на рынок",
     color: "cyan",
-    intro: "Для стратегических и финансовых инвесторов АО КСИ формирует структурированные модели участия в группе и отдельных направлениях. Акцент — на долгосрочном сотрудничестве.",
-    details: "Компания не осуществляет публичного привлечения денежных средств. Модели участия формируются индивидуально в рамках юридически корректных конструкций — партнёрских соглашений, корпоративных договоров или иных предусмотренных законом механизмов.",
+    intro: "Владельцам объектов недвижимости и земельных активов — профессиональное структурирование, упаковка и сопровождение реализации через операторский контур АО КСИ.",
+    details: "Центр реализации активов работает с задачами упаковки, структурирования и логики вывода на рынок. Студия проектного креатива обеспечивает визуальную и презентационную упаковку.",
     offers: [
-      { icon: "FileText", text: "Информационный меморандум по запросу" },
-      { icon: "Scale", text: "Индивидуальные структуры участия" },
-      { icon: "Handshake", text: "Диалог с командой группы" },
-      { icon: "PieChart", text: "Доступ к диверсифицированному портфелю направлений" },
+      { icon: "FileText", text: "Упаковка и структурирование актива" },
+      { icon: "Palette", text: "Визуальная и презентационная упаковка" },
+      { icon: "TrendingUp", text: "Логика реализации и сопровождение" },
+      { icon: "Users", text: "Интеграция подрядчиков и экспертов" },
     ],
-    cta: "Запросить информационный меморандум",
-    disclaimer: "Компания не осуществляет публичного привлечения денежных средств. Отдельные модели участия реализуются в рамках специальных юридических конструкций и партнёрских механизмов, формируемых индивидуально.",
+    cta: "Обсудить работу с активом",
   },
   {
-    icon: "Handshake",
-    title: "Стратегические партнёры",
-    role: "Совместное развитие направлений",
+    icon: "Users",
+    title: "Проектным командам",
+    role: "Инструменты для принятия решений",
     color: "purple",
-    intro: "Институциональные и отраслевые партнёры, заинтересованные в совместном развитии направлений группы: создание совместных структур, разработка продуктов, расширение рыночного присутствия.",
-    details: "АО КСИ открыто к созданию совместных предприятий, партнёрских структур и совместной разработке продуктов в сферах PropTech, ИИ, земельной аналитики и цифрового девелопмента.",
+    intro: "Проектным и инвестиционным командам — доступ к аналитическим инструментам, земельным данным и интеллектуальным контурам системы КриптоМетры.",
+    details: "Лаборатория ИИ предоставляет прогнозные модели и автоматизацию due diligence. Служба земельного поиска формирует структурированные досье. Студия креатива готовит презентационные материалы.",
     offers: [
-      { icon: "Network", text: "Создание совместных партнёрских структур" },
-      { icon: "Code2", text: "Совместная разработка продуктов" },
-      { icon: "Globe", text: "Расширение рыночного присутствия" },
-      { icon: "Layers", text: "Участие в отдельных направлениях группы" },
+      { icon: "BrainCircuit", text: "ИИ-аналитика и прогнозные модели" },
+      { icon: "DatabaseZap", text: "Земельные данные и цифровые досье" },
+      { icon: "Presentation", text: "Подготовка презентаций и концепций" },
+      { icon: "Cpu", text: "Автоматизация аналитических процессов" },
     ],
-    cta: "Предложить партнёрство",
-    disclaimer: null,
+    cta: "Обсудить инструменты",
   },
   {
-    icon: "Code2",
-    title: "Технологические партнёры",
-    role: "Интеграция и совместная разработка",
+    icon: "FlaskConical",
+    title: "Бета-тестерам",
+    role: "Участие в развитии системы",
     color: "cyan",
-    intro: "IT-компании, разработчики, поставщики данных и платформенных решений. АО КСИ открыто к интеграциям, лицензионным соглашениям и совместной разработке в сфере PropTech и ИИ.",
-    details: "Лаборатория ИИ и направление Лицензирования обеспечивают взаимодействие с технологическими партнёрами. Форматы: API-интеграции, white-label, co-development, лицензирование данных.",
+    intro: "АО КСИ приглашает профессиональных участников рынка к участию в тестировании, обучении и настройке интеллектуальных контуров КриптоМетров на реальных задачах.",
+    details: "Вы можете подключиться к бета-тестированию отдельных контуров, участвовать в совместной отработке сценариев и помогать обучать систему на реальных данных.",
     offers: [
-      { icon: "Code2", text: "API-интеграции с платформами группы" },
-      { icon: "PackageCheck", text: "Лицензирование решений" },
-      { icon: "Cpu", text: "Совместные R&D-проекты" },
-      { icon: "DatabaseZap", text: "Доступ к земельным данным и ИИ-моделям" },
+      { icon: "FlaskConical", text: "Тестирование отдельных контуров системы" },
+      { icon: "Settings2", text: "Участие в обучении и настройке" },
+      { icon: "GitBranch", text: "Совместная отработка сценариев" },
+      { icon: "Rocket", text: "Участие в развитии виртуального девелопера" },
     ],
-    cta: "Обсудить техническую интеграцию",
-    disclaimer: null,
-  },
-  {
-    icon: "Sparkles",
-    title: "Заказчики ИИ-решений",
-    role: "Специализированные инструменты под задачу",
-    color: "purple",
-    intro: "Компаниям, ищущим ИИ-инструменты для недвижимости, аналитики, управления или медиа — Лаборатория ИИ и ИИ-продакшн КСИ разрабатывают и лицензируют специализированные решения.",
-    details: "Не универсальные AI-инструменты, а отраслевые решения, обученные на данных и задачах рынка недвижимости. От ИИ-моделей анализа участков до цифровых аватаров для презентаций.",
-    offers: [
-      { icon: "BrainCircuit", text: "Разработка ИИ-инструментов под задачу" },
-      { icon: "PackageCheck", text: "Лицензирование готовых решений" },
-      { icon: "Bot", text: "ИИ-аватары и цифровые персонажи" },
-      { icon: "Monitor", text: "Объясняющие интерфейсы и UX-нарративы" },
-    ],
-    cta: "Обсудить разработку решения",
-    disclaimer: null,
-  },
-  {
-    icon: "Newspaper",
-    title: "Медиа и аналитики",
-    role: "Экспертиза и аналитические данные",
-    color: "cyan",
-    intro: "Профессиональным изданиям и отраслевым аналитикам — экспертные материалы, комментарии, исследования по рынку недвижимости, земельному сегменту и цифровому девелопменту.",
-    details: "Медиацентр АО КСИ формирует аналитическую позицию группы. Мы готовы предоставлять экспертные комментарии, аналитические материалы и данные для профессионального использования.",
-    offers: [
-      { icon: "BarChart2", text: "Аналитические обзоры и исследования" },
-      { icon: "MessageSquare", text: "Экспертные комментарии по запросу" },
-      { icon: "FileText", text: "Материалы Медиацентра КСИ" },
-      { icon: "Mail", text: "Подписка на аналитическую рассылку" },
-    ],
-    cta: "Запросить экспертный комментарий",
-    disclaimer: null,
+    cta: "Принять участие в тестировании",
   },
 ];
 
@@ -121,26 +84,31 @@ export default function Partners() {
   const [activeIdx, setActiveIdx] = useState(0);
   const aud = AUDIENCES[activeIdx];
   const isCyan = aud.color === "cyan";
+  const accentColor = isCyan ? "#00d4ff" : "#7b2fff";
+  const bgAccent = isCyan ? "rgba(0,212,255,0.07)" : "rgba(123,47,255,0.07)";
+  const borderAccent = isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)";
 
   return (
-    <PageLayout breadcrumb={[{ label: "Партнёрам" }]}>
+    <PageLayout breadcrumb={[{ label: "Сотрудничество" }]}>
+      {/* Hero */}
       <section className="py-24 relative overflow-hidden grid-bg">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 40% 50%, rgba(123,47,255,0.04) 0%, transparent 60%)" }} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
-            <div className="section-label mb-5">◆ Работаем с профессионалами рынка</div>
+            <div className="section-label mb-5">◆ Сотрудничество</div>
             <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-              Ваша роль<br />
-              <span className="text-gradient-purple">в экосистеме АО КСИ</span>
+              Кому уже может<br />
+              <span className="text-gradient-purple">быть полезно</span>
             </h1>
             <p className="font-ibm text-white/55 text-xl leading-relaxed">
-              Выберите ваш профиль — и узнайте, что именно мы можем предложить
+              Выберите ваш профиль — и узнайте, как прикладные контуры АО КСИ
+              могут решать ваши задачи уже сейчас.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Навигация по аудиториям */}
+      {/* Навигация */}
       <section className="border-t border-b border-ksi-border/30 sticky top-[73px] z-40 bg-ksi-dark/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 py-3 flex gap-2 flex-wrap">
           {AUDIENCES.map((a, i) => (
@@ -161,46 +129,44 @@ export default function Partners() {
       {/* Детальная карточка */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 card-ksi rounded-sm p-8" style={{ borderColor: isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)", boxShadow: `0 0 40px ${isCyan ? "rgba(0,212,255,0.05)" : "rgba(123,47,255,0.05)"}` }}>
-              <div className="flex items-start gap-4 mb-7">
-                <div className="w-14 h-14 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: isCyan ? "rgba(0,212,255,0.08)" : "rgba(123,47,255,0.08)", border: `1px solid ${isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)"}` }}>
-                  <Icon name={aud.icon} size={24} style={{ color: isCyan ? "#00d4ff" : "#7b2fff" }} />
+          <div className="grid lg:grid-cols-5 gap-8">
+            <div className="lg:col-span-3 rounded-sm p-8" style={{ background: "rgba(255,255,255,0.015)", border: `1px solid ${borderAccent}` }}>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-12 h-12 rounded-sm flex items-center justify-center" style={{ background: bgAccent, border: `1px solid ${borderAccent}` }}>
+                  <Icon name={aud.icon} size={22} style={{ color: accentColor }} />
                 </div>
                 <div>
-                  <div className="font-mono-ibm text-xs tracking-widest mb-1" style={{ color: isCyan ? "rgba(0,212,255,0.5)" : "rgba(123,47,255,0.5)" }}>{aud.role.toUpperCase()}</div>
-                  <h2 className="font-oswald text-3xl text-white font-semibold">{aud.title}</h2>
+                  <h2 className="font-oswald text-2xl font-semibold text-white">{aud.title}</h2>
+                  <p className="font-ibm text-white/35 text-xs">{aud.role}</p>
                 </div>
               </div>
-              <p className="font-ibm text-white/65 text-lg leading-relaxed mb-5">{aud.intro}</p>
-              <p className="font-ibm text-white/50 text-base leading-relaxed mb-8">{aud.details}</p>
-              {aud.disclaimer && (
-                <div className="p-5 rounded-sm mb-8" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-2">ПРАВОВАЯ ОГОВОРКА</div>
-                  <p className="font-ibm text-white/35 text-xs leading-relaxed">{aud.disclaimer}</p>
-                </div>
-              )}
-              <a href="/contacts" className="btn-primary-ksi px-8 py-3.5 rounded-sm text-sm inline-block cursor-pointer" style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
+              <p className="font-ibm text-white/60 text-base leading-relaxed mb-4">{aud.intro}</p>
+              <p className="font-ibm text-white/40 text-sm leading-relaxed mb-8">{aud.details}</p>
+              <a href="/contacts" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm inline-block cursor-pointer"
+                style={!isCyan ? { background: "linear-gradient(135deg, #7b2fff, #a855f7)", color: "#fff" } : {}}>
                 {aud.cta}
               </a>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-1">ЧТО МЫ ПРЕДЛАГАЕМ</div>
+            <div className="lg:col-span-2 flex flex-col gap-3">
+              <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-1 px-1">ЧТО МЫ ПРЕДЛАГАЕМ</div>
               {aud.offers.map((offer, i) => (
                 <div key={i} className="flex items-center gap-4 p-4 rounded-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <div className="w-8 h-8 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: isCyan ? "rgba(0,212,255,0.07)" : "rgba(123,47,255,0.07)", border: `1px solid ${isCyan ? "rgba(0,212,255,0.15)" : "rgba(123,47,255,0.15)"}` }}>
-                    <Icon name={offer.icon} size={14} style={{ color: isCyan ? "#00d4ff" : "#7b2fff" }} />
+                  <div className="w-9 h-9 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: bgAccent, border: `1px solid ${borderAccent}` }}>
+                    <Icon name={offer.icon} size={15} style={{ color: accentColor }} />
                   </div>
-                  <span className="font-ibm text-white/60 text-sm">{offer.text}</span>
+                  <span className="font-ibm text-white/55 text-sm">{offer.text}</span>
                 </div>
               ))}
-              <div className="mt-auto pt-4 border-t border-ksi-border/30">
-                <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-3">ДРУГИЕ АУДИТОРИИ</div>
-                {AUDIENCES.filter((_, i) => i !== activeIdx).slice(0, 4).map((a, i) => (
-                  <button key={i} onClick={() => setActiveIdx(AUDIENCES.indexOf(a))} className="w-full flex items-center gap-3 py-2 text-left group">
-                    <Icon name={a.icon} size={13} className="text-white/20 group-hover:text-white/45 transition-colors flex-shrink-0" />
+
+              <div className="mt-auto pt-5 border-t border-ksi-border/30">
+                <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-3">ДРУГИЕ ПРОФИЛИ</div>
+                {AUDIENCES.filter((_, i) => i !== activeIdx).map((a, i) => (
+                  <button key={i} onClick={() => setActiveIdx(AUDIENCES.indexOf(a))}
+                    className="w-full flex items-center gap-3 py-2 text-left group">
+                    <Icon name={a.icon} size={13} className="text-white/20 group-hover:text-white/45 transition-colors" />
                     <span className="font-ibm text-white/25 text-xs group-hover:text-white/50 transition-colors">{a.title}</span>
+                    <Icon name="ArrowRight" size={11} className="ml-auto text-white/15 group-hover:text-white/35 transition-colors" />
                   </button>
                 ))}
               </div>
@@ -209,33 +175,20 @@ export default function Partners() {
         </div>
       </section>
 
-      {/* Как строится взаимодействие */}
-      <section className="py-16 border-t border-ksi-border/30">
+      {/* Общее приглашение */}
+      <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="section-label mb-5">◆ Процесс</div>
-          <h2 className="font-oswald text-3xl text-white mb-10">Как строится взаимодействие</h2>
-          <div className="grid md:grid-cols-4 gap-5">
-            {[
-              { step: "01", title: "Обращение", desc: "Напишите нам через форму, укажите вашу роль и суть запроса" },
-              { step: "02", title: "Квалификация", desc: "Мы рассматриваем обращение и направляем его в профильное направление" },
-              { step: "03", title: "Первый диалог", desc: "Предметный разговор с профильным специалистом группы" },
-              { step: "04", title: "Формат работы", desc: "Формируем предложение или структуру сотрудничества" },
-            ].map((s, i) => (
-              <div key={i} className="card-ksi p-6 rounded-sm">
-                <div className="font-oswald text-4xl font-bold mb-4" style={{ color: "rgba(0,212,255,0.2)" }}>{s.step}</div>
-                <div className="font-oswald text-white font-medium text-lg mb-2">{s.title}</div>
-                <p className="font-ibm text-white/40 text-sm leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
+          <div className="text-center p-12 rounded-sm relative overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(0,212,255,0.04) 0%, rgba(123,47,255,0.04) 100%)", border: "1px solid rgba(0,212,255,0.1)" }}>
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-ksi-cyan/30 to-transparent" />
+            <h3 className="font-oswald text-3xl font-semibold text-white mb-3">Не нашли свой профиль?</h3>
+            <p className="font-ibm text-white/45 text-base mb-8 max-w-lg mx-auto">
+              Опишите вашу задачу — команда АО КСИ ответит по существу
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <a href="/contacts" className="btn-primary-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">Связаться с командой</a>
+              <a href="/cryptometry" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">О проекте КриптоМетры</a>
+            </div>
           </div>
-        </div>
-      </section>
-
-      <section className="py-16 border-t border-ksi-border/30">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h3 className="font-oswald text-3xl text-white mb-3">Готовы к предметному разговору?</h3>
-          <p className="font-ibm text-white/45 mb-8 max-w-xl mx-auto">Укажите вашу роль в форме — это помогает нам ответить точно и быстро</p>
-          <a href="/contacts" className="btn-primary-ksi px-10 py-3.5 rounded-sm text-sm inline-block cursor-pointer">Написать нам →</a>
         </div>
       </section>
     </PageLayout>
