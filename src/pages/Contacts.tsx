@@ -50,13 +50,11 @@ export default function Contacts() {
                     <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ВЫ ПРЕДСТАВЛЯЕТЕ *</label>
                     <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/60 text-sm focus:outline-none focus:border-ksi-cyan/40 transition-colors">
                       <option value="" className="bg-ksi-dark">Выберите вашу роль</option>
-                      <option value="land" className="bg-ksi-dark">Землевладелец</option>
                       <option value="developer" className="bg-ksi-dark">Девелопер / застройщик</option>
-                      <option value="investor" className="bg-ksi-dark">Инвестор / финансовый партнёр</option>
-                      <option value="strategic" className="bg-ksi-dark">Стратегический партнёр</option>
-                      <option value="tech" className="bg-ksi-dark">Технологический партнёр</option>
-                      <option value="ai-client" className="bg-ksi-dark">Заказчик ИИ-решений</option>
-                      <option value="media" className="bg-ksi-dark">Медиа / аналитик / исследователь</option>
+                      <option value="land" className="bg-ksi-dark">Землевладелец</option>
+                      <option value="asset-owner" className="bg-ksi-dark">Владелец актива</option>
+                      <option value="project-team" className="bg-ksi-dark">Проектная / инвестиционная команда</option>
+                      <option value="beta" className="bg-ksi-dark">Хочу участвовать в бета-тестировании</option>
                       <option value="other" className="bg-ksi-dark">Другое</option>
                     </select>
                   </div>
@@ -103,12 +101,12 @@ export default function Contacts() {
                 <div className="section-label mb-4">◆ По направлениям</div>
                 <div className="space-y-3">
                   {[
-                    { title: "КриптоМетры и девелопмент", href: "/directions/cryptometry" },
-                    { title: "LSS и земельный поиск", href: "/directions/lss" },
-                    { title: "Лаборатория ИИ и лицензирование", href: "/directions/ai-lab" },
-                    { title: "ИИ-продакшн", href: "/directions/ai-production" },
-                    { title: "Инвесторам", href: "/partners" },
-                    { title: "Медиацентр", href: "/media" },
+                    { title: "Проект КриптоМетры", href: "/cryptometry" },
+                    { title: "Служба земельного поиска", href: "/directions/lss" },
+                    { title: "Лаборатория ИИ", href: "/directions/ai-lab" },
+                    { title: "Студия проектного креатива", href: "/directions/ai-production" },
+                    { title: "Центр реализации активов", href: "/directions/fee-dev" },
+                    { title: "Сотрудничество", href: "/partners" },
                   ].map((link, i) => (
                     <a key={i} href={link.href} className="flex items-center gap-3 group py-1">
                       <div className="w-1 h-1 rounded-full bg-ksi-cyan/30 flex-shrink-0" />
