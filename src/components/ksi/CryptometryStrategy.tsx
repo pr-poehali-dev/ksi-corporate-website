@@ -9,7 +9,7 @@ const STRATEGY_POINTS = [
 
 function StrategyBlock() {
   return (
-    <section className="py-24 relative overflow-hidden"
+    <section id="strategy" className="py-24 relative overflow-hidden"
       style={{ background: "linear-gradient(to bottom, rgba(10,10,15,1), rgba(12,12,22,1), rgba(10,10,15,1))" }}>
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 50% at 30% 40%, rgba(123,47,255,0.04), transparent)" }} />

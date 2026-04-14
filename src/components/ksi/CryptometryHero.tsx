@@ -45,6 +45,10 @@ function HeroBlock() {
             <a href="#contours" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
               Внутренние контуры
             </a>
+            <a href="#strategy" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer"
+              style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
+              Стратегическая перспектива
+            </a>
             <a href="#beta" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer"
               style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
               Участвовать в бета-тестировании
