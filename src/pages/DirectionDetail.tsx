@@ -134,6 +134,68 @@ export default function DirectionDetail({ slug }: Props) {
         </section>
       )}
 
+      {/* Экспресс-режим 24 часа */}
+      {detail.expressItems && detail.expressItems.length > 0 && (
+        <section className="py-20 border-t border-ksi-border/30 relative overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${accentColor}05, transparent)` }} />
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="section-label">◆ Экспресс-режим</div>
+                  <span className="font-mono-ibm text-[10px] px-2 py-0.5 rounded-sm" style={{ background: `${accentColor}15`, color: accentColor, border: `1px solid ${accentColor}30` }}>24 ЧАСА</span>
+                </div>
+                <h2 className="font-oswald text-3xl md:text-4xl font-semibold text-white leading-tight mb-5">
+                  Материалы<br />за <span style={{ color: accentColor }}>24 часа</span>
+                </h2>
+                <p className="font-ibm text-white/50 text-base leading-relaxed mb-5">
+                  Для срочных задач Студия может собрать часть материалов в ускоренном режиме — когда проект, актив или гипотезу нужно быстро вывести в обсуждение, переговоры или внутреннее решение.
+                </p>
+                <div className="p-4 rounded-sm" style={{ background: "rgba(255,255,255,0.02)", borderLeft: `2px solid ${accentColor}30` }}>
+                  <p className="font-ibm text-white/30 text-xs leading-relaxed">
+                    Реальный объём и состав материалов зависят от задачи, исходных данных и степени срочности. Экспресс-режим доступен для определённых типов задач.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-2.5">
+                {detail.expressItems.map((item, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 rounded-sm"
+                    style={{ background: `${accentColor}03`, border: `1px solid ${accentColor}08` }}>
+                    <div className="w-9 h-9 rounded-sm flex items-center justify-center flex-shrink-0"
+                      style={{ background: `${accentColor}08`, border: `1px solid ${accentColor}15` }}>
+                      <Icon name={item.icon} size={15} style={{ color: accentColor, opacity: 0.65 }} />
+                    </div>
+                    <p className="font-ibm text-white/50 text-sm">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Что даёт (valuePoints) */}
+      {detail.valuePoints && detail.valuePoints.length > 0 && (
+        <section className="py-20 border-t border-ksi-border/30">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <div className="section-label mb-4 justify-center flex">◆ Ценность</div>
+              <h2 className="font-oswald text-3xl font-semibold text-white mb-3">Что даёт {detail.title}</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {detail.valuePoints.map((item, i) => (
+                <div key={i} className="flex items-center gap-3.5 p-4 rounded-sm"
+                  style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                  <Icon name={item.icon} size={16} style={{ color: accentColor, opacity: 0.55 }} className="flex-shrink-0" />
+                  <p className="font-ibm text-white/50 text-sm">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Клиентские сценарии */}
       {detail.clientScenarios && detail.clientScenarios.length > 0 && (
         <section className="py-20 border-t border-ksi-border/30">
@@ -141,7 +203,7 @@ export default function DirectionDetail({ slug }: Props) {
             <div className="section-label mb-4">◆ Клиентские сценарии</div>
             <h2 className="font-oswald text-3xl font-semibold text-white mb-3">С каким запросом к нам обращаются</h2>
             <p className="font-ibm text-white/40 text-base mb-10 max-w-2xl">Выберите сценарий, который соответствует вашей задаче — и мы сразу сориентируем по формату и срокам работы.</p>
-            <div className="grid md:grid-cols-3 gap-5">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {detail.clientScenarios.map((scenario, i) => (
                 <div key={i} className="card-ksi p-6 rounded-sm flex flex-col" style={{ borderColor: `${accentColor}20` }}>
                   <div className="flex items-center gap-2 mb-4">
