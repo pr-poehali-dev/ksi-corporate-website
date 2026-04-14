@@ -1,4 +1,4 @@
-const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/c3047f69-299d-49f8-9718-3bb88004e08a.jpg";
+const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/1cf1171b-7f91-468e-bee1-51f0c4cca384.jpeg";
 const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6dabea3b-bb29-4450-a60d-b56dafacbcc1.png";
 
 export function HeroSection() {
