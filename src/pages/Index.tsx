@@ -1,11 +1,11 @@
 import { NavBar } from "@/components/ksi/NavBar";
 import { HeroSection } from "@/components/ksi/HeroSection";
-import { ThreeLevelsSection } from "@/components/ksi/ThreeLevelsSection";
-import { HybridModelSection } from "@/components/ksi/HybridModelSection";
-import { AILabSection } from "@/components/ksi/AILabSection";
+import { AboutKsiSection } from "@/components/ksi/AboutKsiSection";
 import { CryptometrySection } from "@/components/ksi/CryptometrySection";
-import { ModulesSection } from "@/components/ksi/ModulesSection";
-import { AudienceSection } from "@/components/ksi/AudienceSection";
+import { SystemCircuitSection } from "@/components/ksi/SystemCircuitSection";
+import { InternalServicesSection } from "@/components/ksi/InternalServicesSection";
+import { HybridModelSection } from "@/components/ksi/HybridModelSection";
+import { TasksSection } from "@/components/ksi/TasksSection";
 import { RoadmapSection } from "@/components/ksi/RoadmapSection";
 import { DifferenceSection } from "@/components/ksi/DifferenceSection";
 import { CTASection } from "@/components/ksi/CTASection";
@@ -16,12 +16,12 @@ export default function Index() {
     <div className="min-h-screen bg-ksi-dark text-white">
       <NavBar />
       <HeroSection />
-      <ThreeLevelsSection />
-      <HybridModelSection />
-      <AILabSection />
+      <AboutKsiSection />
       <CryptometrySection />
-      <ModulesSection />
-      <AudienceSection />
+      <SystemCircuitSection />
+      <InternalServicesSection />
+      <HybridModelSection />
+      <TasksSection />
       <RoadmapSection />
       <DifferenceSection />
       <CTASection />

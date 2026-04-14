@@ -91,7 +91,7 @@ function SiteFooter() {
               <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs mb-4">
-              Цифровая девелоперская группа. Недвижимость. Технологии. Инфраструктура.
+              Управляющая компания проекта «КриптоМетры» — интеллектуальной системы распределённого девелопмента.
             </p>
             <p className="font-ibm text-white/20 text-xs leading-relaxed max-w-sm">
               Компания не осуществляет публичного привлечения денежных средств.
@@ -109,27 +109,31 @@ function SiteFooter() {
           </div>
 
           <div>
-            <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-4">ПРОДУКТЫ</div>
+            <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-4">ПРОЕКТ</div>
             <div className="space-y-2">
-              {[
-                { label: "КриптоМетры", href: "/directions/cryptometry" },
-                { label: "Лаборатория ИИ", href: "/directions/ai-lab" },
-                { label: "LSS", href: "/directions/lss" },
-                { label: "ИИ-продакшн", href: "/directions/ai-production" },
-                { label: "Fee-Dev Platform", href: "/directions/fee-dev" },
-              ].map((p) => (
-                <a key={p.href} href={p.href} className="block font-ibm text-white/40 text-sm hover:text-white/70 transition-colors">{p.label}</a>
-              ))}
+              <a href="/cryptometry" className="block font-ibm text-white/50 text-sm hover:text-white/70 transition-colors">КриптоМетры</a>
             </div>
             <div className="mt-6">
-              <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-2">СПРАВОЧНЫЕ РАЗДЕЛЫ</div>
+              <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-2">ВНУТРЕННИЕ СЛУЖБЫ</div>
+              <div className="space-y-1">
+                {[
+                  { label: "Лаборатория ИИ", href: "/directions/ai-lab" },
+                  { label: "Центр реализации активов", href: "/directions/fee-dev" },
+                  { label: "Служба земельного поиска", href: "/directions/lss" },
+                  { label: "Студия проектного креатива", href: "/directions/ai-production" },
+                ].map((l) => (
+                  <a key={l.href} href={l.href} className="block font-ibm text-white/25 text-xs hover:text-white/45 transition-colors">{l.label}</a>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-2">СПРАВКА</div>
               <div className="space-y-1">
                 {[
                   { label: "Дорожная карта", href: "/roadmap" },
                   { label: "Глоссарий", href: "/glossary" },
-                  { label: "Документы", href: "/documents" },
                 ].map((l) => (
-                  <a key={l.href} href={l.href} className="block font-ibm text-white/25 text-xs hover:text-white/45 transition-colors">{l.label}</a>
+                  <a key={l.href} href={l.href} className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">{l.label}</a>
                 ))}
               </div>
             </div>

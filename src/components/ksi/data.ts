@@ -1,10 +1,9 @@
 export const NAV_ITEMS = [
   { label: "О компании", href: "/about" },
-  { label: "Направления", href: "/directions" },
-  { label: "Экосистема", href: "/ecosystem" },
-  { label: "Проекты", href: "/projects" },
-  { label: "Партнёрам", href: "/partners" },
-  { label: "Медиацентр", href: "/media" },
+  { label: "КриптоМетры", href: "/cryptometry" },
+  { label: "Внутренние службы", href: "/directions" },
+  { label: "Roadmap", href: "/roadmap" },
+  { label: "Глоссарий", href: "/glossary" },
   { label: "Контакты", href: "/contacts" },
 ];
 
