@@ -107,6 +107,33 @@ export default function DirectionDetail({ slug }: Props) {
         </div>
       </section>
 
+      {/* Что делает (coreFunctions) */}
+      {detail.coreFunctions && detail.coreFunctions.length > 0 && (
+        <section className="py-20 border-t border-ksi-border/30"
+          style={{ background: "linear-gradient(to bottom, rgba(10,10,15,0), rgba(0,212,255,0.015), rgba(10,10,15,0))" }}>
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="section-label mb-4">◆ Функции</div>
+            <h2 className="font-oswald text-3xl font-semibold text-white mb-3">Что делает {detail.title}</h2>
+            <p className="font-ibm text-white/40 text-base mb-10 max-w-2xl">Ключевые направления работы службы — от подготовки актива до вывода в реализацию.</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {detail.coreFunctions.map((fn, i) => (
+                <div key={i} className="flex items-start gap-4 p-5 rounded-sm"
+                  style={{ background: `${accentColor}04`, border: `1px solid ${accentColor}10` }}>
+                  <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0"
+                    style={{ background: bgAccent, border: `1px solid ${borderAccent}` }}>
+                    <Icon name={fn.icon} size={17} style={{ color: accentColor, opacity: 0.7 }} />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-oswald text-white/80 text-sm font-medium mb-1.5">{fn.title}</h4>
+                    <p className="font-ibm text-white/38 text-xs leading-relaxed">{fn.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Клиентские сценарии */}
       {detail.clientScenarios && detail.clientScenarios.length > 0 && (
         <section className="py-20 border-t border-ksi-border/30">

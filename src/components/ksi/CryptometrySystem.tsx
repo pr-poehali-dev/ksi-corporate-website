@@ -19,7 +19,7 @@ const CHAT_EXAMPLES = [
 
 const CONTOURS = [
   { icon: "BrainCircuit", title: "Лаборатория ИИ", desc: "Развитие интеллектуальной инфраструктуры, логики системы и обучающего контура.", color: "#7b2fff", href: "/directions/ai-lab" },
-  { icon: "TrendingUp", title: "Центр реализации активов", desc: "Контур сопровождения и реализации активов в логике КриптоМетров.", color: "#00d4ff", href: "/directions/fee-dev" },
+  { icon: "TrendingUp", title: "Центр реализации активов", desc: "Капитализация, партнёрское структурирование и реализация активов в логике КриптоМетров.", color: "#00d4ff", href: "/directions/fee-dev" },
   { icon: "Search", title: "Служба земельного поиска", desc: "Контур поиска площадок, анализа участков и работы с земельными задачами.", color: "#7b2fff", href: "/directions/lss" },
   { icon: "Palette", title: "Студия проектного креатива", desc: "Контур концептуальной, визуальной и презентационной упаковки решений.", color: "#00d4ff", href: "/directions/ai-production" },
 ];
