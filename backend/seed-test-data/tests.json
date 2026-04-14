@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS returns CORS headers",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {}
+    },
+    {
+      "name": "POST seeds test data",
+      "method": "POST",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"success": true}
+    },
+    {
+      "name": "GET method not allowed",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    }
+  ]
+}

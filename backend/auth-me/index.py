@@ -75,7 +75,7 @@ def handler(event: dict, context) -> dict:
 
         # Fetch user
         cur.execute(
-            "SELECT id, email, full_name, user_type, internal_role, is_active "
+            "SELECT id, email, full_name, user_type, internal_role, status "
             "FROM users WHERE id = %s LIMIT 1",
             (user_id,),
         )
@@ -84,7 +84,7 @@ def handler(event: dict, context) -> dict:
         if not user:
             return make_response(404, {"error": "User not found"})
 
-        if not user["is_active"]:
+        if user["status"] != "active":
             return make_response(403, {"error": "Account is deactivated"})
 
         # Fetch company info if client

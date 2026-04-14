@@ -61,7 +61,7 @@ def handler(event: dict, context) -> dict:
 
         # Fetch user by email
         cur.execute(
-            "SELECT id, email, full_name, user_type, internal_role, password_hash, is_active "
+            "SELECT id, email, full_name, user_type, internal_role, password_hash, status "
             "FROM users WHERE email = %s LIMIT 1",
             (email,),
         )
@@ -70,7 +70,7 @@ def handler(event: dict, context) -> dict:
         if not user:
             return make_response(401, {"error": "Invalid email or password"})
 
-        if not user["is_active"]:
+        if user["status"] != "active":
             return make_response(403, {"error": "Account is deactivated"})
 
         # Verify password
@@ -101,9 +101,9 @@ def handler(event: dict, context) -> dict:
 
         # Audit log
         cur.execute(
-            "INSERT INTO audit_log (user_id, action, details, created_at) "
-            "VALUES (%s, %s, %s, %s)",
-            (user["id"], "login", json.dumps({"email": email}), now),
+            "INSERT INTO audit_log (user_id, action, entity_type, entity_id, details, created_at) "
+            "VALUES (%s, %s, %s, %s, %s, %s)",
+            (user["id"], "login", "user", str(user["id"]), json.dumps({"email": email}), now),
         )
 
         # Fetch company info if client

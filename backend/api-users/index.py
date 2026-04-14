@@ -240,8 +240,8 @@ def handle_post(event, cur, user):
 
     cur.execute(
         "INSERT INTO users (id, email, password_hash, full_name, phone, user_type, "
-        "internal_role, status, is_active, created_at, updated_at) "
-        "VALUES (%s, %s, %s, %s, %s, %s, %s, 'active', true, %s, %s)",
+        "internal_role, status, created_at, updated_at) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s, 'active', %s, %s)",
         (user_id, email, password_hash, full_name, phone, user_type,
          internal_role, now, now),
     )
@@ -301,11 +301,6 @@ def handle_put(event, cur, user):
         if field in body:
             sets.append(f"{field} = %s")
             params.append(body[field])
-
-    # Обработка is_active на основе status
-    if "status" in body:
-        sets.append("is_active = %s")
-        params.append(body["status"] == "active")
 
     # Обновление пароля если передан
     new_password = body.get("password")

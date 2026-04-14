@@ -101,7 +101,7 @@ def handler(event: dict, context) -> dict:
 
         # Fetch user with password hash
         cur.execute(
-            "SELECT id, email, password_hash, is_active "
+            "SELECT id, email, password_hash, status "
             "FROM users WHERE id = %s LIMIT 1",
             (user_id,),
         )
@@ -110,7 +110,7 @@ def handler(event: dict, context) -> dict:
         if not user:
             return make_response(404, {"error": "User not found"})
 
-        if not user["is_active"]:
+        if user["status"] != "active":
             return make_response(403, {"error": "Account is deactivated"})
 
         # Verify current password
@@ -133,9 +133,10 @@ def handler(event: dict, context) -> dict:
 
         # Audit log
         cur.execute(
-            "INSERT INTO audit_log (user_id, action, details, created_at) "
-            "VALUES (%s, %s, %s, %s)",
-            (user_id, "change_password", json.dumps({"email": user["email"]}), now),
+            "INSERT INTO audit_log (user_id, action, entity_type, entity_id, details, created_at) "
+            "VALUES (%s, %s, %s, %s, %s, %s)",
+            (user_id, "change_password", "user", str(user_id),
+             json.dumps({"email": user["email"]}), now),
         )
 
         conn.commit()
