@@ -59,7 +59,7 @@ export function NavBar() {
           <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer ml-3">
             Связаться
           </a>
-          <a href={cabinetLink} className="flex items-center gap-1.5 text-white/50 hover:text-cyan-400 transition-colors text-sm ml-2">
+          <a href={cabinetLink} className="flex items-center gap-1.5 border border-cyan-500/30 hover:border-cyan-400/60 text-cyan-400/80 hover:text-cyan-300 transition-all text-sm ml-3 px-4 py-2 rounded-sm">
             <Icon name={user ? "LayoutDashboard" : "LogIn"} size={16} />
             {user ? "Кабинет" : "Войти"}
           </a>
@@ -81,7 +81,7 @@ export function NavBar() {
           <a href="/contacts" className="block btn-primary-ksi px-5 py-2 text-sm rounded-sm text-center mt-4" onClick={() => setMobileOpen(false)}>
             Связаться
           </a>
-          <a href={cabinetLink} className="flex items-center gap-1.5 text-white/50 hover:text-cyan-400 transition-colors text-sm py-2 mt-2" onClick={() => setMobileOpen(false)}>
+          <a href={cabinetLink} className="flex items-center justify-center gap-1.5 border border-cyan-500/30 text-cyan-400/80 hover:text-cyan-300 transition-all text-sm py-2 mt-2 rounded-sm" onClick={() => setMobileOpen(false)}>
             <Icon name={user ? "LayoutDashboard" : "LogIn"} size={16} />
             {user ? "Кабинет" : "Войти"}
           </a>
