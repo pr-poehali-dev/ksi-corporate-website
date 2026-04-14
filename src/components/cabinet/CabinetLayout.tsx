@@ -14,6 +14,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Обзор", icon: "LayoutDashboard", to: "/cabinet" },
+  { label: "Мои активы", icon: "MapPin", to: "/cabinet/assets" },
   { label: "Модули", icon: "Blocks", to: "/cabinet/modules" },
   { label: "Задачи", icon: "ClipboardList", to: "/cabinet/tasks" },
   { label: "Счёт КМ", icon: "Wallet", to: "/cabinet/balance" },

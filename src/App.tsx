@@ -28,6 +28,7 @@ import CabinetModules from "./pages/cabinet/Modules";
 import CabinetTasks from "./pages/cabinet/Tasks";
 import CabinetTaskDetail from "./pages/cabinet/TaskDetail";
 import CabinetTaskCreate from "./pages/cabinet/TaskCreate";
+import CabinetAssets from "./pages/cabinet/Assets";
 import CabinetBalance from "./pages/cabinet/Balance";
 import CabinetChat from "./pages/cabinet/Chat";
 import CabinetDocuments from "./pages/cabinet/Documents";
@@ -129,6 +130,7 @@ const App = () => (
             {/* Cabinet (client) */}
             <Route path="/cabinet" element={<RequireAuth allowedType="client"><CabinetLayout /></RequireAuth>}>
               <Route index element={<CabinetDashboard />} />
+              <Route path="assets" element={<CabinetAssets />} />
               <Route path="modules" element={<CabinetModules />} />
               <Route path="tasks" element={<CabinetTasks />} />
               <Route path="tasks/new" element={<CabinetTaskCreate />} />
