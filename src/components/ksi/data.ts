@@ -70,10 +70,10 @@ export const PROJECTS = [
 ];
 
 export const STATS = [
-  { value: "₽2.4", suffix: " млрд", label: "Объём сделок под управлением" },
+  { value: "1", suffix: " проект", label: "Ключевой проект — КриптоМетры" },
+  { value: "4", suffix: " службы", label: "Внутренние контуры системы" },
   { value: "150+", suffix: "", label: "Регионов в базе аналитики" },
-  { value: "40+", suffix: "", label: "Партнёров экосистемы" },
-  { value: "3", suffix: " платформы", label: "Цифровых продукта в экосистеме" },
+  { value: "2023", suffix: "", label: "Год основания АО КСИ" },
 ];
 
 export const ECOSYSTEM_NODES = [

@@ -18,19 +18,19 @@ export default function Media() {
   const filtered = cat === "Все" ? ARTICLES : ARTICLES.filter(a => a.cat === cat);
 
   return (
-    <PageLayout breadcrumb={[{ label: "Медиацентр" }]}>
+    <PageLayout breadcrumb={[{ label: "Медиа и аналитика" }]}>
       <section className="py-24 relative overflow-hidden grid-bg">
         <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.04) 0%, transparent 60%)" }} />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
-            <div className="section-label mb-5">◆ Медиа & Аналитический центр</div>
+            <div className="section-label mb-5">◆ Медиа и аналитика</div>
             <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
               Позиция. Исследования.<br />
-              <span className="text-gradient-cyan">Интеллектуальное лидерство.</span>
+              <span className="text-gradient-cyan">Аналитический контур.</span>
             </h1>
             <p className="font-ibm text-white/55 text-xl leading-relaxed">
-              Не пресс-служба — аналитическая позиция группы по темам,
-              в которых мы имеем прямую экспертизу.
+              Аналитическая позиция АО КСИ по темам,
+              в которых команда имеет прямую экспертизу.
             </p>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function Media() {
             </div>
             <div>
               <div className="section-label mb-4">◆ Подписка на аналитику</div>
-              <h2 className="font-oswald text-3xl text-white mb-4">Получайте материалы группы</h2>
+              <h2 className="font-oswald text-3xl text-white mb-4">Получайте материалы АО КСИ</h2>
               <p className="font-ibm text-white/55 text-base leading-relaxed mb-6">
                 Исследования, позиции, рыночные обзоры — для профессиональных участников рынка.
                 Без рекламы и маркетинга.

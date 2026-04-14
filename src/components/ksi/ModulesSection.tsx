@@ -13,16 +13,16 @@ const CLUSTERS = [
         href: "/directions/lss",
       },
       {
-        icon: "DatabaseZap",
-        title: "Земельная аналитика & Data",
-        desc: "Цифровые досье, картографические решения и data-продукты для земельных активов.",
-        href: "/directions/land-data",
-      },
-      {
         icon: "FileSearch",
         title: "Цифровые досье",
-        desc: "Структурированная информация об объектах и участках для принятия решений.",
-        href: "/directions/land-data",
+        desc: "Структурированная информация об участках и объектах для принятия решений.",
+        href: "/directions/lss",
+      },
+      {
+        icon: "BrainCircuit",
+        title: "Лаборатория ИИ",
+        desc: "Интеллектуальная инфраструктура, обучение и развитие системы КриптоМетры.",
+        href: "/directions/ai-lab",
       },
     ],
   },
@@ -32,47 +32,47 @@ const CLUSTERS = [
     color: "#7b2fff",
     modules: [
       {
-        icon: "Clapperboard",
-        title: "Студия креатива · ИИ-продакшн",
-        desc: "ИИ-аватары, видеопрезентации, цифровые персонажи и медийная оболочка для проектов.",
+        icon: "Palette",
+        title: "Студия проектного креатива",
+        desc: "Визуальная, концептуальная и презентационная упаковка решений и проектов.",
         href: "/directions/ai-production",
-      },
-      {
-        icon: "Newspaper",
-        title: "Медиа & Аналитический центр",
-        desc: "Исследования, рыночные обзоры и интеллектуальное сопровождение отрасли.",
-        href: "/directions/media",
       },
       {
         icon: "Presentation",
         title: "Визуальная упаковка",
-        desc: "Презентационные материалы, брендинг и визуальные коммуникации для девелоперов.",
+        desc: "Презентационные материалы, концепции и визуальные коммуникации для девелоперов.",
+        href: "/directions/ai-production",
+      },
+      {
+        icon: "Bot",
+        title: "ИИ-персонажи и аватары",
+        desc: "Цифровые персонажи и медийные решения для проектов и презентаций.",
         href: "/directions/ai-production",
       },
     ],
   },
   {
     id: "operations",
-    title: "Структурирование и сопровождение",
+    title: "Структурирование и реализация",
     color: "#5599cc",
     modules: [
       {
-        icon: "Settings2",
-        title: "Центр реализации активов · Fee-Dev",
+        icon: "TrendingUp",
+        title: "Центр реализации активов",
         desc: "Упаковка активов, структурирование проектов и интеграция профессиональных исполнителей.",
         href: "/directions/fee-dev",
       },
       {
-        icon: "Compass",
-        title: "Стратегический консалтинг",
-        desc: "Сопровождение девелоперских и инвестиционных проектов, стратегия выхода на рынок.",
-        href: "/directions/consulting",
+        icon: "Settings2",
+        title: "Операторское сопровождение",
+        desc: "Сопровождение девелоперских задач: от анализа до реализации в логике проекта.",
+        href: "/directions/fee-dev",
       },
       {
-        icon: "Building2",
-        title: "Управление и эксплуатация",
-        desc: "Постдевелоперское сопровождение и цифровое управление объектами.",
-        href: "/directions/property-mgmt",
+        icon: "Scale",
+        title: "Юридическое структурирование",
+        desc: "Формирование правовой архитектуры и логики участия в проектах.",
+        href: "/directions/fee-dev",
       },
     ],
   },
@@ -84,27 +84,25 @@ export function ModulesSection() {
       <div className="absolute inset-0 parcel-bg pointer-events-none opacity-30" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="section-label mb-4">◆ Прикладной слой экосистемы</div>
+        <div className="section-label mb-4">◆ Прикладные контуры системы</div>
         <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-4">
           Прикладные ИИ-модули<br />
           <span className="text-gradient-main">для девелоперских задач</span>
         </h2>
         <p className="font-ibm text-white/50 text-lg leading-relaxed mb-16 max-w-3xl">
-          Отдельные модули АО КСИ уже сегодня могут использоваться как самостоятельные
+          Отдельные модули системы КриптоМетры уже сегодня могут использоваться как самостоятельные
           решения для девелоперов, владельцев активов и партнёров рынка.
         </p>
 
         <div className="space-y-16">
           {CLUSTERS.map((cluster) => (
             <div key={cluster.id}>
-              {/* Заголовок кластера */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-1.5 h-6 rounded-full" style={{ background: cluster.color, opacity: 0.6 }} />
                 <h3 className="font-oswald text-xl font-medium text-white/75">{cluster.title}</h3>
                 <div className="h-px flex-1" style={{ background: `linear-gradient(90deg, ${cluster.color}20, transparent)` }} />
               </div>
 
-              {/* Карточки модулей */}
               <div className="grid md:grid-cols-3 gap-4">
                 {cluster.modules.map((mod, i) => (
                   <a key={i} href={mod.href} className="group block p-5 rounded-sm transition-all duration-300 cursor-pointer"
@@ -140,7 +138,7 @@ export function ModulesSection() {
 
         <div className="mt-14 text-center">
           <a href="/directions" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm inline-block cursor-pointer">
-            Все модули
+            Все внутренние службы
           </a>
         </div>
       </div>
