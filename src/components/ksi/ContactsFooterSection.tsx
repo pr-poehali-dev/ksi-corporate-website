@@ -157,7 +157,7 @@ export function Footer() {
               <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs">
-              Виртуальный девелопер. Цифровая экосистема для рынка недвижимости нового поколения.
+              Управляющая компания экосистемы ИИ-решений для девелопмента.
             </p>
           </div>
 

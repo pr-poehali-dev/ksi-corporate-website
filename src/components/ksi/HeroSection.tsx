@@ -1,7 +1,6 @@
 import Icon from "@/components/ui/icon";
-import { STATS } from "./data";
 
-const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/4a21ac91-a1a0-42e5-85ac-4c4837a8ef21.jpeg";
+const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/files/c3047f69-299d-49f8-9718-3bb88004e08a.jpg";
 const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6dabea3b-bb29-4450-a60d-b56dafacbcc1.png";
 
 export function HeroSection() {
@@ -12,91 +11,74 @@ export function HeroSection() {
           src={HERO_BG}
           alt=""
           className="w-full h-full object-cover"
-          style={{ opacity: 0.45 }}
+          style={{ opacity: 0.35 }}
         />
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(90deg, rgba(8,8,16,0.92) 0%, rgba(8,8,16,0.75) 35%, rgba(8,8,16,0.3) 65%, rgba(8,8,16,0.15) 100%)",
+          background: "linear-gradient(90deg, rgba(8,8,16,0.95) 0%, rgba(8,8,16,0.82) 30%, rgba(8,8,16,0.4) 65%, rgba(8,8,16,0.25) 100%)",
         }} />
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(to bottom, rgba(8,8,16,0.4) 0%, transparent 30%, transparent 70%, rgba(8,8,16,0.85) 100%)",
+          background: "linear-gradient(to bottom, rgba(8,8,16,0.5) 0%, transparent 25%, transparent 65%, rgba(8,8,16,0.9) 100%)",
         }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-20 w-full flex-1 flex flex-col">
-
-        {/* Логотип по центру под меню */}
-        <div className="flex justify-center pt-4 pb-10">
+        <div className="flex justify-center pt-4 pb-8">
           <div className="hero-logo-container relative">
             <img
               src={LOGO_URL}
               alt="КСИ"
               className="hero-logo-neon"
-              style={{ width: 160, height: "auto" }}
+              style={{ width: 140, height: "auto" }}
             />
             <div className="hero-logo-glow" />
           </div>
         </div>
 
-        {/* Контент ниже логотипа */}
-        <div className="max-w-2xl flex-1 flex flex-col justify-center">
-          <div className="section-label mb-6 fade-in-up stagger-1">
-            ◆ Головная структура группы &nbsp;·&nbsp; АО КСИ &nbsp;·&nbsp; Москва
+        <div className="max-w-3xl flex-1 flex flex-col justify-center">
+          <div className="section-label mb-5 fade-in-up stagger-1">
+            ◆ Управляющая компания &nbsp;·&nbsp; АО КСИ &nbsp;·&nbsp; Москва
           </div>
-          <h1 className="font-oswald font-bold text-5xl md:text-6xl xl:text-7xl leading-none mb-2 fade-in-up stagger-2">
-            <span className="text-white">КРИПТО</span>
+
+          <h1 className="font-oswald font-bold text-4xl md:text-5xl xl:text-6xl leading-tight mb-4 fade-in-up stagger-2">
+            <span className="text-white">АО КСИ</span>
           </h1>
-          <h1 className="font-oswald font-bold text-5xl md:text-6xl xl:text-7xl leading-none mb-6 fade-in-up stagger-3">
-            <span className="text-gradient-main">СТРОЙ</span>
-            <span className="text-white"> ИНВЕСТ</span>
-          </h1>
-          <p className="font-ibm text-white/35 text-[11px] tracking-[0.22em] uppercase mb-8 fade-in-up stagger-3">
-            Девелопмент &nbsp;·&nbsp; Земельные активы &nbsp;·&nbsp; Цифровая инфраструктура &nbsp;·&nbsp; Аналитика
-          </p>
-          <p className="font-ibm text-white/72 text-lg leading-relaxed mb-10 max-w-lg fade-in-up stagger-4">
-            АО КСИ — оператор цифровой девелоперской инфраструктуры. Управляет экосистемой
-            направлений на пересечении рынка недвижимости, технологий и профессиональной
-            экспертизы. Не строительная компания. Не фонд. Платформа нового типа.
+          <h2 className="font-oswald font-medium text-2xl md:text-3xl xl:text-4xl leading-tight mb-8 fade-in-up stagger-3">
+            <span className="text-gradient-main">Управляющая компания экосистемы</span><br />
+            <span className="text-white/80">ИИ-решений для девелопмента</span>
+          </h2>
+
+          <p className="font-ibm text-white/60 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-4">
+            АО КСИ формирует архитектуру, в которой Лаборатория ИИ, прикладные модули
+            и флагманский проект КриптоМетры объединяются в единую систему интеллектуальных
+            решений для рынка недвижимости.
           </p>
 
           <div className="flex flex-wrap gap-4 fade-in-up stagger-5">
-            <a href="/ecosystem" className="btn-primary-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
-              Как устроена экосистема
+            <a href="#ai-lab" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
+              Лаборатория ИИ
             </a>
-            <a href="/partners" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
-              Найти свою роль
+            <a href="#cryptometry" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
+              КриптоМетры
             </a>
-          </div>
-
-          <div className="mt-12 fade-in-up stagger-6">
-            <div className="font-ibm text-white/20 text-xs mb-4">Кто вы</div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { label: "Землевладельцам", href: "/partners", icon: "MapPin" },
-                { label: "Девелоперам", href: "/partners", icon: "Building2" },
-                { label: "Инвесторам", href: "/partners", icon: "TrendingUp" },
-                { label: "Технопартнёрам", href: "/partners", icon: "Code2" },
-                { label: "Медиа", href: "/media", icon: "Newspaper" },
-              ].map((item, i) => (
-                <a key={i} href={item.href}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm font-ibm text-xs text-white/40 hover:text-white/70 transition-colors cursor-pointer"
-                  style={{ border: "1px solid rgba(255,255,255,0.1)", background: "rgba(8,8,16,0.5)", backdropFilter: "blur(4px)" }}>
-                  <Icon name={item.icon} size={11} />
-                  {item.label}
-                </a>
-              ))}
-            </div>
+            <a href="#modules" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
+              Модули экосистемы
+            </a>
           </div>
         </div>
 
-        {/* Статистика */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 pt-10"
+        <div className="grid grid-cols-3 gap-8 mt-16 pt-10 max-w-2xl"
           style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          {STATS.map((stat, i) => (
+          {[
+            { value: "1", suffix: "", label: "Управляющая компания", sub: "АО КСИ" },
+            { value: "12", suffix: "+", label: "Прикладных модулей", sub: "в экосистеме" },
+            { value: "1", suffix: "", label: "Флагманский проект", sub: "КриптоМетры" },
+          ].map((stat, i) => (
             <div key={i} className="fade-in-up" style={{ animationDelay: `${0.1 * i + 0.3}s`, opacity: 0 }}>
               <div className="font-oswald text-3xl font-semibold text-gradient-cyan">
                 {stat.value}<span className="text-xl">{stat.suffix}</span>
               </div>
-              <div className="font-ibm text-white/35 text-sm mt-1">{stat.label}</div>
+              <div className="font-ibm text-white/45 text-sm mt-1">{stat.label}</div>
+              <div className="font-ibm text-white/20 text-xs mt-0.5">{stat.sub}</div>
             </div>
           ))}
         </div>
