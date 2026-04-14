@@ -16,6 +16,7 @@ import Documents from "./pages/Documents";
 import Contacts from "./pages/Contacts";
 import Roadmap from "./pages/Roadmap";
 import Glossary from "./pages/Glossary";
+import Cryptometry from "./pages/Cryptometry";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import CabinetLayout from "./components/cabinet/CabinetLayout";
@@ -122,6 +123,7 @@ const App = () => (
             <Route path="/contacts" element={<Contacts />} />
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/glossary" element={<Glossary />} />
+            <Route path="/cryptometry" element={<Cryptometry />} />
 
             {/* Auth */}
             <Route path="/auth/login" element={<GuestOnly><Login /></GuestOnly>} />
