@@ -12,16 +12,16 @@ export default function DirectionDetail({ slug }: Props) {
 
   if (!detail) {
     return (
-      <PageLayout breadcrumb={[{ label: "Направления", href: "/directions" }, { label: "Не найдено" }]}>
+      <PageLayout breadcrumb={[{ label: "Внутренние службы", href: "/directions" }, { label: "Не найдено" }]}>
         <div className="max-w-7xl mx-auto px-6 py-32 text-center">
-          <h1 className="font-oswald text-4xl text-white mb-4">Направление не найдено</h1>
-          <a href="/directions" className="btn-outline-ksi px-6 py-3 rounded-sm text-sm inline-block">← Все направления</a>
+          <h1 className="font-oswald text-4xl text-white mb-4">Служба не найдена</h1>
+          <a href="/directions" className="btn-outline-ksi px-6 py-3 rounded-sm text-sm inline-block">← Все службы</a>
         </div>
       </PageLayout>
     );
   }
 
-  const isCyan = !["ai-lab", "invest-models", "fee-dev-alt", "media", "lss"].includes(detail.id);
+  const isCyan = ["fee-dev", "ai-production"].includes(detail.id);
   const accentColor = isCyan ? "#00d4ff" : "#7b2fff";
   const bgAccent = isCyan ? "rgba(0,212,255,0.07)" : "rgba(123,47,255,0.07)";
   const borderAccent = isCyan ? "rgba(0,212,255,0.2)" : "rgba(123,47,255,0.2)";
@@ -29,7 +29,7 @@ export default function DirectionDetail({ slug }: Props) {
   const related = DIRECTIONS.filter(d => detail.relatedIds.includes(d.id)).slice(0, 4);
 
   return (
-    <PageLayout breadcrumb={[{ label: "Направления", href: "/directions" }, { label: detail.title }]}>
+    <PageLayout breadcrumb={[{ label: "Внутренние службы", href: "/directions" }, { label: detail.title }]}>
       {/* Hero */}
       <section className="py-24 relative overflow-hidden grid-bg">
         <div className="absolute inset-0 pointer-events-none" style={{ background: `radial-gradient(ellipse at 30% 50%, ${isCyan ? "rgba(0,212,255,0.05)" : "rgba(123,47,255,0.05)"} 0%, transparent 60%)` }} />
@@ -76,7 +76,7 @@ export default function DirectionDetail({ slug }: Props) {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2 space-y-4">
-              <div className="section-label mb-3">◆ О направлении</div>
+              <div className="section-label mb-3">◆ О службе</div>
               {detail.intro.map((p, i) => (
                 <p key={i} className={`font-ibm leading-relaxed ${i === 0 ? "text-white/70 text-lg" : "text-white/50 text-base"}`}>{p}</p>
               ))}
@@ -148,7 +148,7 @@ export default function DirectionDetail({ slug }: Props) {
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-label mb-4">◆ Возможности</div>
-          <h2 className="font-oswald text-3xl font-semibold text-white mb-10">Ключевые компетенции направления</h2>
+          <h2 className="font-oswald text-3xl font-semibold text-white mb-10">Ключевые компетенции службы</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {detail.capabilities.map((cap, i) => (
               <div key={i} className="card-ksi p-6 rounded-sm">
@@ -167,7 +167,7 @@ export default function DirectionDetail({ slug }: Props) {
       {related.length > 0 && (
         <section className="py-20 border-t border-ksi-border/30">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="section-label mb-4">◆ Связанные направления</div>
+            <div className="section-label mb-4">◆ Связанные службы</div>
             <h2 className="font-oswald text-3xl font-semibold text-white mb-8">Работает в связке с</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {related.map(dir => (
@@ -198,7 +198,7 @@ export default function DirectionDetail({ slug }: Props) {
                 Написать нам
               </a>
               <a href="/directions" className="btn-outline-ksi px-8 py-3 rounded-sm text-sm cursor-pointer">
-                Все направления
+                Все службы
               </a>
             </div>
           </div>

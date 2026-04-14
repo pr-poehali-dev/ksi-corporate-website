@@ -51,9 +51,7 @@ import AdminSettings from "./pages/admin/SystemSettings";
 const queryClient = new QueryClient();
 
 const DIRECTION_SLUGS = [
-  "cryptometry", "ai-lab", "ai-production", "invest-models",
-  "property-mgmt", "lss", "land-data", "fee-dev",
-  "licensing", "media",
+  "ai-lab", "ai-production", "lss", "fee-dev",
 ];
 
 /* Route guard for authenticated routes */
