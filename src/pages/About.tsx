@@ -14,17 +14,18 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
             <div className="section-label mb-5">◆ О компании</div>
-            <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-4">
-              АО «КриптоСтройИнвест»
+            <h1 className="font-oswald text-4xl md:text-5xl xl:text-6xl font-bold text-white leading-tight mb-4">
+              Акционерное общество «КриптоСтройИнвест»
+              <span className="block text-white/60 text-2xl md:text-3xl xl:text-4xl mt-1">(АО КСИ)</span>
             </h1>
             <h2 className="font-oswald font-medium text-xl md:text-2xl leading-snug mb-8">
-              <span className="text-gradient-main">Стартап по созданию</span>{" "}
-              <span className="text-white/75">виртуального девелопера</span>
+              <span className="text-gradient-main">Оператор интеллектуальной инфраструктуры</span>{" "}
+              <span className="text-white/75">для девелопмента</span>
             </h2>
             <p className="font-ibm text-white/50 text-lg leading-relaxed mb-5">
-              АО КСИ — управляющая компания и технологический проект, задача которого —
-              поэтапно создать виртуального девелопера: интеллектуальную систему,
-              способную решать ключевые девелоперские задачи.
+              АО КСИ развивает внутренние службы и прикладные контуры, обеспечивающие
+              создание виртуального девелопера. Ключевой проект компании — «КриптоМетры»,
+              интеллектуальная система распределённого девелопмента.
             </p>
             <p className="font-ibm text-white/30 text-base leading-relaxed mb-8">
               Акционерное общество, зарегистрированное по российскому корпоративному законодательству.
@@ -50,15 +51,15 @@ export default function About() {
                 <span className="text-gradient-cyan">АО КСИ</span>
               </h2>
               <p className="font-ibm text-white/55 text-lg leading-relaxed mb-5">
-                АО КСИ — это не сервисная компания и не агентство. Это проект по созданию
-                виртуального девелопера — интеллектуальной системы, которая со временем
-                сможет решать ключевые задачи девелопмента через собственные контуры,
-                профессиональные службы и управляемую инфраструктуру.
+                АО КСИ — оператор интеллектуальной инфраструктуры для девелопмента.
+                Компания развивает внутренние службы и прикладные контуры, которые
+                обеспечивают создание виртуального девелопера — интеллектуальной системы
+                нового типа.
               </p>
               <p className="font-ibm text-white/40 text-base leading-relaxed mb-5">
-                Компания шаг за шагом строит прикладные контуры будущей системы.
-                Каждая внутренняя служба, каждый решённый запрос, каждый обученный контур —
-                это движение к системе нового типа.
+                Ключевой проект компании — «КриптоМетры», интеллектуальная система
+                распределённого девелопмента. Каждая внутренняя служба, каждый обученный
+                контур — это движение к системе, меняющей подход к работе с недвижимостью.
               </p>
               <p className="font-ibm text-white/30 text-base leading-relaxed">
                 Горизонт работы — долгий. Модель — системная.
@@ -84,10 +85,10 @@ export default function About() {
                 <div className="font-mono-ibm text-ksi-cyan/40 text-xs mb-3 tracking-widest">ПОЗИЦИОНИРОВАНИЕ</div>
                 <div className="space-y-2">
                   {[
-                    "Управляющая компания",
-                    "Технологический стартап",
                     "Оператор интеллектуальной инфраструктуры",
+                    "Управляющая компания",
                     "Проект виртуального девелопера",
+                    "Ключевой проект — КриптоМетры",
                   ].map((p, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan/40 flex-shrink-0" />
