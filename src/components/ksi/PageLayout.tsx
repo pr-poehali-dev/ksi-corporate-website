@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
+import { useAuth } from "@/contexts/AuthContext";
 
-const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/aa865952-a04a-4fb8-b8c0-6cf619baf76c.png";
+const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/28655df5-bb72-4ef7-ba50-ca96e9a5ae13.png";
 
 function SiteNavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
+  const cabinetLink = user ? (user.user_type === "internal" ? "/admin" : "/cabinet") : "/auth/login";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -50,9 +53,15 @@ function SiteNavBar() {
               {item.label}
             </a>
           ))}
-          <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer ml-auto">
-            Написать нам
-          </a>
+          <div className="flex items-center gap-3 ml-auto">
+            <a href="/contacts" className="btn-primary-ksi px-5 py-2 text-sm rounded-sm cursor-pointer">
+              Написать нам
+            </a>
+            <a href={cabinetLink} className="flex items-center gap-1.5 border border-cyan-500/30 hover:border-cyan-400/60 text-cyan-400/80 hover:text-cyan-300 transition-all text-sm px-4 py-2 rounded-sm">
+              <Icon name={user ? "LayoutDashboard" : "LogIn"} size={16} />
+              {user ? "Кабинет" : "Войти"}
+            </a>
+          </div>
         </div>
 
         <button className="lg:hidden text-white/60 hover:text-white" onClick={() => setMobileOpen(!mobileOpen)}>
@@ -69,6 +78,10 @@ function SiteNavBar() {
           ))}
           <a href="/contacts" className="block btn-primary-ksi px-5 py-2 text-sm rounded-sm text-center mt-4" onClick={() => setMobileOpen(false)}>
             Написать нам
+          </a>
+          <a href={cabinetLink} className="flex items-center justify-center gap-1.5 border border-cyan-500/30 text-cyan-400/80 hover:text-cyan-300 transition-all text-sm py-2 mt-2 rounded-sm" onClick={() => setMobileOpen(false)}>
+            <Icon name={user ? "LayoutDashboard" : "LogIn"} size={16} />
+            {user ? "Кабинет" : "Войти"}
           </a>
         </div>
       )}
