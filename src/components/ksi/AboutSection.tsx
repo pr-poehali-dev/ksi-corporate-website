@@ -3,7 +3,7 @@ import Icon from "@/components/ui/icon";
 const LAYERED_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/ddb45a2a-e1fc-411b-8a69-85a2fb877fc1.png";
 
 const HIERARCHY = [
-  { level: "01", title: "АО КСИ", role: "Управляющая компания", color: "#00d4ff" },
+  { level: "01", title: "АО КСИ", role: "Оператор инфраструктуры", color: "#00d4ff" },
   { level: "02", title: "КриптоМетры", role: "Ключевой проект", color: "#00d4ff" },
   { level: "03", title: "Лаборатория ИИ", role: "Технологическое ядро", color: "#7b2fff" },
   { level: "04", title: "Центр реализации активов", role: "Операторский контур", color: "#00d4ff" },
@@ -20,13 +20,14 @@ export function AboutSection() {
           <div>
             <div className="section-label mb-6">◆ Роль АО КСИ в архитектуре проекта</div>
             <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-8">
-              Не строительная компания.<br />
-              <span className="text-gradient-cyan">Не фонд. Не стартап.</span>
+              Оператор интеллектуальной<br />
+              <span className="text-gradient-cyan">инфраструктуры для девелопмента</span>
             </h2>
             <p className="font-ibm text-white/65 text-lg leading-relaxed mb-6">
-              АО «КриптоСтройИнвест» — управляющая компания, оператор единственного
-              ключевого проекта КриптоМетры и четырёх внутренних служб,
-              формирующих контуры виртуального девелопера.
+              АО «КриптоСтройИнвест» развивает внутренние службы и прикладные контуры,
+              обеспечивающие создание виртуального девелопера.
+              Ключевой проект компании — «КриптоМетры», интеллектуальная система
+              распределённого девелопмента.
             </p>
             <p className="font-ibm text-white/45 text-base leading-relaxed mb-10">
               АО КСИ формирует среду, в которой работают землевладельцы, девелоперы,
@@ -37,7 +38,7 @@ export function AboutSection() {
 
             <div className="space-y-3 mb-10">
               {[
-                { icon: "Layers", text: "Управляющая компания и оператор проекта" },
+                { icon: "Layers", text: "Оператор интеллектуальной инфраструктуры для девелопмента" },
                 { icon: "Hexagon", text: "Единственный ключевой проект — КриптоМетры" },
                 { icon: "BrainCircuit", text: "Четыре внутренние службы: ИИ, земля, реализация, креатив" },
                 { icon: "GitBranch", text: "Гибридная модель: ИИ + методология + операторская верификация" },
