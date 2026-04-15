@@ -20,7 +20,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Финансы КМ", icon: "Banknote", to: "/admin/finance" },
   { label: "Подтверждения", icon: "CheckCircle", to: "/admin/approvals" },
   { label: "Аудит", icon: "ScrollText", to: "/admin/audit" },
-  { label: "Обращения", icon: "MessageSquare", to: "/admin/requests" },
   { label: "Настройки", icon: "Settings", to: "/admin/settings" },
   { label: "Сайт", icon: "Globe", to: "/admin/site-settings" },
 ];
