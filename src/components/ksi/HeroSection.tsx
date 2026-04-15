@@ -23,30 +23,27 @@ export function HeroSection() {
         </div>
 
         <div className="max-w-3xl flex-1 flex flex-col justify-center">
-          <div className="section-label mb-5 fade-in-up stagger-1">
-            ◆ Технологический проект &nbsp;·&nbsp; АО КСИ &nbsp;·&nbsp; Москва
-          </div>
-
-          <h1 className="font-oswald font-bold text-4xl md:text-5xl xl:text-6xl leading-tight mb-3 fade-in-up stagger-2">
-            <span className="text-white">АО КСИ</span>
+          <h1 className="font-oswald font-bold text-3xl md:text-4xl xl:text-5xl leading-tight mb-3 fade-in-up stagger-1">
+            <span className="text-white">Акционерное общество «КриптоСтройИнвест»</span><br />
+            <span className="text-white/60 text-2xl md:text-3xl xl:text-4xl">(АО КСИ)</span>
           </h1>
-          <h2 className="font-oswald font-medium text-xl md:text-2xl xl:text-3xl leading-snug mb-8 fade-in-up stagger-3">
-            <span className="text-gradient-main">Проект по созданию</span><br />
-            <span className="text-white/80">виртуального девелопера</span>
+          <h2 className="font-oswald font-medium text-xl md:text-2xl xl:text-3xl leading-snug mb-8 fade-in-up stagger-2">
+            <span className="text-gradient-main">Оператор интеллектуальной инфраструктуры</span><br />
+            <span className="text-white/80">для девелопмента</span>
           </h2>
 
-          <p className="font-ibm text-white/55 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-4">
-            АО КСИ формирует интеллектуальную инфраструктуру нового типа для девелопмента.
-            Компания развивает внутренние службы, прикладные контуры и флагманский проект
-            КриптоМетры как основу будущей системы.
+          <p className="font-ibm text-white/55 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-3">
+            АО КСИ развивает внутренние службы и прикладные контуры, обеспечивающие
+            создание виртуального девелопера. Ключевой проект компании — «КриптоМетры»,
+            интеллектуальная система распределённого девелопмента.
           </p>
 
-          <div className="flex flex-wrap gap-4 fade-in-up stagger-5">
+          <div className="flex flex-wrap gap-4 fade-in-up stagger-4">
             <a href="/cryptometry" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
               О проекте КриптоМетры
             </a>
-            <a href="#structure" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
-              Структура АО КСИ
+            <a href="/directions" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
+              Внутренние службы АО КСИ
             </a>
             <a href="/contacts" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
               Обсудить сотрудничество
