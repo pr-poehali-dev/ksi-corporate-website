@@ -1,0 +1,85 @@
+{
+  "tests": [
+    {
+      "name": "CORS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {}
+    },
+    {
+      "name": "GET method not allowed",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    },
+    {
+      "name": "Generate landscape dark presentation",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "format": "landscape",
+        "theme": "dark",
+        "sections": ["hero", "about", "services"]
+      },
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"pdf_base64": "string", "filename": "string"}
+    },
+    {
+      "name": "Generate portrait light presentation",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "format": "portrait",
+        "theme": "light",
+        "sections": ["hero", "cryptometry", "roadmap", "contacts"]
+      },
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"pdf_base64": "string", "filename": "string"}
+    },
+    {
+      "name": "Generate all sections landscape dark",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "format": "landscape",
+        "theme": "dark",
+        "sections": ["hero", "about", "cryptometry", "services", "architecture", "roadmap", "contacts"]
+      },
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"pdf_base64": "string", "filename": "string"}
+    },
+    {
+      "name": "Invalid section ignored gracefully",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "format": "landscape",
+        "theme": "dark",
+        "sections": ["hero", "nonexistent"]
+      },
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"pdf_base64": "string", "filename": "string"}
+    },
+    {
+      "name": "Empty sections returns error",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "format": "landscape",
+        "theme": "dark",
+        "sections": []
+      },
+      "expectedStatus": 400,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "string"}
+    }
+  ]
+}
