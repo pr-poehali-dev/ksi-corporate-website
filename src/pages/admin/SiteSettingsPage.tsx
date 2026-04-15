@@ -69,6 +69,11 @@ function buildPrivacyPreview(v: Settings): string {
   return sections.join("\n\n");
 }
 
+const TELEGRAM_FIELDS = [
+  { key: "telegram_bot_token", label: "Токен бота (@BotFather)", type: "password" },
+  { key: "telegram_chat_id", label: "Chat ID (группа или личный)", type: "text" },
+] as const;
+
 export default function SiteSettingsPage() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -80,8 +85,11 @@ export default function SiteSettingsPage() {
 
   const [reqValues, setReqValues] = useState<Settings>({});
   const [privValues, setPrivValues] = useState<Settings>({});
+  const [tgValues, setTgValues] = useState<Settings>({});
   const [reqSaving, setReqSaving] = useState(false);
   const [privSaving, setPrivSaving] = useState(false);
+  const [tgSaving, setTgSaving] = useState(false);
+  const [tgTesting, setTgTesting] = useState(false);
 
   useEffect(() => {
     if (data?.settings) {
@@ -97,6 +105,13 @@ export default function SiteSettingsPage() {
         pv[f.key] = s[f.key] || "";
       }
       setPrivValues(pv);
+
+      const tg: Settings = {};
+      for (const f of TELEGRAM_FIELDS) {
+        tg[f.key] = s[f.key] || "";
+      }
+      tg.telegram_notifications_enabled = s.telegram_notifications_enabled || "false";
+      setTgValues(tg);
     }
   }, [data]);
 
@@ -127,6 +142,33 @@ export default function SiteSettingsPage() {
     },
     onSettled: () => setPrivSaving(false),
   });
+
+  const saveTelegram = useMutation({
+    mutationFn: () => api.put("site-settings", { settings: tgValues }),
+    onMutate: () => setTgSaving(true),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["site-settings"] });
+      toast({ title: "Сохранено", description: "Настройки Telegram обновлены" });
+    },
+    onError: (err) => {
+      const msg = err instanceof ApiError ? (err.data?.error as string) || "Ошибка сохранения" : "Не удалось сохранить";
+      toast({ title: "Ошибка", description: msg, variant: "destructive" });
+    },
+    onSettled: () => setTgSaving(false),
+  });
+
+  const handleTestTelegram = async () => {
+    setTgTesting(true);
+    try {
+      await api.post("contact-form", { action: "test" });
+      toast({ title: "Отправлено", description: "Тестовое сообщение отправлено в Telegram" });
+    } catch (err) {
+      const msg = err instanceof ApiError ? (err.data?.error as string) || "Ошибка отправки" : "Не удалось отправить";
+      toast({ title: "Ошибка", description: msg, variant: "destructive" });
+    } finally {
+      setTgTesting(false);
+    }
+  };
 
   const privacyPreview = useMemo(() => buildPrivacyPreview(privValues), [privValues]);
 
@@ -172,6 +214,7 @@ export default function SiteSettingsPage() {
         <TabsList className="border border-[#1a1a2e] bg-[#0f0f18]">
           <TabsTrigger value="requisites" className="text-xs data-[state=active]:bg-[#1a1a2e]">Реквизиты</TabsTrigger>
           <TabsTrigger value="privacy" className="text-xs data-[state=active]:bg-[#1a1a2e]">Политика ПДн</TabsTrigger>
+          <TabsTrigger value="telegram" className="text-xs data-[state=active]:bg-[#1a1a2e]">Уведомления</TabsTrigger>
         </TabsList>
 
         <TabsContent value="requisites" className="mt-4">
@@ -249,6 +292,81 @@ export default function SiteSettingsPage() {
             <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-white/35">Предпросмотр документа</h3>
             <div className="rounded-md border border-[#1a1a2e] bg-[#0f0f18] p-5">
               <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-white/60">{privacyPreview}</pre>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="telegram" className="mt-4 space-y-4">
+          <div className="rounded-lg border border-[#1a1a2e] bg-[#12121c] p-5">
+            <h3 className="mb-2 text-xs font-medium uppercase tracking-wider text-white/35">Telegram-уведомления</h3>
+            <p className="mb-5 text-xs text-white/25">Заявки с формы «Связаться» будут приходить в Telegram-чат</p>
+
+            <div className="mb-5 flex items-center gap-3">
+              <button
+                onClick={() => setTgValues(prev => ({ ...prev, telegram_notifications_enabled: prev.telegram_notifications_enabled === "true" ? "false" : "true" }))}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${tgValues.telegram_notifications_enabled === "true" ? "bg-cyan-500/30" : "bg-white/10"}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full transition-transform ${tgValues.telegram_notifications_enabled === "true" ? "translate-x-6 bg-cyan-400" : "translate-x-1 bg-white/30"}`} />
+              </button>
+              <span className="text-sm text-white/60">{tgValues.telegram_notifications_enabled === "true" ? "Уведомления включены" : "Уведомления выключены"}</span>
+            </div>
+
+            <div className="space-y-4">
+              {TELEGRAM_FIELDS.map((f) => (
+                <div key={f.key} className="space-y-1.5">
+                  <label className="text-xs text-white/40">{f.label}</label>
+                  <input
+                    type={f.type}
+                    value={tgValues[f.key] || ""}
+                    onChange={(e) => setTgValues(prev => ({ ...prev, [f.key]: e.target.value }))}
+                    className={INPUT_CLASS}
+                    placeholder={f.label}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-center gap-3">
+              <button
+                onClick={() => saveTelegram.mutate()}
+                disabled={tgSaving}
+                className="flex items-center gap-2 rounded-md bg-cyan-500/10 px-5 py-2.5 text-xs font-medium text-cyan-400 transition-colors hover:bg-cyan-500/20 disabled:opacity-50"
+              >
+                {tgSaving && <Icon name="Loader2" size={14} className="animate-spin" />}
+                <Icon name="Save" size={14} />
+                Сохранить
+              </button>
+              <button
+                onClick={handleTestTelegram}
+                disabled={tgTesting || !tgValues.telegram_bot_token || !tgValues.telegram_chat_id}
+                className="flex items-center gap-2 rounded-md border border-[#1a1a2e] px-5 py-2.5 text-xs font-medium text-white/50 transition-colors hover:border-[#2a2a3e] hover:text-white/70 disabled:opacity-30"
+              >
+                {tgTesting && <Icon name="Loader2" size={14} className="animate-spin" />}
+                <Icon name="Send" size={14} />
+                Тест
+              </button>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-[#1a1a2e] bg-[#12121c] p-5">
+            <h3 className="mb-4 text-xs font-medium uppercase tracking-wider text-white/35">Инструкция</h3>
+            <div className="space-y-3 text-sm text-white/45">
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/10 text-[10px] font-bold text-cyan-400">1</span>
+                <p>Откройте <a href="https://t.me/BotFather" target="_blank" rel="noopener" className="text-cyan-400/70 hover:text-cyan-400 transition-colors">@BotFather</a> в Telegram и создайте нового бота командой /newbot</p>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/10 text-[10px] font-bold text-cyan-400">2</span>
+                <p>Скопируйте токен бота и вставьте в поле выше</p>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/10 text-[10px] font-bold text-cyan-400">3</span>
+                <p>Добавьте бота в группу или напишите ему лично, затем узнайте Chat ID через <a href="https://t.me/getmyid_bot" target="_blank" rel="noopener" className="text-cyan-400/70 hover:text-cyan-400 transition-colors">@getmyid_bot</a></p>
+              </div>
+              <div className="flex gap-3">
+                <span className="flex-shrink-0 flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/10 text-[10px] font-bold text-cyan-400">4</span>
+                <p>Вставьте Chat ID, сохраните и нажмите «Тест» для проверки</p>
+              </div>
             </div>
           </div>
         </TabsContent>
