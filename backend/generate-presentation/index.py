@@ -2,6 +2,7 @@ import json
 import base64
 import os
 import ssl
+import copy
 import urllib.request
 import tempfile
 from fpdf import FPDF
@@ -558,7 +559,7 @@ class PresentationPDF(FPDF):
         # Subtitle
         self._set_text_color("text_secondary")
         self._font("", 11)
-        subtitle = SITE_CONTENT["hero"]["subtitle"]
+        subtitle = getattr(self, 'site_content', SITE_CONTENT)["hero"]["subtitle"]
         self.set_xy(self._margin_x + 10, ph * 0.50)
         self.multi_cell(self._content_w * 0.7, 6, subtitle, align="L")
 
@@ -574,7 +575,7 @@ class PresentationPDF(FPDF):
     # -- ABOUT ---------------------------------------------------------
 
     def _render_about(self):
-        data = SITE_CONTENT["about"]
+        data = getattr(self, 'site_content', SITE_CONTENT)["about"]
         mx = self._margin_x
         cw = self._content_w
         y_start = 22
@@ -630,7 +631,7 @@ class PresentationPDF(FPDF):
     # -- CRYPTOMETRY ---------------------------------------------------
 
     def _render_cryptometry(self):
-        data = SITE_CONTENT["cryptometry"]
+        data = getattr(self, 'site_content', SITE_CONTENT)["cryptometry"]
         mx = self._margin_x
         cw = self._content_w
         y = 22
@@ -681,7 +682,7 @@ class PresentationPDF(FPDF):
     # -- SERVICES ------------------------------------------------------
 
     def _render_services(self):
-        data = SITE_CONTENT["services"]
+        data = getattr(self, 'site_content', SITE_CONTENT)["services"]
         mx = self._margin_x
         cw = self._content_w
         y = 22
@@ -734,7 +735,7 @@ class PresentationPDF(FPDF):
     # -- ARCHITECTURE --------------------------------------------------
 
     def _render_architecture(self):
-        data = SITE_CONTENT["architecture"]
+        data = getattr(self, 'site_content', SITE_CONTENT)["architecture"]
         mx = self._margin_x
         cw = self._content_w
         y = 22
@@ -799,7 +800,7 @@ class PresentationPDF(FPDF):
     # -- ROADMAP -------------------------------------------------------
 
     def _render_roadmap(self):
-        data = SITE_CONTENT["roadmap"]
+        data = getattr(self, 'site_content', SITE_CONTENT)["roadmap"]
         mx = self._margin_x
         cw = self._content_w
         y = 22
@@ -881,7 +882,7 @@ class PresentationPDF(FPDF):
     # -- CONTACTS ------------------------------------------------------
 
     def _render_contacts(self):
-        data = SITE_CONTENT["contacts"]
+        data = getattr(self, 'site_content', SITE_CONTENT)["contacts"]
         mx = self._margin_x
         cw = self._content_w
         ph = self.page_h
@@ -928,19 +929,18 @@ class PresentationPDF(FPDF):
         # In portrait mode we still use one section per page for cleanliness
         page_num = 0
         for section_id in sections:
-            if section_id not in SITE_CONTENT:
+            if section_id not in getattr(self, 'site_content', SITE_CONTENT):
                 continue
             page_num += 1
             self.add_section_page(section_id, page_num)
 
 
-def build_pdf(fmt, theme, sections, company_name, tagline):
+def build_pdf(fmt, theme, sections, company_name, tagline, content=None):
     """Build the PDF and return bytes."""
+    use_content = content or SITE_CONTENT
     if fmt == "landscape":
-        # 16:9 widescreen: 338.67mm x 190.5mm
         pw, ph = 338.67, 190.5
     else:
-        # A4 portrait
         pw, ph = 210, 297
 
     pdf = PresentationPDF(
@@ -951,10 +951,11 @@ def build_pdf(fmt, theme, sections, company_name, tagline):
         company_name=company_name,
         tagline=tagline,
     )
+    pdf.site_content = use_content
 
     page_num = 0
     for section_id in sections:
-        if section_id not in SITE_CONTENT:
+        if section_id not in use_content:
             continue
         page_num += 1
         pdf.add_section_page(section_id, page_num)
@@ -997,16 +998,25 @@ def handler(event: dict, context) -> dict:
     if not isinstance(sections, list) or len(sections) == 0:
         return make_response(400, {"error": "Parameter 'sections' must be a non-empty array"})
 
+    content_override = body.get("content_override", {})
+    if isinstance(content_override, dict):
+        working_content = copy.deepcopy(SITE_CONTENT)
+        for sec_id, sec_data in content_override.items():
+            if isinstance(sec_data, dict) and sec_id in working_content:
+                working_content[sec_id].update(sec_data)
+    else:
+        working_content = SITE_CONTENT
+
     company_name = body.get("company_name", "")
     if not company_name:
-        company_name = SITE_CONTENT["hero"]["title"]
+        company_name = working_content["hero"]["title"]
 
     tagline = body.get("tagline", "")
     if not tagline:
-        tagline = SITE_CONTENT["hero"]["tagline"]
+        tagline = working_content["hero"]["tagline"]
 
     try:
-        pdf_bytes = build_pdf(fmt, theme, sections, company_name, tagline)
+        pdf_bytes = build_pdf(fmt, theme, sections, company_name, tagline, working_content)
     except Exception as exc:
         print("PDF generation error: {}".format(exc))
         return make_response(500, {"error": "Failed to generate PDF: {}".format(str(exc))})
