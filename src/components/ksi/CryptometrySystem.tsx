@@ -36,9 +36,9 @@ function HowItWorksBlock() {
               Как КриптоМетры<br />работают<br /><span className="text-gradient-main">на старте</span>
             </h2>
             <p className="font-ibm text-white/50 text-lg leading-relaxed mb-6">
-              На старте КриптоМетры развиваются не как полностью автономная система,
-              а как управляемый интеллектуальный контур, в котором ИИ, внутренняя методология
-              и профессиональные службы АО КСИ работают вместе.
+              На старте КриптоМетры развиваются как управляемый интеллектуальный контур,
+              в котором ИИ, внутренняя методология и профессиональные службы АО КСИ
+              обеспечивают решение задач совместно.
             </p>
             <div className="p-4 rounded-sm" style={{ background: "rgba(0,212,255,0.02)", borderLeft: "2px solid rgba(0,212,255,0.25)" }}>
               <p className="font-ibm text-white/38 text-sm leading-relaxed">
