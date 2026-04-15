@@ -1,5 +1,5 @@
 const HERO_BG = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/1cf1171b-7f91-468e-bee1-51f0c4cca384.jpeg";
-const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/6dabea3b-bb29-4450-a60d-b56dafacbcc1.png";
+const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/28655df5-bb72-4ef7-ba50-ca96e9a5ae13.png";
 
 export function HeroSection() {
   return (
@@ -27,26 +27,27 @@ export function HeroSection() {
             ◆ Технологический проект &nbsp;·&nbsp; АО КСИ &nbsp;·&nbsp; Москва
           </div>
 
-          <h1 className="font-oswald font-bold text-4xl md:text-5xl xl:text-6xl leading-tight mb-3 fade-in-up stagger-2">
-            <span className="text-white">АО КСИ</span>
+          <h1 className="font-oswald font-bold text-3xl md:text-4xl xl:text-5xl leading-tight mb-3 fade-in-up stagger-2">
+            <span className="text-white">Акционерное общество</span><br />
+            <span className="text-gradient-main">«КриптоСтройИнвест»</span>
+            <span className="text-white/50 text-xl md:text-2xl xl:text-3xl ml-3">(АО КСИ)</span>
           </h1>
+
           <h2 className="font-oswald font-medium text-xl md:text-2xl xl:text-3xl leading-snug mb-8 fade-in-up stagger-3">
-            <span className="text-gradient-main">Проект по созданию</span><br />
-            <span className="text-white/80">виртуального девелопера</span>
+            <span className="text-white/70">Оператор интеллектуальной инфраструктуры</span><br />
+            <span className="text-white/50">для девелопмента</span>
           </h2>
 
           <p className="font-ibm text-white/55 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-4">
-            АО КСИ формирует интеллектуальную инфраструктуру нового типа для девелопмента.
-            Компания развивает внутренние службы, прикладные контуры и флагманский проект
-            КриптоМетры как основу будущей системы.
+            АО КСИ развивает внутренние службы и прикладные контуры, из которых поэтапно собирается виртуальный девелопер. Ключевой проект компании — «КриптоМетры», интеллектуальная система распределённого девелопмента.
           </p>
 
           <div className="flex flex-wrap gap-4 fade-in-up stagger-5">
             <a href="/cryptometry" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
               О проекте КриптоМетры
             </a>
-            <a href="#structure" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
-              Структура АО КСИ
+            <a href="/directions" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
+              Внутренние службы АО КСИ
             </a>
             <a href="/contacts" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
               Обсудить сотрудничество

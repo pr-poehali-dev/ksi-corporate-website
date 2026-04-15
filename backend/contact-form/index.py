@@ -11,7 +11,7 @@ import psycopg2.extras
 
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Authorization",
 }
 
@@ -162,9 +162,19 @@ def handle_contact_form(conn, event: dict) -> dict:
     if not email:
         return make_response(400, {"error": "Поле 'email' обязательно"})
 
+    source_ip = event.get("requestContext", {}).get("identity", {}).get("sourceIp", "")
+
+    # Save to database before sending Telegram notification
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "INSERT INTO {schema}.contact_requests (name, org, email, role, message, source_ip, status) "
+        "VALUES (%s, %s, %s, %s, %s, %s, 'new')".format(schema=SCHEMA),
+        (name, org, email, role, message, source_ip),
+    )
+    conn.commit()
+
     role_label = ROLE_LABELS.get(role, role or "\u2014")
 
-    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     tg_settings = get_telegram_settings(cur)
 
     bot_token = tg_settings.get("telegram_bot_token", "").strip()
@@ -224,11 +234,102 @@ def handle_test_telegram(conn, event: dict) -> dict:
     return make_response(200, {"success": True})
 
 
-def handler(event: dict, context) -> dict:
-    """Обработка контактной формы и отправка уведомлений в Telegram.
+def handle_list_requests(conn, event: dict) -> dict:
+    """Получение списка обращений. Требует авторизации внутреннего пользователя."""
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
+    user = get_current_internal_user(cur, event)
+    if not user:
+        return make_response(403, {"error": "Access denied. Internal user required."})
+
+    params = event.get("queryStringParameters") or {}
+    try:
+        page = max(1, int(params.get("page", 1)))
+    except (ValueError, TypeError):
+        page = 1
+    try:
+        per_page = max(1, min(100, int(params.get("per_page", 20))))
+    except (ValueError, TypeError):
+        per_page = 20
+
+    status_filter = (params.get("status") or "").strip()
+    offset = (page - 1) * per_page
+
+    where_clause = ""
+    query_params = []
+    if status_filter:
+        where_clause = " WHERE status = %s"
+        query_params.append(status_filter)
+
+    cur.execute(
+        "SELECT COUNT(*) AS total FROM {schema}.contact_requests{where}".format(
+            schema=SCHEMA, where=where_clause
+        ),
+        query_params,
+    )
+    total = cur.fetchone()["total"]
+
+    cur.execute(
+        "SELECT id, name, org, email, role, message, source_ip, status, created_at "
+        "FROM {schema}.contact_requests{where} "
+        "ORDER BY created_at DESC LIMIT %s OFFSET %s".format(
+            schema=SCHEMA, where=where_clause
+        ),
+        query_params + [per_page, offset],
+    )
+    items = cur.fetchall()
+
+    return make_response(200, {
+        "items": items,
+        "total": total,
+        "page": page,
+        "per_page": per_page,
+    })
+
+
+def handle_update_request(conn, event: dict) -> dict:
+    """Обновление статуса обращения. Требует авторизации внутреннего пользователя."""
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    user = get_current_internal_user(cur, event)
+    if not user:
+        return make_response(403, {"error": "Access denied. Internal user required."})
+
+    body = parse_body(event)
+    request_id = body.get("id")
+    new_status = (body.get("status") or "").strip()
+
+    if not request_id:
+        return make_response(400, {"error": "Поле 'id' обязательно"})
+
+    allowed_statuses = ("new", "reviewed", "replied", "archived")
+    if new_status not in allowed_statuses:
+        return make_response(400, {
+            "error": "Недопустимый статус. Допустимые: {s}".format(s=", ".join(allowed_statuses))
+        })
+
+    cur.execute(
+        "UPDATE {schema}.contact_requests SET status = %s WHERE id = %s RETURNING id".format(
+            schema=SCHEMA
+        ),
+        (new_status, request_id),
+    )
+    updated = cur.fetchone()
+    conn.commit()
+
+    if not updated:
+        return make_response(404, {"error": "Обращение не найдено"})
+
+    return make_response(200, {"success": True, "id": updated["id"], "status": new_status})
+
+
+def handler(event: dict, context) -> dict:
+    """Обработка контактной формы и управление обращениями.
+
+    GET / — список обращений (только для admin).
     POST / — отправка обращения с контактной формы сайта.
     POST / (action=test) — тестирование подключения к Telegram (только для admin).
+    PUT / — обновление статуса обращения (только для admin).
     OPTIONS / — CORS preflight.
     """
     method = event.get("httpMethod", event.get("method", ""))
@@ -236,13 +337,19 @@ def handler(event: dict, context) -> dict:
     if method == "OPTIONS":
         return make_response(200, {})
 
-    if method != "POST":
+    if method not in ("GET", "POST", "PUT"):
         return make_response(405, {"error": "Method not allowed"})
 
     conn = None
     try:
         conn = get_connection()
-        return handle_contact_form(conn, event)
+
+        if method == "GET":
+            return handle_list_requests(conn, event)
+        elif method == "PUT":
+            return handle_update_request(conn, event)
+        else:
+            return handle_contact_form(conn, event)
 
     except Exception as exc:
         if conn:

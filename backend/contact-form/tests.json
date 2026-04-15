@@ -9,12 +9,21 @@
       "expectedBody": {}
     },
     {
-      "name": "GET method not allowed",
+      "name": "GET without auth returns 403",
       "method": "GET",
       "path": "/",
-      "expectedStatus": 405,
+      "expectedStatus": 403,
       "bodyMatcher": "partial",
-      "expectedBody": {"error": "Method not allowed"}
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "GET with invalid token returns 403",
+      "method": "GET",
+      "path": "/",
+      "headers": {"X-Authorization": "Bearer invalidtoken999"},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
     },
     {
       "name": "POST without body returns validation error for name",
@@ -67,6 +76,33 @@
       "expectedStatus": 403,
       "bodyMatcher": "partial",
       "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "PUT without auth returns 403",
+      "method": "PUT",
+      "path": "/",
+      "body": {"id": 1, "status": "reviewed"},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "PUT with invalid token returns 403",
+      "method": "PUT",
+      "path": "/",
+      "headers": {"X-Authorization": "Bearer invalidtoken999"},
+      "body": {"id": 1, "status": "reviewed"},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "DELETE method not allowed",
+      "method": "DELETE",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
     }
   ]
 }
