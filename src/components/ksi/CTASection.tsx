@@ -1,6 +1,18 @@
+import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 
 export function CTASection() {
+  const [settings, setSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("https://functions.poehali.dev/de77851c-6234-460f-903b-ca3df97ddc07")
+      .then(r => r.json())
+      .then(d => { if (d.settings) setSettings(d.settings); })
+      .catch(() => {});
+  }, []);
+
+  const contactEmail = settings.email || "info@aoksi.ru";
+
   return (
     <section className="py-24 relative overflow-hidden"
       style={{ background: "linear-gradient(to bottom, rgba(10,10,15,1), rgba(12,12,20,1))" }}>
@@ -37,7 +49,7 @@ export function CTASection() {
         <div className="flex items-center justify-center gap-8 text-white/18">
           <div className="flex items-center gap-2">
             <Icon name="Mail" size={13} />
-            <span className="font-ibm text-sm">info@ksi.ru</span>
+            <span className="font-ibm text-sm">{contactEmail}</span>
           </div>
           <div className="flex items-center gap-2">
             <Icon name="MapPin" size={13} />

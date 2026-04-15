@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
 
 export function ContactsSection() {
   const [form, setForm] = useState({ name: "", org: "", email: "", message: "", role: "" });
+  const [settings, setSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("https://functions.poehali.dev/de77851c-6234-460f-903b-ca3df97ddc07")
+      .then(r => r.json())
+      .then(d => { if (d.settings) setSettings(d.settings); })
+      .catch(() => {});
+  }, []);
+
+  const contactEmail = settings.email || "info@aoksi.ru";
+  const contactPhone = settings.phone || "+7 (495) 000-00-00";
+  const contactAddress = settings.actual_address || "Москва, Россия";
 
   return (
     <section id="contacts" className="py-28 relative overflow-hidden">
@@ -58,9 +70,9 @@ export function ContactsSection() {
           <div className="lg:col-span-2">
             <div className="space-y-4 mb-8">
               {[
-                { icon: "Mail", label: "Email", value: "info@ksi.ru" },
-                { icon: "Phone", label: "Телефон", value: "+7 (495) 000-00-00" },
-                { icon: "MapPin", label: "Адрес", value: "Москва, Россия" },
+                { icon: "Mail", label: "Email", value: contactEmail },
+                { icon: "Phone", label: "Телефон", value: contactPhone },
+                { icon: "MapPin", label: "Адрес", value: contactAddress },
                 { icon: "Clock", label: "Ответ", value: "Рабочие дни, до 24 часов" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4 py-3"
@@ -157,7 +169,7 @@ export function Footer() {
               <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs">
-              Управляющая компания проекта «КриптоМетры» — интеллектуальной системы распределённого девелопмента.
+              Оператор интеллектуальной инфраструктуры для девелопмента. Ключевой проект — «КриптоМетры».
             </p>
           </div>
 
@@ -199,7 +211,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-ksi-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="font-ibm text-white/25 text-xs">© 2024 АО «КриптоСтройИнвест». Все права защищены.</div>
+          <div className="font-ibm text-white/25 text-xs">© 2026 АО «КриптоСтройИнвест». Все права защищены.</div>
           <div className="flex items-center gap-6">
             {["Политика конфиденциальности", "Пользовательское соглашение", "Реквизиты"].map((link) => (
               <span key={link} className="font-ibm text-white/25 text-xs hover:text-white/50 cursor-pointer transition-colors">{link}</span>

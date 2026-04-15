@@ -41,7 +41,7 @@ export default function Contacts() {
     }
   };
 
-  const contactEmail = settings.email || "info@ksi.ru";
+  const contactEmail = settings.email || "info@aoksi.ru";
   const contactPhone = settings.phone || "+7 (495) 000-00-00";
   const contactAddress = settings.actual_address || "Москва, Россия";
 
