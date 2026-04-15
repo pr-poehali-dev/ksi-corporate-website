@@ -17,6 +17,7 @@ import Contacts from "./pages/Contacts";
 import Roadmap from "./pages/Roadmap";
 import Glossary from "./pages/Glossary";
 import Cryptometry from "./pages/Cryptometry";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import CabinetLayout from "./components/cabinet/CabinetLayout";
@@ -48,6 +49,7 @@ import AdminFinance from "./pages/admin/Finance";
 import AdminApprovals from "./pages/admin/Approvals";
 import AdminAuditLog from "./pages/admin/AuditLog";
 import AdminSettings from "./pages/admin/SystemSettings";
+import AdminSiteSettings from "./pages/admin/SiteSettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -123,6 +125,7 @@ const App = () => (
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/glossary" element={<Glossary />} />
             <Route path="/cryptometry" element={<Cryptometry />} />
+            <Route path="/privacy" element={<Privacy />} />
 
             {/* Auth */}
             <Route path="/auth/login" element={<GuestOnly><Login /></GuestOnly>} />
@@ -156,6 +159,7 @@ const App = () => (
               <Route path="approvals" element={<AdminApprovals />} />
               <Route path="audit" element={<AdminAuditLog />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="site-settings" element={<AdminSiteSettings />} />
             </Route>
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

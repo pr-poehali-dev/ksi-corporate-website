@@ -1,0 +1,65 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS returns CORS headers",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {}
+    },
+    {
+      "name": "GET returns settings publicly",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"settings": {}}
+    },
+    {
+      "name": "PUT without auth returns 403",
+      "method": "PUT",
+      "path": "/",
+      "body": {"settings": {"company_name": "Test"}},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "PUT with invalid token returns 403",
+      "method": "PUT",
+      "path": "/",
+      "headers": {"X-Authorization": "Bearer invalidtoken123"},
+      "body": {"settings": {"company_name": "Test"}},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "PUT without settings field returns 400",
+      "method": "PUT",
+      "path": "/",
+      "headers": {"X-Authorization": "Bearer invalidtoken123"},
+      "body": {"data": "wrong"},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "POST method not allowed",
+      "method": "POST",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    },
+    {
+      "name": "DELETE method not allowed",
+      "method": "DELETE",
+      "path": "/",
+      "expectedStatus": 405,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Method not allowed"}
+    }
+  ]
+}

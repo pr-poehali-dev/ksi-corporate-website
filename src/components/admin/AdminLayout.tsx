@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Подтверждения", icon: "CheckCircle", to: "/admin/approvals" },
   { label: "Аудит", icon: "ScrollText", to: "/admin/audit" },
   { label: "Настройки", icon: "Settings", to: "/admin/settings" },
+  { label: "Сайт", icon: "Globe", to: "/admin/site-settings" },
 ];
 
 const INTERNAL_ROLE_LABELS: Record<string, string> = {

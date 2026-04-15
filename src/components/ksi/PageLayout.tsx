@@ -90,18 +90,36 @@ function SiteNavBar() {
 }
 
 function SiteFooter() {
+  const [s, setS] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("https://functions.poehali.dev/de77851c-6234-460f-903b-ca3df97ddc07")
+      .then(r => r.json())
+      .then(d => { if (d.settings) setS(d.settings); })
+      .catch(() => {});
+  }, []);
+
+  const companyName = s.company_full_name || "АО «КриптоСтройИнвест»";
+  const ogrn = s.ogrn || "";
+  const inn = s.inn || "";
+  const addr = s.actual_address || "Москва, Россия";
+  const year = new Date().getFullYear();
+
   return (
     <footer className="border-t border-ksi-border py-12 mt-auto">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8 mb-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img
-                src={LOGO_URL}
-                alt="КСИ"
-                className="h-10 w-auto flex-shrink-0"
-              />
-              <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
+              <a href="/">
+                <img
+                  src={LOGO_URL}
+                  alt="КСИ"
+                  className="h-10 w-auto flex-shrink-0"
+                  style={{ filter: "drop-shadow(0 0 6px rgba(0,212,255,0.25))" }}
+                />
+              </a>
+              <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">{s.company_short_name || "АО КриптоСтройИнвест"}</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs mb-4">
               Управляющая компания проекта «КриптоМетры» — интеллектуальной системы распределённого девелопмента.
@@ -145,6 +163,7 @@ function SiteFooter() {
                 {[
                   { label: "Дорожная карта", href: "/roadmap" },
                   { label: "Глоссарий", href: "/glossary" },
+                  { label: "Политика ПДн", href: "/privacy" },
                 ].map((l) => (
                   <a key={l.href} href={l.href} className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">{l.label}</a>
                 ))}
@@ -154,9 +173,9 @@ function SiteFooter() {
         </div>
 
         <div className="border-t border-ksi-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="font-ibm text-white/25 text-xs">© 2024 АО «КриптоСтройИнвест». Все права защищены.</div>
+          <div className="font-ibm text-white/25 text-xs">© {year} {companyName}. Все права защищены.</div>
           <div className="font-ibm text-white/20 text-xs text-center md:text-right max-w-md">
-            ОГРН: 0000000000000 · ИНН: 0000000000 · Москва, Россия
+            {ogrn && <>ОГРН: {ogrn} · </>}{inn && <>ИНН: {inn} · </>}{addr}
           </div>
         </div>
       </div>

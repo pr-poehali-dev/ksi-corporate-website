@@ -15,6 +15,7 @@ const urls = {
   "auth-me": "https://functions.poehali.dev/1fd884a6-0ce0-4c7b-9cf8-95a09195f975",
   "auth-logout": "https://functions.poehali.dev/efa036e3-d00e-4159-a196-e089c1a217ea",
   "auth-login": "https://functions.poehali.dev/b71cec9c-a5e5-47dd-8fb0-afd40a67732d",
+  "site-settings": "https://functions.poehali.dev/de77851c-6234-460f-903b-ca3df97ddc07",
 } as const;
 
 export type ApiEndpoint = keyof typeof urls;
