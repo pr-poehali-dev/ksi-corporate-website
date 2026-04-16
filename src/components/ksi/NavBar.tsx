@@ -45,8 +45,8 @@ export function NavBar() {
           style={{
             width: showLogo ? 36 : 0,
             height: 36,
-            marginLeft: showLogo ? 24 : 0,
-            marginRight: showLogo ? 24 : 0,
+            marginLeft: showLogo ? 24 : 12,
+            marginRight: showLogo ? 24 : 12,
             opacity: showLogo ? 1 : 0,
             transform: showLogo ? "scale(1)" : "scale(0.5)",
             transition: "width 400ms cubic-bezier(0.22, 1, 0.36, 1), margin 400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
