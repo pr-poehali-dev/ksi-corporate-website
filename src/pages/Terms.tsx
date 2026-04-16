@@ -14,7 +14,7 @@ export default function Terms() {
   }, []);
 
   const name = s.company_full_name || "АО «КриптоСтройИнвест»";
-  const site = s.site_url || "aoksi.ru";
+  const site = s.website || "https://aoksi.ru/";
   const email = s.email || "info@aoksi.ru";
 
   return (
