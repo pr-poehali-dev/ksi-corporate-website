@@ -9,6 +9,28 @@ export const MESSENGER_OPTIONS = [
 
 export type MessengerValue = typeof MESSENGER_OPTIONS[number]["value"];
 
+export function formatPhoneRU(input: string): string {
+  let digits = input.replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits[0] === "8") digits = "7" + digits.slice(1);
+  if (digits[0] !== "7") digits = "7" + digits;
+  digits = digits.slice(0, 11);
+
+  const country = digits[0];
+  const area = digits.slice(1, 4);
+  const part1 = digits.slice(4, 7);
+  const part2 = digits.slice(7, 9);
+  const part3 = digits.slice(9, 11);
+
+  let out = "+" + country;
+  if (digits.length > 1) out += " (" + area;
+  if (digits.length >= 4) out += ")";
+  if (digits.length >= 5) out += " " + part1;
+  if (digits.length >= 8) out += "-" + part2;
+  if (digits.length >= 10) out += "-" + part3;
+  return out;
+}
+
 interface Props {
   phone: string;
   messengers: MessengerValue[];
@@ -25,14 +47,28 @@ export default function PhoneMessengersField({ phone, messengers, onPhoneChange,
     }
   };
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onPhoneChange(formatPhoneRU(e.target.value));
+  };
+
+  const handlePhoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && phone) {
+      e.preventDefault();
+      const digits = phone.replace(/\D/g, "");
+      onPhoneChange(formatPhoneRU(digits.slice(0, -1)));
+    }
+  };
+
   return (
     <div>
       <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ТЕЛЕФОН</label>
       <input
         type="tel"
         value={phone}
-        onChange={(e) => onPhoneChange(e.target.value)}
+        onChange={handlePhoneChange}
+        onKeyDown={handlePhoneKeyDown}
         placeholder="+7 (___) ___-__-__"
+        inputMode="tel"
         className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors"
       />
       <div className="font-mono-ibm text-white/25 text-[10px] tracking-widest mt-3 mb-2">УДОБНЫЙ СПОСОБ СВЯЗИ</div>
