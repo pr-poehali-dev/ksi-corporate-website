@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
 import Icon from "@/components/ui/icon";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { api } from "@/lib/api";
 
 interface NavItem {
   label: string;
@@ -19,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Задачи", icon: "ClipboardList", to: "/admin/tasks" },
   { label: "Финансы КМ", icon: "Banknote", to: "/admin/finance" },
   { label: "Подтверждения", icon: "CheckCircle", to: "/admin/approvals" },
+  { label: "Обращения", icon: "MessageSquare", to: "/admin/requests" },
   { label: "Аудит", icon: "ScrollText", to: "/admin/audit" },
   { label: "Презентации", icon: "Presentation", to: "/admin/presentations" },
   { label: "Настройки", icon: "Settings", to: "/admin/settings" },
@@ -45,6 +48,15 @@ export default function AdminLayout() {
     await logout();
     navigate("/auth/login");
   };
+
+  const { data: newRequests } = useQuery<{ count: number }>({
+    queryKey: ["admin-new-requests-count"],
+    queryFn: () => api.get("contact-form", { count: "new" }),
+    refetchInterval: 60000,
+    staleTime: 30000,
+  });
+  const newCount = newRequests?.count ?? 0;
+  const hasNew = newCount > 0;
 
   const roleLabel = user?.internal_role
     ? INTERNAL_ROLE_LABELS[user.internal_role] ?? user.internal_role
@@ -147,8 +159,18 @@ export default function AdminLayout() {
           <div className="flex-1" />
 
           {/* Notifications */}
-          <button className="relative rounded-md p-2 text-white/50 transition-colors hover:bg-white/5 hover:text-white/80">
+          <button
+            onClick={() => navigate("/admin/requests")}
+            title={hasNew ? `Новых обращений: ${newCount}` : "Обращения"}
+            className="relative rounded-md p-2 text-white/50 transition-colors hover:bg-white/5 hover:text-white/80"
+          >
             <Icon name="Bell" size={18} />
+            {hasNew && (
+              <span className="absolute right-1.5 top-1.5 flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500/70 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+              </span>
+            )}
           </button>
 
           {/* Logout */}

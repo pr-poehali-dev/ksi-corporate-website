@@ -53,6 +53,7 @@ import AdminAuditLog from "./pages/admin/AuditLog";
 import AdminSettings from "./pages/admin/SystemSettings";
 import AdminSiteSettings from "./pages/admin/SiteSettingsPage";
 import AdminPresentations from "./pages/admin/Presentations";
+import AdminRequests from "./pages/admin/Requests";
 
 const queryClient = new QueryClient();
 
@@ -163,6 +164,7 @@ const App = () => (
               <Route path="finance" element={<AdminFinance />} />
               <Route path="approvals" element={<AdminApprovals />} />
               <Route path="audit" element={<AdminAuditLog />} />
+              <Route path="requests" element={<AdminRequests />} />
               <Route path="settings" element={<AdminSettings />} />
               <Route path="site-settings" element={<AdminSiteSettings />} />
               <Route path="presentations" element={<AdminPresentations />} />

@@ -12,12 +12,21 @@ interface RequestItem {
   name: string;
   org: string;
   email: string;
+  phone: string;
+  messengers: string[];
   role: string;
   message: string;
   source_ip: string;
   status: string;
   created_at: string;
 }
+
+const MESSENGER_LABELS: Record<string, string> = {
+  telegram: "Telegram",
+  whatsapp: "WhatsApp",
+  viber: "Viber",
+  call: "Звонок",
+};
 
 interface RequestsResp {
   items: RequestItem[];
@@ -39,12 +48,18 @@ const ROLE_LABELS: Record<string, string> = {
   "asset-owner": "Владелец актива",
   "project-team": "Проектная команда",
   beta: "Бета-тестирование",
+  investor: "Инвестор",
+  strategic: "Стратег. партнёр",
+  tech: "Технол. партнёр",
+  "ai-client": "Заказчик ИИ",
+  media: "Медиа",
   other: "Другое",
 };
 
 const TABS = [
   { key: "", label: "Все" },
   { key: "new", label: "Новые" },
+  { key: "reviewed", label: "Просмотрены" },
   { key: "replied", label: "Отвечено" },
   { key: "archived", label: "Архив" },
 ];
@@ -77,9 +92,9 @@ export default function AdminRequests() {
     queryFn: () => api.get("contact-form", { page: 1, per_page: 1 }),
   });
 
-  const newQuery = useQuery<RequestsResp>({
-    queryKey: ["admin-requests-stats-new"],
-    queryFn: () => api.get("contact-form", { page: 1, per_page: 1, status: "new" }),
+  const newQuery = useQuery<{ count: number }>({
+    queryKey: ["admin-new-requests-count"],
+    queryFn: () => api.get("contact-form", { count: "new" }),
   });
 
   const todayCount = useMemo(() => {
@@ -93,7 +108,7 @@ export default function AdminRequests() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-requests"] });
       queryClient.invalidateQueries({ queryKey: ["admin-requests-stats"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-requests-stats-new"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-new-requests-count"] });
       toast({ title: "Статус обновлен" });
     },
     onError: (err) => {
@@ -129,7 +144,7 @@ export default function AdminRequests() {
         <div className="flex items-center gap-3 rounded-lg border border-[#1a1a2e] bg-[#12121c] px-4 py-2.5">
           <Icon name="Sparkles" size={16} className="text-cyan-400/50" />
           <div>
-            <p className="text-lg font-semibold text-cyan-400">{newQuery.data?.total ?? "..."}</p>
+            <p className="text-lg font-semibold text-cyan-400">{newQuery.data?.count ?? "..."}</p>
             <p className="text-[10px] text-white/30">Новых</p>
           </div>
         </div>
@@ -181,6 +196,7 @@ export default function AdminRequests() {
                 <th className="px-3 py-2.5 font-medium text-white/30">Дата</th>
                 <th className="px-3 py-2.5 font-medium text-white/30">Имя</th>
                 <th className="px-3 py-2.5 font-medium text-white/30">Email</th>
+                <th className="px-3 py-2.5 font-medium text-white/30">Телефон</th>
                 <th className="px-3 py-2.5 font-medium text-white/30">Организация</th>
                 <th className="px-3 py-2.5 font-medium text-white/30">Роль</th>
                 <th className="px-3 py-2.5 font-medium text-white/30">Статус</th>
@@ -235,6 +251,32 @@ export default function AdminRequests() {
                       >
                         {r.email}
                       </a>
+                    </td>
+                    <td className="px-3 py-2.5 align-top">
+                      {r.phone ? (
+                        <div className="space-y-1">
+                          <a
+                            href={`tel:${r.phone.replace(/[^+\d]/g, "")}`}
+                            className="block text-white/60 hover:text-white/90"
+                          >
+                            {r.phone}
+                          </a>
+                          {r.messengers && r.messengers.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {r.messengers.map((m) => (
+                                <span
+                                  key={m}
+                                  className="rounded border border-cyan-500/20 bg-cyan-500/5 px-1.5 py-0.5 text-[10px] text-cyan-400/80"
+                                >
+                                  {MESSENGER_LABELS[m] ?? m}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-white/25">—</span>
+                      )}
                     </td>
                     <td className="px-3 py-2.5 align-top text-white/40">{r.org || "\u2014"}</td>
                     <td className="px-3 py-2.5 align-top text-white/40">
