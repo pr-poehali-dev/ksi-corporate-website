@@ -187,12 +187,14 @@ def handle_contact_form(conn, event: dict) -> dict:
     messengers_str = ", ".join(messenger_labels) if messenger_labels else "\u2014"
     messengers_db = ",".join([m for m in messengers_raw if m])
 
+    # IP-адрес отправителя
     req_ctx = event.get("requestContext") or {}
     identity = req_ctx.get("identity") or {}
     source_ip = (identity.get("sourceIp") or "")[:45]
 
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
+    # Сохраняем обращение в БД
     try:
         cur.execute(
             "INSERT INTO {schema}.contact_requests "
@@ -277,13 +279,6 @@ def handle_list_requests(conn, event: dict) -> dict:
         return make_response(403, {"error": "Access denied. Internal user required."})
 
     qs = event.get("queryStringParameters") or {}
-
-    if qs.get("count") == "new":
-        cur.execute(
-            "SELECT COUNT(*) AS c FROM {schema}.contact_requests WHERE status = 'new'".format(schema=SCHEMA)
-        )
-        return make_response(200, {"count": cur.fetchone()["c"]})
-
     try:
         page = max(1, int(qs.get("page") or 1))
     except (TypeError, ValueError):
@@ -374,7 +369,6 @@ def handler(event: dict, context) -> dict:
     POST / — отправка обращения с контактной формы сайта (публично).
     POST / (action=test) — тестирование подключения к Telegram (только для admin).
     GET / — список обращений с фильтром по статусу и пагинацией (только для admin).
-    GET /?count=new — количество новых заявок (только для admin).
     PUT / — смена статуса обращения (только для admin).
     OPTIONS / — CORS preflight.
     """

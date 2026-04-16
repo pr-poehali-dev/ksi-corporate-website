@@ -59,7 +59,6 @@ const ROLE_LABELS: Record<string, string> = {
 const TABS = [
   { key: "", label: "Все" },
   { key: "new", label: "Новые" },
-  { key: "reviewed", label: "Просмотрены" },
   { key: "replied", label: "Отвечено" },
   { key: "archived", label: "Архив" },
 ];
@@ -92,9 +91,9 @@ export default function AdminRequests() {
     queryFn: () => api.get("contact-form", { page: 1, per_page: 1 }),
   });
 
-  const newQuery = useQuery<{ count: number }>({
-    queryKey: ["admin-new-requests-count"],
-    queryFn: () => api.get("contact-form", { count: "new" }),
+  const newQuery = useQuery<RequestsResp>({
+    queryKey: ["admin-requests-stats-new"],
+    queryFn: () => api.get("contact-form", { page: 1, per_page: 1, status: "new" }),
   });
 
   const todayCount = useMemo(() => {
@@ -108,7 +107,7 @@ export default function AdminRequests() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-requests"] });
       queryClient.invalidateQueries({ queryKey: ["admin-requests-stats"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-new-requests-count"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-requests-stats-new"] });
       toast({ title: "Статус обновлен" });
     },
     onError: (err) => {
@@ -144,7 +143,7 @@ export default function AdminRequests() {
         <div className="flex items-center gap-3 rounded-lg border border-[#1a1a2e] bg-[#12121c] px-4 py-2.5">
           <Icon name="Sparkles" size={16} className="text-cyan-400/50" />
           <div>
-            <p className="text-lg font-semibold text-cyan-400">{newQuery.data?.count ?? "..."}</p>
+            <p className="text-lg font-semibold text-cyan-400">{newQuery.data?.total ?? "..."}</p>
             <p className="text-[10px] text-white/30">Новых</p>
           </div>
         </div>
