@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,7 +10,10 @@ export function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user } = useAuth();
+  const location = useLocation();
   const cabinetLink = user ? (user.user_type === "internal" ? "/admin" : "/cabinet") : "/auth/login";
+  const isHome = location.pathname === "/";
+  const showLogo = !isHome || scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -19,7 +22,7 @@ export function NavBar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const current = typeof window !== "undefined" ? window.location.pathname : "";
+  const current = location.pathname;
   const half = Math.ceil(NAV_ITEMS.length / 2);
   const leftNav = NAV_ITEMS.slice(0, half);
   const rightNav = NAV_ITEMS.slice(half);
@@ -40,14 +43,14 @@ export function NavBar() {
         <div
           className="flex items-center justify-center overflow-hidden"
           style={{
-            width: scrolled ? 36 : 0,
+            width: showLogo ? 36 : 0,
             height: 36,
-            marginLeft: scrolled ? 24 : 0,
-            marginRight: scrolled ? 24 : 0,
-            opacity: scrolled ? 1 : 0,
-            transform: scrolled ? "scale(1)" : "scale(0.5)",
+            marginLeft: showLogo ? 24 : 0,
+            marginRight: showLogo ? 24 : 0,
+            opacity: showLogo ? 1 : 0,
+            transform: showLogo ? "scale(1)" : "scale(0.5)",
             transition: "width 400ms cubic-bezier(0.22, 1, 0.36, 1), margin 400ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1)",
-            pointerEvents: scrolled ? "auto" : "none",
+            pointerEvents: showLogo ? "auto" : "none",
           }}
         >
           <Link to="/" className="block" style={{ width: 36, height: 36 }}>
