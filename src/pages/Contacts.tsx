@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import PageLayout from "@/components/ksi/PageLayout";
 import Icon from "@/components/ui/icon";
 import { api, ApiError } from "@/lib/api";
+import PhoneMessengersField, { MessengerValue } from "@/components/ksi/PhoneMessengersField";
 
 export default function Contacts() {
-  const [form, setForm] = useState({ name: "", org: "", email: "", role: "", message: "" });
+  const [form, setForm] = useState({ name: "", org: "", email: "", phone: "", role: "", message: "" });
+  const [messengers, setMessengers] = useState<MessengerValue[]>([]);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
@@ -29,11 +31,14 @@ export default function Contacts() {
         name: form.name.trim(),
         org: form.org.trim(),
         email: form.email.trim(),
+        phone: form.phone.trim(),
+        messengers,
         role: form.role,
         message: form.message.trim(),
       });
       setSent(true);
-      setForm({ name: "", org: "", email: "", role: "", message: "" });
+      setForm({ name: "", org: "", email: "", phone: "", role: "", message: "" });
+      setMessengers([]);
     } catch (err) {
       setError(err instanceof ApiError ? (err.data?.error as string) || "Ошибка отправки" : "Не удалось отправить");
     } finally {
@@ -98,6 +103,12 @@ export default function Contacts() {
                       <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">EMAIL *</label>
                       <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors" />
                     </div>
+                    <PhoneMessengersField
+                      phone={form.phone}
+                      messengers={messengers}
+                      onPhoneChange={(v) => setForm({ ...form, phone: v })}
+                      onMessengersChange={setMessengers}
+                    />
                     <div>
                       <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ВЫ ПРЕДСТАВЛЯЕТЕ *</label>
                       <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/60 text-sm focus:outline-none focus:border-ksi-cyan/40 transition-colors">

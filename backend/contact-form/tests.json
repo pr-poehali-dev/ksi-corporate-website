@@ -50,6 +50,22 @@
       "expectedBody": {"success": true, "message": "Обращение отправлено"}
     },
     {
+      "name": "POST contact form with phone and messengers returns success",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "Пётр Петров",
+        "email": "petr@example.com",
+        "phone": "+7 999 123 45 67",
+        "messengers": ["telegram", "whatsapp"],
+        "role": "investor",
+        "message": "Свяжитесь со мной"
+      },
+      "expectedStatus": 200,
+      "bodyMatcher": "partial",
+      "expectedBody": {"success": true, "message": "Обращение отправлено"}
+    },
+    {
       "name": "POST test-telegram without auth returns 403",
       "method": "POST",
       "path": "/",

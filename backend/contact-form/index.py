@@ -24,7 +24,19 @@ ROLE_LABELS = {
     "asset-owner": "Владелец актива",
     "project-team": "Проектная / инвестиционная команда",
     "beta": "Хочу участвовать в бета-тестировании",
+    "investor": "Инвестор / финансовый партнёр",
+    "strategic": "Стратегический партнёр",
+    "tech": "Технологический партнёр",
+    "ai-client": "Заказчик ИИ-решений",
+    "media": "Медиа / аналитик",
     "other": "Другое",
+}
+
+MESSENGER_LABELS = {
+    "telegram": "Telegram",
+    "whatsapp": "WhatsApp",
+    "viber": "Viber",
+    "call": "Звонок",
 }
 
 
@@ -156,6 +168,13 @@ def handle_contact_form(conn, event: dict) -> dict:
     org = (body.get("org") or "").strip()
     role = (body.get("role") or "").strip()
     message = (body.get("message") or "").strip()
+    phone = (body.get("phone") or "").strip()
+    messengers_raw = body.get("messengers") or []
+    if isinstance(messengers_raw, str):
+        messengers_raw = [m.strip() for m in messengers_raw.split(",") if m.strip()]
+    if not isinstance(messengers_raw, list):
+        messengers_raw = []
+    messenger_labels = [MESSENGER_LABELS.get(m, m) for m in messengers_raw if m]
 
     if not name:
         return make_response(400, {"error": "Поле 'name' обязательно"})
@@ -163,6 +182,7 @@ def handle_contact_form(conn, event: dict) -> dict:
         return make_response(400, {"error": "Поле 'email' обязательно"})
 
     role_label = ROLE_LABELS.get(role, role or "\u2014")
+    messengers_str = ", ".join(messenger_labels) if messenger_labels else "\u2014"
 
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     tg_settings = get_telegram_settings(cur)
@@ -177,12 +197,16 @@ def handle_contact_form(conn, event: dict) -> dict:
             "<b>\u0418\u043c\u044f:</b> {name}\n"
             "<b>\u041e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u044f:</b> {org}\n"
             "<b>Email:</b> {email}\n"
+            "<b>\u0422\u0435\u043b\u0435\u0444\u043e\u043d:</b> {phone}\n"
+            "<b>\u0421\u0432\u044f\u0437\u044c:</b> {messengers}\n"
             "<b>\u0420\u043e\u043b\u044c:</b> {role}\n"
             "<b>\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435:</b>\n{message}"
         ).format(
             name=escape_html(name),
             org=escape_html(org) if org else "\u2014",
             email=escape_html(email),
+            phone=escape_html(phone) if phone else "\u2014",
+            messengers=escape_html(messengers_str),
             role=escape_html(role_label),
             message=escape_html(message) if message else "\u2014",
         )

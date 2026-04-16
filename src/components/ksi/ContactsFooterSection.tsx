@@ -2,10 +2,43 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
+import { api, ApiError } from "@/lib/api";
+import PhoneMessengersField, { MessengerValue } from "./PhoneMessengersField";
 
 export function ContactsSection() {
-  const [form, setForm] = useState({ name: "", org: "", email: "", message: "", role: "" });
+  const [form, setForm] = useState({ name: "", org: "", email: "", phone: "", message: "", role: "" });
+  const [messengers, setMessengers] = useState<MessengerValue[]>([]);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
   const [settings, setSettings] = useState<Record<string, string>>({});
+
+  const handleSubmit = async () => {
+    if (!form.name.trim() || !form.email.trim()) {
+      setError("Заполните обязательные поля: имя и email");
+      return;
+    }
+    setError("");
+    setSending(true);
+    try {
+      await api.post("contact-form", {
+        name: form.name.trim(),
+        org: form.org.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        messengers,
+        role: form.role,
+        message: form.message.trim(),
+      });
+      setSent(true);
+      setForm({ name: "", org: "", email: "", phone: "", message: "", role: "" });
+      setMessengers([]);
+    } catch (err) {
+      setError(err instanceof ApiError ? (err.data?.error as string) || "Ошибка отправки" : "Не удалось отправить");
+    } finally {
+      setSending(false);
+    }
+  };
 
   useEffect(() => {
     fetch("https://functions.poehali.dev/de77851c-6234-460f-903b-ca3df97ddc07")
@@ -105,6 +138,18 @@ export function ContactsSection() {
             style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)" }}>
             <div className="font-ibm text-white/25 text-xs tracking-[0.18em] uppercase mb-6">Форма обращения</div>
 
+            {sent ? (
+              <div className="flex flex-col items-center py-12 text-center">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.2)" }}>
+                  <Icon name="Check" size={28} className="text-ksi-cyan" />
+                </div>
+                <h3 className="font-oswald text-xl text-white mb-2">Обращение отправлено</h3>
+                <p className="font-ibm text-white/40 text-sm max-w-sm">Мы получили ваше сообщение и ответим в течение рабочего дня.</p>
+                <button onClick={() => setSent(false)} className="mt-6 font-ibm text-ksi-cyan/60 text-sm hover:text-ksi-cyan transition-colors">
+                  Отправить ещё
+                </button>
+              </div>
+            ) : (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -120,6 +165,12 @@ export function ContactsSection() {
                 <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">EMAIL *</label>
                 <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors" />
               </div>
+              <PhoneMessengersField
+                phone={form.phone}
+                messengers={messengers}
+                onPhoneChange={(v) => setForm({ ...form, phone: v })}
+                onMessengersChange={setMessengers}
+              />
               <div>
                 <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ВЫ ПРЕДСТАВЛЯЕТЕ *</label>
                 <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/60 text-sm focus:outline-none focus:border-ksi-cyan/40 transition-colors">
@@ -139,8 +190,16 @@ export function ContactsSection() {
                 <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Кратко опишите задачу или вопрос..." rows={4} className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors resize-none" />
               </div>
 
-              <button className="btn-primary-ksi w-full py-4 rounded-sm text-sm mt-2 cursor-pointer">
-                Отправить обращение
+              {error && (
+                <div className="flex items-center gap-2 text-red-400/80 text-sm font-ibm">
+                  <Icon name="AlertCircle" size={14} />
+                  {error}
+                </div>
+              )}
+
+              <button onClick={handleSubmit} disabled={sending} className="btn-primary-ksi w-full py-4 rounded-sm text-sm mt-2 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50">
+                {sending && <Icon name="Loader2" size={16} className="animate-spin" />}
+                {sending ? "Отправка..." : "Отправить обращение"}
               </button>
 
               <p className="font-ibm text-white/20 text-xs text-center leading-relaxed">
@@ -148,6 +207,7 @@ export function ContactsSection() {
                 для обработки вашего обращения
               </p>
             </div>
+            )}
           </div>
         </div>
       </div>
