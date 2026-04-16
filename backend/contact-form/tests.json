@@ -9,8 +9,25 @@
       "expectedBody": {}
     },
     {
-      "name": "GET method not allowed",
+      "name": "GET list without auth returns 403",
       "method": "GET",
+      "path": "/",
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "PUT update status without auth returns 403",
+      "method": "PUT",
+      "path": "/",
+      "body": {"id": 1, "status": "reviewed"},
+      "expectedStatus": 403,
+      "bodyMatcher": "partial",
+      "expectedBody": {"error": "Access denied. Internal user required."}
+    },
+    {
+      "name": "DELETE method not allowed",
+      "method": "DELETE",
       "path": "/",
       "expectedStatus": 405,
       "bodyMatcher": "partial",

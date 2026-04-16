@@ -11,9 +11,11 @@ import psycopg2.extras
 
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Authorization",
 }
+
+ALLOWED_STATUSES = {"new", "reviewed", "replied", "archived"}
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
 SCHEMA = "t_p64876520_ksi_corporate_websit"
@@ -183,8 +185,28 @@ def handle_contact_form(conn, event: dict) -> dict:
 
     role_label = ROLE_LABELS.get(role, role or "\u2014")
     messengers_str = ", ".join(messenger_labels) if messenger_labels else "\u2014"
+    messengers_db = ",".join([m for m in messengers_raw if m])
+
+    # IP-адрес отправителя
+    req_ctx = event.get("requestContext") or {}
+    identity = req_ctx.get("identity") or {}
+    source_ip = (identity.get("sourceIp") or "")[:45]
 
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    # Сохраняем обращение в БД
+    try:
+        cur.execute(
+            "INSERT INTO {schema}.contact_requests "
+            "(name, org, email, phone, messengers, role, message, source_ip, status) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'new') RETURNING id".format(schema=SCHEMA),
+            (name[:255], org[:255], email[:255], phone[:32], messengers_db, role[:50], message, source_ip),
+        )
+        conn.commit()
+    except Exception as exc:
+        conn.rollback()
+        print("DB insert error: {exc}".format(exc=exc))
+
     tg_settings = get_telegram_settings(cur)
 
     bot_token = tg_settings.get("telegram_bot_token", "").strip()
@@ -248,11 +270,106 @@ def handle_test_telegram(conn, event: dict) -> dict:
     return make_response(200, {"success": True})
 
 
-def handler(event: dict, context) -> dict:
-    """Обработка контактной формы и отправка уведомлений в Telegram.
+def handle_list_requests(conn, event: dict) -> dict:
+    """Получение списка обращений с фильтрами и пагинацией. Только admin."""
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-    POST / — отправка обращения с контактной формы сайта.
+    user = get_current_internal_user(cur, event)
+    if not user:
+        return make_response(403, {"error": "Access denied. Internal user required."})
+
+    qs = event.get("queryStringParameters") or {}
+    try:
+        page = max(1, int(qs.get("page") or 1))
+    except (TypeError, ValueError):
+        page = 1
+    try:
+        per_page = min(100, max(1, int(qs.get("per_page") or 20)))
+    except (TypeError, ValueError):
+        per_page = 20
+    status = (qs.get("status") or "").strip()
+
+    where = ""
+    if status and status in ALLOWED_STATUSES:
+        safe = status.replace("'", "''")
+        where = "WHERE status = '{s}'".format(s=safe)
+
+    cur.execute(
+        "SELECT COUNT(*) AS c FROM {schema}.contact_requests {where}".format(schema=SCHEMA, where=where)
+    )
+    total = cur.fetchone()["c"]
+
+    offset = (page - 1) * per_page
+    cur.execute(
+        "SELECT id, name, org, email, phone, messengers, role, message, source_ip, status, created_at "
+        "FROM {schema}.contact_requests {where} "
+        "ORDER BY created_at DESC LIMIT {lim} OFFSET {off}".format(
+            schema=SCHEMA, where=where, lim=per_page, off=offset
+        )
+    )
+    rows = cur.fetchall()
+
+    items = []
+    for r in rows:
+        messengers = r.get("messengers") or ""
+        messengers_list = [m for m in messengers.split(",") if m] if messengers else []
+        items.append({
+            "id": r["id"],
+            "name": r["name"],
+            "org": r["org"] or "",
+            "email": r["email"],
+            "phone": r.get("phone") or "",
+            "messengers": messengers_list,
+            "role": r["role"] or "",
+            "message": r["message"] or "",
+            "source_ip": r["source_ip"] or "",
+            "status": r["status"] or "new",
+            "created_at": r["created_at"].isoformat() if r["created_at"] else None,
+        })
+
+    return make_response(200, {"items": items, "total": total, "page": page, "per_page": per_page})
+
+
+def handle_update_request(conn, event: dict) -> dict:
+    """Обновление статуса обращения. Только admin."""
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+
+    user = get_current_internal_user(cur, event)
+    if not user:
+        return make_response(403, {"error": "Access denied. Internal user required."})
+
+    body = parse_body(event)
+    req_id = body.get("id")
+    new_status = (body.get("status") or "").strip()
+
+    if not req_id:
+        return make_response(400, {"error": "Поле 'id' обязательно"})
+    try:
+        req_id = int(req_id)
+    except (TypeError, ValueError):
+        return make_response(400, {"error": "Некорректный 'id'"})
+    if new_status not in ALLOWED_STATUSES:
+        return make_response(400, {"error": "Недопустимый статус"})
+
+    cur.execute(
+        "UPDATE {schema}.contact_requests SET status = %s WHERE id = %s".format(schema=SCHEMA),
+        (new_status, req_id),
+    )
+    if cur.rowcount == 0:
+        conn.rollback()
+        return make_response(404, {"error": "Обращение не найдено"})
+    conn.commit()
+
+    return make_response(200, {"success": True})
+
+
+def handler(event: dict, context) -> dict:
+    """Обработка контактной формы, списка обращений и уведомлений в Telegram.
+
+    POST / — отправка обращения с контактной формы сайта (публично).
     POST / (action=test) — тестирование подключения к Telegram (только для admin).
+    GET / — список обращений с фильтром по статусу и пагинацией (только для admin).
+    PUT / — смена статуса обращения (только для admin).
     OPTIONS / — CORS preflight.
     """
     method = event.get("httpMethod", event.get("method", ""))
@@ -260,13 +377,18 @@ def handler(event: dict, context) -> dict:
     if method == "OPTIONS":
         return make_response(200, {})
 
-    if method != "POST":
-        return make_response(405, {"error": "Method not allowed"})
-
     conn = None
     try:
         conn = get_connection()
-        return handle_contact_form(conn, event)
+
+        if method == "GET":
+            return handle_list_requests(conn, event)
+        if method == "PUT":
+            return handle_update_request(conn, event)
+        if method == "POST":
+            return handle_contact_form(conn, event)
+
+        return make_response(405, {"error": "Method not allowed"})
 
     except Exception as exc:
         if conn:

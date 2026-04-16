@@ -1,0 +1,3 @@
+ALTER TABLE t_p64876520_ksi_corporate_websit.contact_requests
+  ADD COLUMN IF NOT EXISTS phone VARCHAR(32) NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS messengers TEXT NULL DEFAULT '';
