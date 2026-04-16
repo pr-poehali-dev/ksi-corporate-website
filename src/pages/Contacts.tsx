@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import PageLayout from "@/components/ksi/PageLayout";
 import Icon from "@/components/ui/icon";
 import { api, ApiError } from "@/lib/api";
-import PhoneMessengersField, { MessengerValue } from "@/components/ksi/PhoneMessengersField";
+import PhoneMessengersField, { MessengerValue, isValidPhoneRU } from "@/components/ksi/PhoneMessengersField";
 
 export default function Contacts() {
   const [form, setForm] = useState({ name: "", org: "", email: "", phone: "", role: "", message: "" });
@@ -22,6 +22,14 @@ export default function Contacts() {
   const handleSubmit = async () => {
     if (!form.name.trim() || !form.email.trim()) {
       setError("Заполните обязательные поля: имя и email");
+      return;
+    }
+    if (form.phone.trim() && !isValidPhoneRU(form.phone)) {
+      setError("Введите полный номер телефона в формате +7 (___) ___-__-__");
+      return;
+    }
+    if (form.phone.trim() && messengers.length === 0) {
+      setError("Выберите удобный способ связи");
       return;
     }
     setError("");

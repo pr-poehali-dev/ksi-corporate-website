@@ -9,6 +9,11 @@ export const MESSENGER_OPTIONS = [
 
 export type MessengerValue = typeof MESSENGER_OPTIONS[number]["value"];
 
+export function isValidPhoneRU(value: string): boolean {
+  const digits = value.replace(/\D/g, "");
+  return digits.length === 11;
+}
+
 export function formatPhoneRU(input: string): string {
   let digits = input.replace(/\D/g, "");
   if (!digits) return "";

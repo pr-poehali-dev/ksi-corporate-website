@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
 import { api, ApiError } from "@/lib/api";
-import PhoneMessengersField, { MessengerValue } from "./PhoneMessengersField";
+import PhoneMessengersField, { MessengerValue, isValidPhoneRU } from "./PhoneMessengersField";
 
 export function ContactsSection() {
   const [form, setForm] = useState({ name: "", org: "", email: "", phone: "", message: "", role: "" });
@@ -16,6 +16,14 @@ export function ContactsSection() {
   const handleSubmit = async () => {
     if (!form.name.trim() || !form.email.trim()) {
       setError("Заполните обязательные поля: имя и email");
+      return;
+    }
+    if (form.phone.trim() && !isValidPhoneRU(form.phone)) {
+      setError("Введите полный номер телефона в формате +7 (___) ___-__-__");
+      return;
+    }
+    if (form.phone.trim() && messengers.length === 0) {
+      setError("Выберите удобный способ связи");
       return;
     }
     setError("");
