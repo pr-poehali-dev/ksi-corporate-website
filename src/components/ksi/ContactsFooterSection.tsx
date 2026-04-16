@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { NAV_ITEMS } from "./data";
 
@@ -169,7 +170,7 @@ export function Footer() {
               <span className="font-oswald font-semibold text-white tracking-widest uppercase text-sm">АО КриптоСтройИнвест</span>
             </div>
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-xs">
-              Оператор интеллектуальной инфраструктуры для девелопмента. Ключевой проект — «КриптоМетры».
+              Оператор интеллектуальной инфраструктуры для девелопмента. Управляющая компания проекта «КриптоМетры».
             </p>
           </div>
 
@@ -177,7 +178,7 @@ export function Footer() {
             <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-4">НАВИГАЦИЯ</div>
             <div className="space-y-2">
               {NAV_ITEMS.map((item) => (
-                <a key={item.href} href={item.href} className="block font-ibm text-white/40 text-sm hover:text-white/70 transition-colors">{item.label}</a>
+                <Link key={item.href} to={item.href} className="block font-ibm text-white/40 text-sm hover:text-white/70 transition-colors">{item.label}</Link>
               ))}
             </div>
           </div>
@@ -185,7 +186,7 @@ export function Footer() {
           <div>
             <div className="font-mono-ibm text-white/30 text-xs tracking-widest mb-4">ПРОЕКТ</div>
             <div className="space-y-2">
-              <a href="/cryptometry" className="block font-ibm text-white/50 text-sm hover:text-white/70 transition-colors">КриптоМетры</a>
+              <Link to="/cryptometry" className="block font-ibm text-white/50 text-sm hover:text-white/70 transition-colors">КриптоМетры</Link>
             </div>
             <div className="mt-6">
               <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-2">ВНУТРЕННИЕ СЛУЖБЫ</div>
@@ -196,15 +197,15 @@ export function Footer() {
                   { label: "Служба земельного поиска", href: "/directions/lss" },
                   { label: "Студия проектного креатива", href: "/directions/ai-production" },
                 ].map((l) => (
-                  <a key={l.href} href={l.href} className="block font-ibm text-white/25 text-xs hover:text-white/45 transition-colors">{l.label}</a>
+                  <Link key={l.href} to={l.href} className="block font-ibm text-white/25 text-xs hover:text-white/45 transition-colors">{l.label}</Link>
                 ))}
               </div>
             </div>
             <div className="mt-4">
               <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-2">СПРАВКА</div>
               <div className="space-y-1">
-                <a href="/roadmap" className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">Дорожная карта</a>
-                <a href="/glossary" className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">Глоссарий</a>
+                <Link to="/roadmap" className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">Дорожная карта</Link>
+                <Link to="/glossary" className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">Глоссарий</Link>
               </div>
             </div>
           </div>
