@@ -165,6 +165,8 @@ function SiteFooter() {
                   { label: "Дорожная карта", href: "/roadmap" },
                   { label: "Глоссарий", href: "/glossary" },
                   { label: "Политика ПДн", href: "/privacy" },
+                  { label: "Соглашение", href: "/terms" },
+                  { label: "Реквизиты", href: "/requisites" },
                 ].map((l) => (
                   <Link key={l.href} to={l.href} className="block font-ibm text-white/20 text-xs hover:text-white/40 transition-colors">{l.label}</Link>
                 ))}

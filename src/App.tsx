@@ -18,6 +18,8 @@ import Roadmap from "./pages/Roadmap";
 import Glossary from "./pages/Glossary";
 import Cryptometry from "./pages/Cryptometry";
 import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Requisites from "./pages/Requisites";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import CabinetLayout from "./components/cabinet/CabinetLayout";
@@ -127,6 +129,8 @@ const App = () => (
             <Route path="/glossary" element={<Glossary />} />
             <Route path="/cryptometry" element={<Cryptometry />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/requisites" element={<Requisites />} />
 
             {/* Auth */}
             <Route path="/auth/login" element={<GuestOnly><Login /></GuestOnly>} />

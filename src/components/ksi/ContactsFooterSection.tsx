@@ -214,8 +214,12 @@ export function Footer() {
         <div className="border-t border-ksi-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="font-ibm text-white/25 text-xs">© 2026 АО «КриптоСтройИнвест». Все права защищены.</div>
           <div className="flex items-center gap-6">
-            {["Политика конфиденциальности", "Пользовательское соглашение", "Реквизиты"].map((link) => (
-              <span key={link} className="font-ibm text-white/25 text-xs hover:text-white/50 cursor-pointer transition-colors">{link}</span>
+            {[
+              { label: "Политика конфиденциальности", href: "/privacy" },
+              { label: "Пользовательское соглашение", href: "/terms" },
+              { label: "Реквизиты", href: "/requisites" },
+            ].map((link) => (
+              <Link key={link.href} to={link.href} className="font-ibm text-white/25 text-xs hover:text-white/50 transition-colors">{link.label}</Link>
             ))}
           </div>
         </div>
