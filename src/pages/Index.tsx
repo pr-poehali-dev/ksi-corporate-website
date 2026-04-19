@@ -2,6 +2,7 @@ import { NavBar } from "@/components/ksi/NavBar";
 import { HeroSection } from "@/components/ksi/HeroSection";
 import { AboutKsiSection } from "@/components/ksi/AboutKsiSection";
 import { AudienceTabsSection } from "@/components/ksi/AudienceTabsSection";
+import { HowWeWorkSection } from "@/components/ksi/HowWeWorkSection";
 import { HybridModelSection } from "@/components/ksi/HybridModelSection";
 import { InternalServicesSection } from "@/components/ksi/InternalServicesSection";
 import { StrategySection } from "@/components/ksi/StrategySection";
@@ -24,6 +25,7 @@ export default function Index() {
       <HeroSection />
       <AboutKsiSection />
       <AudienceTabsSection />
+      <HowWeWorkSection />
       <HybridModelSection />
       <InternalServicesSection />
       <StrategySection />
