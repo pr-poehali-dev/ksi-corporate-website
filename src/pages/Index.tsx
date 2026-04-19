@@ -31,10 +31,10 @@ export default function Index() {
       <HowWeWorkSection />
       <SpeedSection />
       <HybridModelSection />
+      <StrategySection />
       <InternalServicesSection />
       <ModuleExamplesSection />
       <ModulesConnectionSection />
-      <StrategySection />
       <TrustArchitectureSection />
       <RoadmapTimelineSection />
       <EntryProductsSection />
