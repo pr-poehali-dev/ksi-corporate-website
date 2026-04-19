@@ -33,7 +33,7 @@ export function HeroSection() {
           <p className="font-ibm text-white/60 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-3">
             Мы создаём виртуального девелопера не как идею, а как практическую систему —
             поэтапно, модуль за модулем, превращая замысел в рабочую инфраструктуру
-            и прикладную пользу для партнёров.
+            и прикладную пользу для наших партнёров.
           </p>
 
           <div className="flex flex-wrap gap-4 fade-in-up stagger-4">
