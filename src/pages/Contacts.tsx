@@ -1,66 +1,34 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import PageLayout from "@/components/ksi/PageLayout";
+import { useSearchParams, Link } from "react-router-dom";
+import { NavBar } from "@/components/ksi/NavBar";
+import { NewFooter } from "@/components/ksi/NewFooter";
 import Icon from "@/components/ui/icon";
 import { api, ApiError } from "@/lib/api";
 import PhoneMessengersField, { MessengerValue, isValidPhoneRU } from "@/components/ksi/PhoneMessengersField";
 
-const PLAN_LABELS: Record<string, string> = {
-  basic: "Базовое подключение — 1 модуль",
-  pro: "Профессиональный контур — несколько модулей",
-  custom: "Индивидуальная сборка",
-};
-
-const TOPIC_LABELS: Record<string, string> = {
-  land: "Обсуждение участка",
-  developer: "Пилотная задача для девелопера",
-  assets: "Обсуждение актива",
-  partners: "Партнёрское сотрудничество",
-  demo: "Запрос демонстрации",
-  calculator: "Разбор задачи из калькулятора",
-  "lss-brief": "Справка по участку за 24 часа",
-  concept: "Первичная концепция проекта за 24 часа",
-};
-
-const PRIORITY_LABELS: Record<string, string> = {
-  urgent: "⚡ Срочная задача — до 12 часов",
-};
-
-const ROLE_BY_TOPIC: Record<string, string> = {
-  land: "land",
-  developer: "developer",
-  assets: "asset-owner",
-  partners: "other",
-  "lss-brief": "land",
-  concept: "developer",
-};
+const ROLE_OPTIONS = [
+  { id: "land", label: "Землевладелец" },
+  { id: "developer", label: "Действующий девелопер" },
+  { id: "investor", label: "Инвестор / партнёр" },
+  { id: "other", label: "Другое" },
+];
 
 function buildPrefillMessage(params: URLSearchParams): string {
-  const plan = params.get("plan") || "";
   const topic = params.get("topic") || "";
-  const priority = params.get("priority") || "";
-  const product = params.get("product") || "";
-
+  const plan = params.get("plan") || "";
   const lines: string[] = [];
-  if (priority && PRIORITY_LABELS[priority]) lines.push(PRIORITY_LABELS[priority]);
-  if (plan && PLAN_LABELS[plan]) lines.push(`Формат: ${PLAN_LABELS[plan]}`);
-  if (topic && TOPIC_LABELS[topic]) lines.push(`Тема: ${TOPIC_LABELS[topic]}`);
-  if (product && TOPIC_LABELS[product]) lines.push(`Продукт: ${TOPIC_LABELS[product]}`);
-
+  if (topic) lines.push(`Тема: ${topic}`);
+  if (plan) lines.push(`Формат: ${plan}`);
   return lines.join("\n");
 }
 
 export default function Contacts() {
   const [searchParams] = useSearchParams();
   const prefillMessage = buildPrefillMessage(searchParams);
-  const prefillRole =
-    ROLE_BY_TOPIC[searchParams.get("topic") || ""] ||
-    ROLE_BY_TOPIC[searchParams.get("product") || ""] ||
-    "";
 
   const [form, setForm] = useState({
     name: "", org: "", email: "", phone: "",
-    role: prefillRole,
+    role: "",
     message: prefillMessage,
   });
   const [messengers, setMessengers] = useState<MessengerValue[]>([]);
@@ -113,170 +81,243 @@ export default function Contacts() {
 
   const contactEmail = settings.email || "info@aoksi.ru";
   const contactPhone = settings.phone || "+7 (495) 000-00-00";
-  const contactAddress = settings.actual_address || "Москва, Россия";
 
   return (
-    <PageLayout breadcrumb={[{ label: "Контакты" }]}>
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 70% 30%, rgba(0,212,255,0.04) 0%, transparent 60%)" }} />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="max-w-2xl">
-            <div className="section-label mb-5">◆ Контакты</div>
-            <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-5">
-              Предметный<br />
-              <span className="text-gradient-main">разговор</span>
-            </h1>
-            <p className="font-ibm text-white/55 text-xl leading-relaxed">
-              АО КСИ ведёт диалог с профессиональными участниками рынка.
-              Укажите вашу роль и задачу — это поможет нам ответить точно и по существу.
-            </p>
-          </div>
+    <div className="min-h-screen bg-ksi-dark text-white">
+      <NavBar />
+
+      {/* Hero */}
+      <section className="pt-32 pb-16 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-[500px] h-[400px] opacity-[0.04]"
+            style={{ background: "radial-gradient(ellipse, #00d4ff 0%, transparent 70%)" }} />
+        </div>
+        <div className="max-w-5xl mx-auto px-6 relative z-10">
+          <div className="section-label mb-4">◆ Персональное приглашение</div>
+          <h1 className="font-oswald text-5xl md:text-6xl font-semibold text-white mb-6 leading-tight">
+            Это не форма обратной<br />
+            связи.<br />
+            <span className="text-gradient-main">Это приглашение.</span>
+          </h1>
+          <p className="font-ibm text-white/45 text-lg max-w-xl">
+            АО КСИ ведёт предметный диалог с профессиональными участниками рынка. 
+            Расскажите о задаче — мы ответим по существу.
+          </p>
         </div>
       </section>
 
-      <section className="pb-24">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-5 gap-12">
-            <div className="lg:col-span-3">
-              <div className="card-ksi p-8 rounded-sm" style={{ borderColor: "rgba(0,212,255,0.1)" }}>
-                <div className="font-mono-ibm text-ksi-cyan/50 text-xs tracking-widest mb-6">ФОРМА ОБРАЩЕНИЯ</div>
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
 
-                {sent ? (
-                  <div className="flex flex-col items-center py-12 text-center">
-                    <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.2)" }}>
-                      <Icon name="Check" size={28} className="text-ksi-cyan" />
-                    </div>
-                    <h3 className="font-oswald text-xl text-white mb-2">Обращение отправлено</h3>
-                    <p className="font-ibm text-white/40 text-sm max-w-sm">Мы получили ваше сообщение и ответим в течение рабочего дня.</p>
-                    <button onClick={() => setSent(false)} className="mt-6 font-ibm text-ksi-cyan/60 text-sm hover:text-ksi-cyan transition-colors">
-                      Отправить ещё
-                    </button>
+            {/* Форма */}
+            <div className="lg:col-span-3">
+              {!sent ? (
+                <div className="border border-white/10 bg-white/[0.02] p-8 rounded-sm">
+                  <div className="font-ibm text-white/20 text-xs tracking-[0.2em] uppercase mb-6">
+                    Форма персонального обращения
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    {prefillMessage && (
-                      <div
-                        className="flex items-start gap-3 px-4 py-3 rounded-sm"
-                        style={{ background: "rgba(0,212,255,0.05)", border: "1px solid rgba(0,212,255,0.2)" }}
-                      >
-                        <Icon name="Tag" size={14} className="text-ksi-cyan/70 mt-[3px] flex-shrink-0" />
-                        <p className="font-ibm text-ksi-cyan/80 text-xs leading-relaxed">
-                          Контекст из запроса подставлен в поле «Суть запроса» — при необходимости отредактируйте.
-                        </p>
-                      </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ИМЯ *</label>
-                        <input type="text" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Ваше имя" className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors" />
-                      </div>
-                      <div>
-                        <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ОРГАНИЗАЦИЯ</label>
-                        <input type="text" value={form.org} onChange={e => setForm({ ...form, org: e.target.value })} placeholder="Компания" className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors" />
-                      </div>
+
+                  {/* Роль */}
+                  <div className="mb-5">
+                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-2">Ваша роль</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {ROLE_OPTIONS.map((r) => (
+                        <button
+                          key={r.id}
+                          onClick={() => setForm({ ...form, role: r.id })}
+                          className={`px-4 py-2.5 text-sm font-ibm border rounded-sm transition-all text-left ${
+                            form.role === r.id
+                              ? "border-ksi-cyan text-ksi-cyan bg-ksi-cyan/5"
+                              : "border-white/12 text-white/40 hover:border-white/25"
+                          }`}
+                        >
+                          {r.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-1">Имя *</div>
+                      <input
+                        type="text" value={form.name}
+                        onChange={e => setForm({ ...form, name: e.target.value })}
+                        placeholder="Иван Иванов"
+                        className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors"
+                      />
                     </div>
                     <div>
-                      <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">EMAIL *</label>
-                      <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors" />
+                      <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-1">Организация</div>
+                      <input
+                        type="text" value={form.org}
+                        onChange={e => setForm({ ...form, org: e.target.value })}
+                        placeholder="ООО «Название»"
+                        className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors"
+                      />
                     </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-1">Email *</div>
+                    <input
+                      type="email" value={form.email}
+                      onChange={e => setForm({ ...form, email: e.target.value })}
+                      placeholder="email@company.ru"
+                      className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors"
+                    />
+                  </div>
+
+                  <div className="mb-4">
                     <PhoneMessengersField
                       phone={form.phone}
                       messengers={messengers}
-                      onPhoneChange={(v) => setForm({ ...form, phone: v })}
+                      onPhoneChange={v => setForm({ ...form, phone: v })}
                       onMessengersChange={setMessengers}
                     />
-                    <div>
-                      <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ВЫ ПРЕДСТАВЛЯЕТЕ *</label>
-                      <select value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/60 text-sm focus:outline-none focus:border-ksi-cyan/40 transition-colors">
-                        <option value="" className="bg-ksi-dark">Выберите вашу роль</option>
-                        <option value="developer" className="bg-ksi-dark">Девелопер / застройщик</option>
-                        <option value="land" className="bg-ksi-dark">Землевладелец</option>
-                        <option value="asset-owner" className="bg-ksi-dark">Владелец актива</option>
-                        <option value="project-team" className="bg-ksi-dark">Проектная / инвестиционная команда</option>
-                        <option value="beta" className="bg-ksi-dark">Хочу участвовать в бета-тестировании</option>
-                        <option value="other" className="bg-ksi-dark">Другое</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">СУТЬ ЗАПРОСА</label>
-                      <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Кратко опишите вашу задачу или вопрос..." rows={5} className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors resize-none" />
-                    </div>
-                    {error && (
-                      <div className="flex items-center gap-2 text-red-400/80 text-sm font-ibm">
-                        <Icon name="AlertCircle" size={14} />
-                        {error}
-                      </div>
-                    )}
-                    <button onClick={handleSubmit} disabled={sending} className="btn-primary-ksi w-full py-4 rounded-sm text-sm cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50">
-                      {sending && <Icon name="Loader2" size={16} className="animate-spin" />}
-                      {sending ? "Отправка..." : "Отправить обращение"}
-                    </button>
-                    <p className="font-ibm text-white/20 text-xs text-center leading-relaxed">
-                      Данные используются исключительно для обработки вашего обращения.
-                      Нажимая кнопку, вы соглашаетесь с <a href="/privacy" className="text-white/30 underline hover:text-white/50 transition-colors">политикой обработки ПДн</a>.
-                    </p>
                   </div>
-                )}
-              </div>
-            </div>
 
-            <div className="lg:col-span-2 space-y-5">
-              <div>
-                <div className="section-label mb-4">◆ Прямые контакты</div>
-                <div className="space-y-4">
-                  {[
-                    { icon: "Mail", label: "Email", value: contactEmail },
-                    { icon: "Phone", label: "Телефон", value: contactPhone },
-                    { icon: "MapPin", label: "Адрес", value: contactAddress },
-                    { icon: "Clock", label: "Режим ответа", value: "Рабочие дни, в течение 24 часов" },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0" style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.12)" }}>
-                        <Icon name={item.icon} size={16} className="text-ksi-cyan" />
-                      </div>
-                      <div>
-                        <div className="font-mono-ibm text-white/25 text-xs tracking-widest mb-0.5">{item.label}</div>
-                        <div className="font-ibm text-white/65 text-sm">{item.value}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                  <div className="mb-6">
+                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-1">Суть запроса</div>
+                    <textarea
+                      value={form.message}
+                      onChange={e => setForm({ ...form, message: e.target.value })}
+                      rows={4}
+                      placeholder="Опишите задачу, актив или вопрос. Чем конкретнее — тем предметнее наш ответ."
+                      className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors resize-none"
+                    />
+                  </div>
 
-              <div className="pt-4 border-t border-ksi-border/30">
-                <div className="section-label mb-4">◆ По направлениям</div>
-                <div className="space-y-3">
-                  {[
-                    { title: "Проект КриптоМетры", href: "/cryptometry" },
-                    { title: "Служба земельного поиска", href: "/directions/lss" },
-                    { title: "Лаборатория ИИ", href: "/directions/ai-lab" },
-                    { title: "Студия проектного креатива", href: "/directions/ai-production" },
-                    { title: "Центр реализации активов", href: "/directions/fee-dev" },
-                    { title: "Сотрудничество", href: "/partners" },
-                  ].map((link, i) => (
-                    <a key={i} href={link.href} className="flex items-center gap-3 group py-1">
-                      <div className="w-1 h-1 rounded-full bg-ksi-cyan/30 flex-shrink-0" />
-                      <span className="font-ibm text-white/40 text-sm group-hover:text-white/65 transition-colors">{link.title}</span>
-                      <Icon name="ArrowRight" size={12} className="ml-auto text-white/15 group-hover:text-white/35 transition-colors" />
-                    </a>
-                  ))}
-                </div>
-              </div>
+                  {error && (
+                    <div className="font-ibm text-red-400 text-sm mb-4">{error}</div>
+                  )}
 
-              <div className="pt-4 border-t border-ksi-border/30">
-                <div className="p-5 rounded-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <div className="font-mono-ibm text-white/20 text-xs tracking-widest mb-2">ПРАВОВАЯ ОГОВОРКА</div>
-                  <p className="font-ibm text-white/30 text-xs leading-relaxed">
-                    Компания не осуществляет публичного привлечения денежных средств.
-                    Отдельные модели участия реализуются в рамках специальных юридических
-                    конструкций и партнёрских механизмов.
+                  <button
+                    onClick={handleSubmit}
+                    disabled={sending}
+                    className="btn-primary-ksi w-full py-3.5 text-sm font-medium rounded-sm disabled:opacity-50"
+                  >
+                    {sending ? "Отправляем..." : "Отправить приглашение"}
+                  </button>
+
+                  <p className="font-ibm text-white/20 text-xs mt-4 text-center">
+                    Только для юридических лиц · B2B · НДС ·{" "}
+                    <Link to="/privacy" className="hover:text-white/40 transition-colors">
+                      Политика конфиденциальности
+                    </Link>
                   </p>
                 </div>
+              ) : (
+                <div className="border border-ksi-cyan/20 bg-ksi-cyan/[0.04] p-10 rounded-sm text-center">
+                  <div className="w-14 h-14 rounded-full border border-ksi-cyan/30 flex items-center justify-center mx-auto mb-5">
+                    <Icon name="Check" size={26} className="text-ksi-cyan" />
+                  </div>
+                  <h3 className="font-oswald text-2xl font-semibold text-white mb-2">
+                    Приглашение принято
+                  </h3>
+                  <p className="font-ibm text-white/40 text-sm max-w-sm mx-auto mb-6">
+                    Мы получили ваше обращение и ответим в течение рабочего дня. 
+                    Если задача срочная — напишите напрямую на email.
+                  </p>
+                  <button
+                    onClick={() => setSent(false)}
+                    className="font-ibm text-ksi-cyan/50 text-sm hover:text-ksi-cyan transition-colors"
+                  >
+                    Отправить ещё одно обращение
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Боковая панель */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Как мы работаем */}
+              <div className="border border-white/8 bg-white/[0.02] p-6 rounded-sm">
+                <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">
+                  Как мы работаем с запросами
+                </div>
+                <div className="space-y-4">
+                  {[
+                    { step: "01", text: "Получаем обращение и изучаем задачу" },
+                    { step: "02", text: "Отвечаем по существу — не шаблоном" },
+                    { step: "03", text: "Предлагаем формат: звонок, встреча или документ" },
+                  ].map((s) => (
+                    <div key={s.step} className="flex items-start gap-3">
+                      <span className="font-ibm text-ksi-cyan/40 text-xs font-bold w-6 flex-shrink-0 mt-0.5">
+                        {s.step}
+                      </span>
+                      <span className="font-ibm text-white/45 text-sm">{s.text}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Прямые контакты */}
+              <div className="border border-white/8 bg-white/[0.02] p-6 rounded-sm">
+                <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">
+                  Прямые контакты
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Icon name="Mail" size={16} className="text-ksi-cyan/40 flex-shrink-0" />
+                    <a href={`mailto:${contactEmail}`}
+                      className="font-ibm text-white/55 text-sm hover:text-ksi-cyan transition-colors">
+                      {contactEmail}
+                    </a>
+                  </div>
+                  {contactPhone && contactPhone !== "+7 (495) 000-00-00" && (
+                    <div className="flex items-center gap-3">
+                      <Icon name="Phone" size={16} className="text-ksi-cyan/40 flex-shrink-0" />
+                      <a href={`tel:${contactPhone.replace(/\D/g, "")}`}
+                        className="font-ibm text-white/55 text-sm hover:text-ksi-cyan transition-colors">
+                        {contactPhone}
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Сроки ответа */}
+              <div className="border border-white/8 bg-white/[0.02] p-6 rounded-sm">
+                <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">
+                  Сроки ответа
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-ibm text-white/40 text-sm">Стандарт</span>
+                    <span className="font-ibm text-white/60 text-sm">до 24 часов</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-ibm text-white/40 text-sm">Срочно</span>
+                    <span className="font-ibm text-ksi-cyan/70 text-sm">до 12 часов</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ссылки */}
+              <div className="space-y-2">
+                <Link to="/early-access"
+                  className="flex items-center justify-between p-4 border border-white/8 hover:border-ksi-cyan/25 bg-white/[0.02] rounded-sm group transition-all">
+                  <span className="font-ibm text-white/50 text-sm group-hover:text-white/80 transition-colors">
+                    Запросить ранний доступ
+                  </span>
+                  <Icon name="ArrowRight" size={14} className="text-white/25 group-hover:text-ksi-cyan transition-colors" />
+                </Link>
+                <Link to="/requisites"
+                  className="flex items-center justify-between p-4 border border-white/8 hover:border-white/15 bg-white/[0.02] rounded-sm group transition-all">
+                  <span className="font-ibm text-white/35 text-sm group-hover:text-white/60 transition-colors">
+                    Реквизиты АО КСИ
+                  </span>
+                  <Icon name="ArrowRight" size={14} className="text-white/20 group-hover:text-white/40 transition-colors" />
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
-    </PageLayout>
+
+      <NewFooter />
+    </div>
   );
 }
