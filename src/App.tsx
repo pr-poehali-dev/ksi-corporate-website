@@ -9,7 +9,8 @@ import About from "./pages/About";
 import Directions from "./pages/Directions";
 import DirectionDetail from "./pages/DirectionDetail";
 import Ecosystem from "./pages/Ecosystem";
-import Projects from "./pages/Projects";
+import Projects from "./pages/ProjectsList";
+import ProjectDetail from "./pages/ProjectDetail";
 import Partners from "./pages/Partners";
 import Media from "./pages/Media";
 import Documents from "./pages/Documents";
@@ -20,6 +21,10 @@ import Cryptometry from "./pages/Cryptometry";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Requisites from "./pages/Requisites";
+import EarlyAccess from "./pages/EarlyAccess";
+import Legal from "./pages/Legal";
+import Coauthor from "./pages/Coauthor";
+import Pricing from "./pages/Pricing";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import CabinetLayout from "./components/cabinet/CabinetLayout";
@@ -121,6 +126,11 @@ const App = () => (
             ))}
             <Route path="/ecosystem" element={<Ecosystem />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:slug" element={<ProjectDetail />} />
+            <Route path="/early-access" element={<EarlyAccess />} />
+            <Route path="/legal" element={<Legal />} />
+            <Route path="/coauthor" element={<Coauthor />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/partners" element={<Partners />} />
             <Route path="/media" element={<Media />} />
             <Route path="/documents" element={<Documents />} />
