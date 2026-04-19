@@ -7,6 +7,7 @@ import { SpeedSection } from "@/components/ksi/SpeedSection";
 import { HybridModelSection } from "@/components/ksi/HybridModelSection";
 import { InternalServicesSection } from "@/components/ksi/InternalServicesSection";
 import { ModulesConnectionSection } from "@/components/ksi/ModulesConnectionSection";
+import { ModuleExamplesSection } from "@/components/ksi/ModuleExamplesSection";
 import { StrategySection } from "@/components/ksi/StrategySection";
 import { TrustArchitectureSection } from "@/components/ksi/TrustArchitectureSection";
 import { RoadmapTimelineSection } from "@/components/ksi/RoadmapTimelineSection";
@@ -31,6 +32,7 @@ export default function Index() {
       <SpeedSection />
       <HybridModelSection />
       <InternalServicesSection />
+      <ModuleExamplesSection />
       <ModulesConnectionSection />
       <StrategySection />
       <TrustArchitectureSection />
