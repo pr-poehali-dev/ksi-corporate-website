@@ -1,6 +1,49 @@
 import { useEffect, useState } from "react";
-import PageLayout from "@/components/ksi/PageLayout";
+import { Link } from "react-router-dom";
+import { NavBar } from "@/components/ksi/NavBar";
+import { NewFooter } from "@/components/ksi/NewFooter";
 import Icon from "@/components/ui/icon";
+
+const GROUPS = [
+  {
+    label: "Регистрационные данные",
+    icon: "Building2",
+    keys: [
+      { label: "Полное наименование", key: "company_full_name", fallback: "АО «КриптоСтройИнвест»" },
+      { label: "Сокращённое наименование", key: "company_short_name", fallback: "АО КСИ" },
+      { label: "ОГРН", key: "ogrn" },
+      { label: "ИНН", key: "inn" },
+      { label: "КПП", key: "kpp" },
+      { label: "Генеральный директор", key: "ceo_name" },
+    ],
+  },
+  {
+    label: "Адреса",
+    icon: "MapPin",
+    keys: [
+      { label: "Юридический адрес", key: "legal_address" },
+      { label: "Фактический адрес", key: "actual_address" },
+    ],
+  },
+  {
+    label: "Банковские реквизиты",
+    icon: "Landmark",
+    keys: [
+      { label: "Расчётный счёт", key: "bank_account" },
+      { label: "Банк", key: "bank_name" },
+      { label: "БИК", key: "bank_bik" },
+      { label: "Корр. счёт", key: "bank_corr_account" },
+    ],
+  },
+  {
+    label: "Контакты",
+    icon: "Mail",
+    keys: [
+      { label: "Email", key: "email" },
+      { label: "Телефон", key: "phone" },
+    ],
+  },
+];
 
 export default function Requisites() {
   const [s, setS] = useState<Record<string, string>>({});
@@ -14,77 +57,96 @@ export default function Requisites() {
       .finally(() => setLoading(false));
   }, []);
 
-  const rows = [
-    { label: "Полное наименование", value: s.company_full_name || "АО «КриптоСтройИнвест»", icon: "Building2" },
-    { label: "Сокращённое наименование", value: s.company_short_name || "АО КСИ", icon: "Tag" },
-    { label: "ОГРН", value: s.ogrn, icon: "Hash" },
-    { label: "ИНН", value: s.inn, icon: "Hash" },
-    { label: "КПП", value: s.kpp, icon: "Hash" },
-    { label: "Юридический адрес", value: s.legal_address, icon: "MapPin" },
-    { label: "Фактический адрес", value: s.actual_address, icon: "MapPin" },
-    { label: "Генеральный директор", value: s.ceo_name, icon: "User" },
-    { label: "Расчётный счёт", value: s.bank_account, icon: "Landmark" },
-    { label: "Банк", value: s.bank_name, icon: "Landmark" },
-    { label: "БИК", value: s.bank_bik, icon: "Hash" },
-    { label: "Корр. счёт", value: s.bank_corr_account, icon: "Hash" },
-    { label: "Email", value: s.email, icon: "Mail" },
-    { label: "Телефон", value: s.phone, icon: "Phone" },
-  ].filter(r => r.value);
-
   return (
-    <PageLayout breadcrumb={[{ label: "Реквизиты" }]}>
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <h1 className="font-oswald text-2xl md:text-3xl font-semibold text-white mb-2 uppercase tracking-wider">
-          Реквизиты
-        </h1>
-        <p className="font-ibm text-white/40 text-sm mb-10">
-          Оператор интеллектуальной инфраструктуры для девелопмента. Управляющая компания проекта «КриптоМетры».
-        </p>
+    <div className="min-h-screen bg-ksi-dark text-white">
+      <NavBar />
 
-        {loading ? (
-          <div className="space-y-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="h-12 bg-white/5 rounded-sm animate-pulse" />
-            ))}
-          </div>
-        ) : rows.length === 0 ? (
-          <div className="text-center py-20">
-            <Icon name="FileQuestion" size={40} className="text-white/15 mx-auto mb-4" />
-            <p className="font-ibm text-white/35 text-sm">Реквизиты пока не заполнены</p>
-            <p className="font-ibm text-white/20 text-xs mt-1">Данные появятся после настройки в панели управления</p>
-          </div>
-        ) : (
-          <div className="rounded-sm overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.07)" }}>
-            {rows.map((row, i) => (
-              <div
-                key={row.label}
-                className="flex items-center gap-4 px-6 py-4"
-                style={{
-                  background: i % 2 === 0 ? "rgba(255,255,255,0.02)" : "transparent",
-                  borderBottom: i < rows.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
-                }}
-              >
-                <div className="w-8 h-8 flex items-center justify-center flex-shrink-0"
-                  style={{ borderLeft: "2px solid rgba(0,212,255,0.25)" }}>
-                  <Icon name={row.icon} size={14} className="text-ksi-cyan/50" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-ibm text-white/25 text-[10px] tracking-widest uppercase mb-0.5">{row.label}</div>
-                  <div className="font-ibm text-white/70 text-sm break-all">{row.value}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-10 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-          <p className="font-ibm text-white/20 text-xs leading-relaxed">
-            Компания не осуществляет публичного привлечения денежных средств.
-            Отдельные модели участия реализуются в рамках специальных юридических
-            конструкций и партнёрских механизмов, формируемых индивидуально.
+      {/* Hero */}
+      <section className="pt-32 pb-16 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] opacity-[0.04]"
+            style={{ background: "radial-gradient(ellipse, #00d4ff 0%, transparent 70%)" }} />
+        </div>
+        <div className="max-w-4xl mx-auto px-6 relative z-10">
+          <div className="section-label mb-4">◆ Документы</div>
+          <h1 className="font-oswald text-5xl font-semibold text-white mb-4 leading-tight">
+            Реквизиты<br /><span className="text-gradient-main">АО КСИ</span>
+          </h1>
+          <p className="font-ibm text-white/40 text-base max-w-lg">
+            Официальные реквизиты АО «КриптоСтройИнвест» для договорной работы и документооборота.
           </p>
         </div>
-      </div>
-    </PageLayout>
+      </section>
+
+      {/* Реквизиты */}
+      <section className="py-12 pb-24">
+        <div className="max-w-4xl mx-auto px-6">
+          {loading ? (
+            <div className="space-y-3">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="h-14 bg-white/[0.04] rounded-sm animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {GROUPS.map((group) => {
+                const rows = group.keys
+                  .map(k => ({ label: k.label, value: s[k.key] || k.fallback || "" }))
+                  .filter(r => r.value);
+                if (rows.length === 0) return null;
+                return (
+                  <div key={group.label} className="border border-white/8 rounded-sm overflow-hidden">
+                    <div className="flex items-center gap-3 px-6 py-3 bg-white/[0.03] border-b border-white/6">
+                      <Icon name={group.icon as "Building2"} size={14} className="text-ksi-cyan/50" />
+                      <span className="font-ibm text-white/25 text-xs tracking-[0.15em] uppercase">{group.label}</span>
+                    </div>
+                    {rows.map((row, i) => (
+                      <div
+                        key={row.label}
+                        className={`flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 px-6 py-4 ${i < rows.length - 1 ? "border-b border-white/[0.05]" : ""}`}
+                      >
+                        <div className="font-ibm text-white/30 text-xs w-52 flex-shrink-0">{row.label}</div>
+                        <div className="font-ibm text-white/70 text-sm break-all">{row.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+
+              {/* Дисклеймер */}
+              <div className="border border-white/6 bg-white/[0.015] p-6 rounded-sm">
+                <p className="font-ibm text-white/25 text-xs leading-relaxed">
+                  Компания не осуществляет публичного привлечения денежных средств. 
+                  Отдельные модели участия реализуются в рамках специальных юридических конструкций 
+                  и партнёрских механизмов, формируемых индивидуально.
+                </p>
+              </div>
+
+              {/* Ссылки */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link to="/documents"
+                  className="flex items-center justify-between gap-3 flex-1 p-4 border border-white/8 hover:border-white/15 bg-white/[0.02] rounded-sm group transition-all">
+                  <div className="flex items-center gap-3">
+                    <Icon name="FileText" size={16} className="text-ksi-cyan/40" />
+                    <span className="font-ibm text-white/45 text-sm group-hover:text-white/70 transition-colors">Документы</span>
+                  </div>
+                  <Icon name="ArrowRight" size={14} className="text-white/20 group-hover:text-white/40 transition-colors" />
+                </Link>
+                <Link to="/legal"
+                  className="flex items-center justify-between gap-3 flex-1 p-4 border border-white/8 hover:border-white/15 bg-white/[0.02] rounded-sm group transition-all">
+                  <div className="flex items-center gap-3">
+                    <Icon name="Scale" size={16} className="text-ksi-cyan/40" />
+                    <span className="font-ibm text-white/45 text-sm group-hover:text-white/70 transition-colors">Правовая основа</span>
+                  </div>
+                  <Icon name="ArrowRight" size={14} className="text-white/20 group-hover:text-white/40 transition-colors" />
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <NewFooter />
+    </div>
   );
 }
