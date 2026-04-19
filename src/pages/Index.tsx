@@ -3,6 +3,9 @@ import { HeroSection } from "@/components/ksi/HeroSection";
 import { AboutKsiSection } from "@/components/ksi/AboutKsiSection";
 import { HybridModelSection } from "@/components/ksi/HybridModelSection";
 import { InternalServicesSection } from "@/components/ksi/InternalServicesSection";
+import { StrategySection } from "@/components/ksi/StrategySection";
+import { TrustArchitectureSection } from "@/components/ksi/TrustArchitectureSection";
+import { RoadmapTimelineSection } from "@/components/ksi/RoadmapTimelineSection";
 import { EntryProductsSection } from "@/components/ksi/EntryProductsSection";
 import { ResponsibilitySection } from "@/components/ksi/ResponsibilitySection";
 import { CryptoMeaningSection } from "@/components/ksi/CryptoMeaningSection";
@@ -21,6 +24,9 @@ export default function Index() {
       <AboutKsiSection />
       <HybridModelSection />
       <InternalServicesSection />
+      <StrategySection />
+      <TrustArchitectureSection />
+      <RoadmapTimelineSection />
       <EntryProductsSection />
       <BenefitCalculator />
       <ResponsibilitySection />
