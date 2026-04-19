@@ -52,9 +52,21 @@ export function SpeedSection() {
               без длинного производственного цикла. Для большинства типовых задач ориентир по первичной
               обработке — до 24 часов. Для срочных сценариев возможен ускоренный режим — до 12 часов.
             </p>
-            <p className="font-ibm text-white/35 text-sm leading-relaxed">
+            <p className="font-ibm text-white/35 text-sm leading-relaxed mb-8">
               Фактический срок зависит от типа задачи, объёма исходных данных и необходимого уровня проработки.
             </p>
+            <a
+              href="/contacts?priority=urgent"
+              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-sm font-oswald text-sm tracking-wider uppercase transition-all"
+              style={{
+                background: "linear-gradient(135deg, rgba(123,47,255,0.2), rgba(0,212,255,0.15))",
+                border: "1px solid rgba(160,112,255,0.45)",
+                color: "#c090ff",
+              }}
+            >
+              <Icon name="Zap" size={16} />
+              Поставить срочную задачу
+            </a>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
