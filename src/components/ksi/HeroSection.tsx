@@ -26,19 +26,14 @@ export function HeroSection() {
           <div className="section-label mb-5 fade-in-up stagger-1">◆ АО «КриптоСтройИнвест»</div>
 
           <h1 className="font-oswald font-bold text-3xl md:text-4xl xl:text-5xl leading-tight mb-5 fade-in-up stagger-2">
-            <span className="text-white">АО КСИ — оператор</span><br />
-            <span className="text-gradient-main">интеллектуальной инфраструктуры</span><br />
-            <span className="text-white/85">для девелопмента</span>
+            <span className="text-gradient-main">Первый виртуальный девелопер</span><br />
+            <span className="text-white/85">России</span>
           </h1>
 
-          <p className="font-ibm text-white/60 text-lg leading-relaxed mb-4 max-w-2xl fade-in-up stagger-3">
-            Разрабатываем и внедряем прикладные ИИ-модули для девелопмента,
-            параллельно обучая систему будущего виртуального девелопера.
-          </p>
-
-          <p className="font-ibm text-white/40 text-base leading-relaxed mb-10 max-w-2xl fade-in-up stagger-3">
-            Земельный поиск, проектный креатив, аналитика и упаковка активов — как самостоятельные продукты.
-            Каждый кейс становится частью распределённой интеллектуальной системы.
+          <p className="font-ibm text-white/60 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-3">
+            Мы создаём виртуального девелопера не как идею, а как практическую систему —
+            поэтапно, модуль за модулем, превращая замысел в рабочую инфраструктуру
+            и прикладную пользу для партнёров.
           </p>
 
           <div className="flex flex-wrap gap-4 fade-in-up stagger-4">
