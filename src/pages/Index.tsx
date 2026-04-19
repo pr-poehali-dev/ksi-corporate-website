@@ -33,12 +33,12 @@ export default function Index() {
       <InternalServicesSection />
       <ModuleExamplesSection />
       <ModulesConnectionSection />
+      <EntryProductsSection />
+      <BenefitCalculator />
       <StrategySection />
       <HybridModelSection />
       <TrustArchitectureSection />
       <RoadmapTimelineSection />
-      <EntryProductsSection />
-      <BenefitCalculator />
       <ResponsibilitySection />
       <CryptoMeaningSection />
       <CryptometrySection />
