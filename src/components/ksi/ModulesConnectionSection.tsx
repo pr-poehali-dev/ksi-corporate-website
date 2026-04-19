@@ -118,27 +118,52 @@ export function ModulesConnectionSection() {
     <section
       id="connect"
       className="py-24 relative overflow-hidden"
-      style={{ background: "linear-gradient(to bottom, rgba(10,10,15,1), rgba(14,12,24,1), rgba(10,10,15,1))" }}
+      style={{ background: "linear-gradient(to bottom, rgba(8,6,18,1), rgba(12,9,26,1), rgba(8,6,18,1))" }}
     >
+      {/* Top border glow */}
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.6) 30%, rgba(123,47,255,0.6) 70%, transparent 100%)" }} />
+      {/* Bottom border glow */}
+      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(123,47,255,0.4) 30%, rgba(0,212,255,0.4) 70%, transparent 100%)" }} />
+
+      {/* Ambient glow top-left */}
+      <div className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(0,212,255,0.07) 0%, transparent 70%)" }} />
+      {/* Ambient glow bottom-right */}
+      <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(123,47,255,0.07) 0%, transparent 70%)" }} />
+
       <div className="absolute inset-0 parcel-bg pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
 
         {/* Header */}
-        <div className="max-w-3xl mb-14">
-          <div className="section-label mb-4">◆ Подключение</div>
-          <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-5">
-            Подключение модулей<br />
-            <span className="text-gradient-main">АО КСИ</span>
-          </h2>
-          <p className="font-ibm text-white/55 text-lg leading-relaxed mb-3">
-            АО КСИ уже сегодня позволяет подключать прикладные контуры под конкретные девелоперские задачи.
-            Вы выбираете подходящий формат, получаете доступ к нужным модулям и ставите запросы
-            через интеллектуальный контур системы.
-          </p>
-          <p className="font-ibm text-white/38 text-base leading-relaxed">
-            Каждый модуль подключается как самостоятельный контур и в дальнейшем становится частью единой системы КриптоМетров.
-          </p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="section-label">◆ Подключение</div>
+              <div
+                className="px-3 py-1 rounded-sm font-mono-ibm text-[9px] tracking-widest uppercase"
+                style={{ background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.35)", color: "#00d4ff" }}
+              >
+                Доступно сейчас
+              </div>
+            </div>
+            <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-5">
+              Подключение модулей<br />
+              <span className="text-gradient-main">АО КСИ</span>
+            </h2>
+            <p className="font-ibm text-white/60 text-lg leading-relaxed mb-3">
+              Выберите формат, получите доступ к нужным модулям и ставьте запросы
+              через интеллектуальный контур системы.
+            </p>
+            <p className="font-ibm text-white/38 text-sm leading-relaxed">
+              Каждый модуль подключается как самостоятельный контур и в дальнейшем становится частью единой системы КриптоМетров.
+            </p>
+          </div>
+          <a
+            href="/contacts?plan=basic"
+            className="btn-primary-ksi px-7 py-3.5 rounded-sm text-sm cursor-pointer whitespace-nowrap self-start md:self-auto flex-shrink-0"
+          >
+            Начать прямо сейчас
+          </a>
         </div>
 
         {/* Tariffs */}
@@ -146,24 +171,31 @@ export function ModulesConnectionSection() {
           {TARIFFS.map((t) => (
             <div
               key={t.id}
-              className="relative flex flex-col p-7 rounded-sm overflow-hidden"
+              className="relative flex flex-col p-7 rounded-sm overflow-hidden transition-transform duration-200 hover:-translate-y-1"
               style={{
-                background: t.accent ? `${t.color}08` : "rgba(255,255,255,0.015)",
-                border: `1px solid ${t.accent ? `${t.color}40` : "rgba(255,255,255,0.07)"}`,
-                boxShadow: t.accent ? `0 0 40px ${t.color}12` : "none",
+                background: t.accent
+                  ? `linear-gradient(160deg, ${t.color}12 0%, rgba(10,8,22,1) 60%)`
+                  : "rgba(255,255,255,0.02)",
+                border: `1px solid ${t.accent ? `${t.color}55` : "rgba(255,255,255,0.09)"}`,
+                boxShadow: t.accent
+                  ? `0 0 60px ${t.color}18, inset 0 1px 0 ${t.color}25`
+                  : "inset 0 1px 0 rgba(255,255,255,0.04)",
               }}
             >
               <div
                 className="absolute top-0 left-0 right-0 h-px"
-                style={{ background: `linear-gradient(90deg, transparent, ${t.color}${t.accent ? "90" : "50"}, transparent)` }}
+                style={{ background: `linear-gradient(90deg, transparent, ${t.color}${t.accent ? "cc" : "60"}, transparent)` }}
               />
               {t.accent && (
-                <div
-                  className="absolute top-4 right-4 px-2 py-0.5 rounded-sm font-mono-ibm text-[9px] tracking-widest uppercase"
-                  style={{ background: `${t.color}18`, border: `1px solid ${t.color}40`, color: t.color }}
-                >
-                  Популярный
-                </div>
+                <>
+                  <div className="absolute inset-0 pointer-events-none rounded-sm" style={{ background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${t.color}08 0%, transparent 60%)` }} />
+                  <div
+                    className="absolute top-4 right-4 px-2.5 py-1 rounded-sm font-mono-ibm text-[9px] tracking-widest uppercase"
+                    style={{ background: `${t.color}22`, border: `1px solid ${t.color}55`, color: t.color }}
+                  >
+                    Популярный
+                  </div>
+                </>
               )}
 
               <div
