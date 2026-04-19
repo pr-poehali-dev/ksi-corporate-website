@@ -1,11 +1,68 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import PageLayout from "@/components/ksi/PageLayout";
 import Icon from "@/components/ui/icon";
 import { api, ApiError } from "@/lib/api";
 import PhoneMessengersField, { MessengerValue, isValidPhoneRU } from "@/components/ksi/PhoneMessengersField";
 
+const PLAN_LABELS: Record<string, string> = {
+  basic: "Базовое подключение — 1 модуль",
+  pro: "Профессиональный контур — несколько модулей",
+  custom: "Индивидуальная сборка",
+};
+
+const TOPIC_LABELS: Record<string, string> = {
+  land: "Обсуждение участка",
+  developer: "Пилотная задача для девелопера",
+  assets: "Обсуждение актива",
+  partners: "Партнёрское сотрудничество",
+  demo: "Запрос демонстрации",
+  calculator: "Разбор задачи из калькулятора",
+  "lss-brief": "Справка по участку за 24 часа",
+  concept: "Первичная концепция проекта за 24 часа",
+};
+
+const PRIORITY_LABELS: Record<string, string> = {
+  urgent: "⚡ Срочная задача — до 12 часов",
+};
+
+const ROLE_BY_TOPIC: Record<string, string> = {
+  land: "land",
+  developer: "developer",
+  assets: "asset-owner",
+  partners: "other",
+  "lss-brief": "land",
+  concept: "developer",
+};
+
+function buildPrefillMessage(params: URLSearchParams): string {
+  const plan = params.get("plan") || "";
+  const topic = params.get("topic") || "";
+  const priority = params.get("priority") || "";
+  const product = params.get("product") || "";
+
+  const lines: string[] = [];
+  if (priority && PRIORITY_LABELS[priority]) lines.push(PRIORITY_LABELS[priority]);
+  if (plan && PLAN_LABELS[plan]) lines.push(`Формат: ${PLAN_LABELS[plan]}`);
+  if (topic && TOPIC_LABELS[topic]) lines.push(`Тема: ${TOPIC_LABELS[topic]}`);
+  if (product && TOPIC_LABELS[product]) lines.push(`Продукт: ${TOPIC_LABELS[product]}`);
+
+  return lines.join("\n");
+}
+
 export default function Contacts() {
-  const [form, setForm] = useState({ name: "", org: "", email: "", phone: "", role: "", message: "" });
+  const [searchParams] = useSearchParams();
+  const prefillMessage = buildPrefillMessage(searchParams);
+  const prefillRole =
+    ROLE_BY_TOPIC[searchParams.get("topic") || ""] ||
+    ROLE_BY_TOPIC[searchParams.get("product") || ""] ||
+    "";
+
+  const [form, setForm] = useState({
+    name: "", org: "", email: "", phone: "",
+    role: prefillRole,
+    message: prefillMessage,
+  });
   const [messengers, setMessengers] = useState<MessengerValue[]>([]);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -97,6 +154,17 @@ export default function Contacts() {
                   </div>
                 ) : (
                   <div className="space-y-4">
+                    {prefillMessage && (
+                      <div
+                        className="flex items-start gap-3 px-4 py-3 rounded-sm"
+                        style={{ background: "rgba(0,212,255,0.05)", border: "1px solid rgba(0,212,255,0.2)" }}
+                      >
+                        <Icon name="Tag" size={14} className="text-ksi-cyan/70 mt-[3px] flex-shrink-0" />
+                        <p className="font-ibm text-ksi-cyan/80 text-xs leading-relaxed">
+                          Контекст из запроса подставлен в поле «Суть запроса» — при необходимости отредактируйте.
+                        </p>
+                      </div>
+                    )}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="font-mono-ibm text-white/30 text-xs tracking-widest block mb-2">ИМЯ *</label>
