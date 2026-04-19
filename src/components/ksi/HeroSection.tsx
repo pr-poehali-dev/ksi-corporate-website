@@ -23,30 +23,33 @@ export function HeroSection() {
         </div>
 
         <div className="max-w-3xl flex-1 flex flex-col justify-center">
-          <h1 className="font-oswald font-bold text-3xl md:text-4xl xl:text-5xl leading-tight mb-3 fade-in-up stagger-1">
-            <span className="text-white">Акционерное общество «КриптоСтройИнвест»</span><br />
-            <span className="text-white/60 text-2xl md:text-3xl xl:text-4xl">(АО КСИ)</span>
-          </h1>
-          <h2 className="font-oswald font-medium text-xl md:text-2xl xl:text-3xl leading-snug mb-8 fade-in-up stagger-2">
-            <span className="text-gradient-main">Оператор интеллектуальной инфраструктуры</span><br />
-            <span className="text-white/80">для девелопмента</span>
-          </h2>
+          <div className="section-label mb-5 fade-in-up stagger-1">◆ АО «КриптоСтройИнвест»</div>
 
-          <p className="font-ibm text-white/55 text-lg leading-relaxed mb-10 max-w-2xl fade-in-up stagger-3">
-            Оператор интеллектуальной инфраструктуры для девелопмента.
-            Управляющая компания проекта «КриптоМетры» — интеллектуальной системы
-            распределённого девелопмента.
+          <h1 className="font-oswald font-bold text-3xl md:text-4xl xl:text-5xl leading-tight mb-5 fade-in-up stagger-2">
+            <span className="text-white">АО КСИ — оператор</span><br />
+            <span className="text-gradient-main">интеллектуальной инфраструктуры</span><br />
+            <span className="text-white/85">для девелопмента</span>
+          </h1>
+
+          <p className="font-ibm text-white/60 text-lg leading-relaxed mb-4 max-w-2xl fade-in-up stagger-3">
+            Разрабатываем и внедряем прикладные ИИ-модули для девелопмента,
+            параллельно обучая систему будущего виртуального девелопера.
+          </p>
+
+          <p className="font-ibm text-white/40 text-base leading-relaxed mb-10 max-w-2xl fade-in-up stagger-3">
+            Земельный поиск, проектный креатив, аналитика и упаковка активов — как самостоятельные продукты.
+            Каждый кейс становится частью распределённой интеллектуальной системы.
           </p>
 
           <div className="flex flex-wrap gap-4 fade-in-up stagger-4">
-            <a href="/cryptometry" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
-              О проекте КриптоМетры
+            <a href="#modules" className="btn-primary-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
+              Посмотреть модули
             </a>
-            <a href="/directions" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
-              Внутренние службы АО КСИ
+            <a href="/contacts" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer">
+              Получить консультацию
             </a>
-            <a href="/contacts" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
-              Обсудить сотрудничество
+            <a href="/partners" className="btn-outline-ksi px-7 py-3 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>
+              Стать партнёром
             </a>
           </div>
         </div>
