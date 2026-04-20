@@ -181,7 +181,7 @@ export function HeroSection() {
         style={{ background: "linear-gradient(90deg, transparent, rgba(0,212,255,0.15), transparent)" }} />
 
       {/* ════════ КОНТЕНТ ════════ */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-28 pb-20 lg:pt-36">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-80 pb-20 lg:pt-96">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
           {/* ── Левая колонка: основной контент ── */}
@@ -349,23 +349,27 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* ── Большой логотип по центру — исчезает при скролле ── */}
+      {/* ── Большой логотип по центру под навбаром — исчезает при скролле ── */}
       <div
-        className="absolute top-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+        className="absolute left-1/2 z-20 pointer-events-none flex flex-col items-center gap-1"
         style={{
+          top: 72,
           opacity: scrolled ? 0 : 1,
-          transform: scrolled ? "translateX(-50%) scale(0.5)" : "translateX(-50%) scale(1)",
-          transition: "opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 400ms cubic-bezier(0.22,1,0.36,1)",
+          transform: scrolled
+            ? "translateX(-50%) translateY(-12px) scale(0.25)"
+            : "translateX(-50%) translateY(0) scale(1)",
+          transition: "opacity 380ms cubic-bezier(0.22,1,0.36,1), transform 420ms cubic-bezier(0.22,1,0.36,1)",
+          transformOrigin: "top center",
         }}
       >
         <img
           src={LOGO_URL}
           alt="АО КСИ"
           style={{
-            width: 48,
-            height: 48,
+            width: 240,
+            height: 240,
             objectFit: "contain",
-            filter: "drop-shadow(0 0 12px rgba(0,212,255,0.35))",
+            filter: "drop-shadow(0 0 32px rgba(0,212,255,0.30)) drop-shadow(0 0 80px rgba(0,212,255,0.12))",
           }}
         />
       </div>
