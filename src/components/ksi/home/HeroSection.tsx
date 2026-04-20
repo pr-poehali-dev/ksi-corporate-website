@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 
+const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/28655df5-bb72-4ef7-ba50-ca96e9a5ae13.png";
+
 /* ─── Параллакс-мышь ─────────────────────────────────────── */
 function useParallax(strength = 0.018) {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -106,6 +108,12 @@ function TerritoryMap({ opacity = 1 }: { opacity?: number }) {
 export function HeroSection() {
   const parallax = useParallax(0.016);
   const ref = useRef<HTMLDivElement>(null);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const v0 = useFadeIn(0);
   const v1 = useFadeIn(120);
@@ -339,6 +347,27 @@ export function HeroSection() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* ── Большой логотип по центру — исчезает при скролле ── */}
+      <div
+        className="absolute top-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+        style={{
+          opacity: scrolled ? 0 : 1,
+          transform: scrolled ? "translateX(-50%) scale(0.5)" : "translateX(-50%) scale(1)",
+          transition: "opacity 350ms cubic-bezier(0.22,1,0.36,1), transform 400ms cubic-bezier(0.22,1,0.36,1)",
+        }}
+      >
+        <img
+          src={LOGO_URL}
+          alt="АО КСИ"
+          style={{
+            width: 48,
+            height: 48,
+            objectFit: "contain",
+            filter: "drop-shadow(0 0 12px rgba(0,212,255,0.35))",
+          }}
+        />
       </div>
 
       {/* Стрелка вниз */}
