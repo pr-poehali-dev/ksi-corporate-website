@@ -11,16 +11,17 @@ export function ProjectsSection() {
           <div className="section-label mb-4">◆ 5 контуров обучения</div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
             <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight">
-              5 реальных проектов.<br />
-              <span className="text-gradient-main">5 кейсов обучения.</span>
+              Девелопер виртуальный,<br />
+              <span className="text-gradient-main">проекты реальные.</span>
             </h2>
             <Link to="/projects" className="font-ibm text-ksi-cyan/55 hover:text-ksi-cyan text-sm flex items-center gap-1 transition-colors self-start md:self-auto flex-shrink-0">
               Все проекты <Icon name="ArrowRight" size={13} />
             </Link>
           </div>
           <p className="font-ibm text-white/35 text-base mb-12 max-w-2xl">
-            Каждый из этих проектов — не объект продажи. Это реальная задача, которую система решила
-            и запомнила. Так строится интеллект виртуального девелопера.
+            Каждый из этих проектов — не объект продажи. Это реальная задача, которую система решает
+            и готовит проект к выводу на рынок. Вместе со строительством зданий строится интеллект
+            виртуального девелопера.
           </p>
         </Reveal>
 
