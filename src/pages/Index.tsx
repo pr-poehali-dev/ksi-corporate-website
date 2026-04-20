@@ -8,6 +8,7 @@ import { CoauthorsSection } from "@/components/ksi/home/CoauthorsSection";
 import { WhatYouGetSection } from "@/components/ksi/home/WhatYouGetSection";
 import { MiningCryptoSection } from "@/components/ksi/home/MiningCryptoSection";
 import { ProjectsSection } from "@/components/ksi/home/ProjectsSection";
+import { ResponsibilitySection } from "@/components/ksi/ResponsibilitySection";
 import { LandownersSection } from "@/components/ksi/home/LandownersSection";
 import { DevelopersSection } from "@/components/ksi/home/DevelopersSection";
 import { CasesGallery } from "@/components/ksi/home/CasesGallery";
@@ -26,6 +27,7 @@ export default function Index() {
       <WhatYouGetSection />
       <MiningCryptoSection />
       <ProjectsSection />
+      <ResponsibilitySection />
       <LandownersSection />
       <DevelopersSection />
       <CasesGallery />
