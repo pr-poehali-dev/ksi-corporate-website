@@ -15,6 +15,8 @@ import { CasesGallery } from "@/components/ksi/home/CasesGallery";
 import { PricingPreviewSection } from "@/components/ksi/home/PricingPreviewSection";
 import { LegalPreviewSection } from "@/components/ksi/home/LegalPreviewSection";
 import { FinalCTASection } from "@/components/ksi/home/FinalCTASection";
+import { CollaborationSection } from "@/components/ksi/CollaborationSection";
+import { CTASection } from "@/components/ksi/CTASection";
 
 export default function Index() {
   return (
@@ -34,6 +36,8 @@ export default function Index() {
       <PricingPreviewSection />
       <LegalPreviewSection />
       <FinalCTASection />
+      <CollaborationSection />
+      <CTASection />
       <NewFooter />
     </div>
   );
