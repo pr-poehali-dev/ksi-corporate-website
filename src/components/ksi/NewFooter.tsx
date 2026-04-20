@@ -72,7 +72,7 @@ export function NewFooter() {
         {/* Нижняя полоса */}
         <div className="border-t border-white/6 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="font-ibm text-white/20 text-xs">
-            © 2023–2025 АО «КриптоСтройИнвест». Все права защищены.
+            © 2026 АО «КриптоСтройИнвест». Все права защищены.
           </div>
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="font-ibm text-white/20 hover:text-white/40 text-xs transition-colors">

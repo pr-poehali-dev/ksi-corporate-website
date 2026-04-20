@@ -29,7 +29,7 @@ export default function About() {
             </p>
             <p className="font-ibm text-white/30 text-base leading-relaxed mb-8">
               Акционерное общество, зарегистрированное по российскому корпоративному законодательству.
-              Основана в 2023 году. Москва.
+              Запущена в 2026 году. Москва.
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="/cryptometry" className="btn-primary-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Проект КриптоМетры</a>
@@ -69,7 +69,7 @@ export default function About() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { label: "Год основания", value: "2023", color: "cyan" },
+                  { label: "Год запуска", value: "2026", color: "cyan" },
                   { label: "Правовая форма", value: "АО", color: "purple" },
                   { label: "Внутренние службы", value: "4", color: "cyan" },
                   { label: "Ключевой проект", value: "КМ", color: "purple" },
