@@ -1,101 +1,349 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
-import { Reveal } from "./Reveal";
 
-export function HeroSection() {
+/* ─── Параллакс-мышь ─────────────────────────────────────── */
+function useParallax(strength = 0.018) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      const cx = window.innerWidth / 2;
+      const cy = window.innerHeight / 2;
+      setOffset({ x: (e.clientX - cx) * strength, y: (e.clientY - cy) * strength });
+    };
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [strength]);
+  return offset;
+}
+
+/* ─── Счётчик строк (для нумерации у заголовка) ──────────── */
+const STATS = [
+  { value: "5", label: "кейсов обучения" },
+  { value: "4", label: "внутренних контура" },
+  { value: "2023", label: "год запуска" },
+];
+
+/* ─── Анимация появления ──────────────────────────────────── */
+function useFadeIn(delay = 0) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+  return visible;
+}
+
+/* ─── Архитектурная SVG-схема (территория) ───────────────── */
+function TerritoryMap({ opacity = 1 }: { opacity?: number }) {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Фон: сетка + свечение */}
-      <div className="absolute inset-0 pointer-events-none">
-        <svg className="absolute inset-0 w-full h-full opacity-[0.025]" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="hero-grid" width="64" height="64" patternUnits="userSpaceOnUse">
-              <path d="M 64 0 L 0 0 0 64" fill="none" stroke="white" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#hero-grid)" />
-        </svg>
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full opacity-[0.06]"
-          style={{ background: "radial-gradient(circle, #00d4ff 0%, transparent 65%)" }} />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] opacity-[0.03]"
-          style={{ background: "radial-gradient(circle, #7b2fff 0%, transparent 70%)" }} />
+    <svg
+      viewBox="0 0 800 500"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ opacity }}
+      className="w-full h-full"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      {/* Сетка */}
+      <defs>
+        <pattern id="t-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M40 0H0V40" stroke="rgba(0,212,255,0.06)" strokeWidth="0.5" />
+        </pattern>
+        <radialGradient id="glow-c" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#00d4ff" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="glow-p" cx="80%" cy="70%" r="40%">
+          <stop offset="0%" stopColor="#7b2fff" stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#7b2fff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      <rect width="800" height="500" fill="url(#t-grid)" />
+      <rect width="800" height="500" fill="url(#glow-c)" />
+      <rect width="800" height="500" fill="url(#glow-p)" />
+
+      {/* Кварталы */}
+      <rect x="80" y="60" width="220" height="140" rx="1" stroke="rgba(0,212,255,0.18)" strokeWidth="0.8" />
+      <rect x="320" y="60" width="140" height="60" rx="1" stroke="rgba(0,212,255,0.12)" strokeWidth="0.6" />
+      <rect x="320" y="140" width="140" height="60" rx="1" stroke="rgba(0,212,255,0.10)" strokeWidth="0.6" />
+      <rect x="480" y="60" width="240" height="140" rx="1" stroke="rgba(123,47,255,0.15)" strokeWidth="0.8" />
+
+      {/* Разделительные дороги */}
+      <line x1="0" y1="220" x2="800" y2="220" stroke="rgba(0,212,255,0.07)" strokeWidth="1" />
+      <line x1="310" y1="0" x2="310" y2="220" stroke="rgba(0,212,255,0.07)" strokeWidth="1" />
+      <line x1="470" y1="0" x2="470" y2="220" stroke="rgba(0,212,255,0.07)" strokeWidth="1" />
+
+      {/* Нижние кварталы */}
+      <rect x="80" y="260" width="100" height="180" rx="1" stroke="rgba(0,212,255,0.10)" strokeWidth="0.6" />
+      <rect x="200" y="260" width="160" height="80" rx="1" stroke="rgba(0,212,255,0.10)" strokeWidth="0.6" />
+      <rect x="200" y="360" width="160" height="80" rx="1" stroke="rgba(0,212,255,0.08)" strokeWidth="0.6" />
+      <rect x="380" y="260" width="200" height="180" rx="1" stroke="rgba(123,47,255,0.12)" strokeWidth="0.8" />
+      <rect x="600" y="260" width="120" height="80" rx="1" stroke="rgba(0,212,255,0.08)" strokeWidth="0.6" />
+      <rect x="600" y="360" width="120" height="80" rx="1" stroke="rgba(0,212,255,0.08)" strokeWidth="0.6" />
+
+      {/* Точки-узлы */}
+      <circle cx="190" cy="130" r="3" fill="none" stroke="#00d4ff" strokeWidth="0.8" opacity="0.5" />
+      <circle cx="190" cy="130" r="7" fill="none" stroke="#00d4ff" strokeWidth="0.3" opacity="0.3" />
+      <circle cx="560" cy="130" r="3" fill="none" stroke="#7b2fff" strokeWidth="0.8" opacity="0.4" />
+      <circle cx="560" cy="130" r="7" fill="none" stroke="#7b2fff" strokeWidth="0.3" opacity="0.25" />
+      <circle cx="480" cy="350" r="3" fill="none" stroke="#00d4ff" strokeWidth="0.8" opacity="0.4" />
+
+      {/* Соединительные линии */}
+      <line x1="190" y1="130" x2="480" y2="350" stroke="rgba(0,212,255,0.06)" strokeWidth="0.5" strokeDasharray="6,8" />
+      <line x1="560" y1="130" x2="480" y2="350" stroke="rgba(123,47,255,0.05)" strokeWidth="0.5" strokeDasharray="6,8" />
+
+      {/* Подписи кварталов */}
+      <text x="108" y="78" fill="rgba(0,212,255,0.25)" fontSize="6" fontFamily="monospace" letterSpacing="2">КОНТУР А</text>
+      <text x="497" y="78" fill="rgba(123,47,255,0.22)" fontSize="6" fontFamily="monospace" letterSpacing="2">КОНТУР Б</text>
+      <text x="397" y="278" fill="rgba(123,47,255,0.18)" fontSize="6" fontFamily="monospace" letterSpacing="2">КОНТУР В</text>
+    </svg>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+export function HeroSection() {
+  const parallax = useParallax(0.016);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const v0 = useFadeIn(0);
+  const v1 = useFadeIn(120);
+  const v2 = useFadeIn(280);
+  const v3 = useFadeIn(440);
+  const v4 = useFadeIn(580);
+  const v5 = useFadeIn(720);
+
+  const fade = (v: boolean, dy = 22, delay = 0): React.CSSProperties => ({
+    opacity: v ? 1 : 0,
+    transform: v ? "none" : `translateY(${dy}px)`,
+    transition: `opacity 700ms cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 700ms cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+  });
+
+  return (
+    <section
+      ref={ref}
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+      style={{ background: "radial-gradient(ellipse 120% 80% at 50% 0%, #0d1117 0%, #0a0a0f 55%)" }}
+    >
+
+      {/* ── Фоновый слой: карта территории + параллакс ── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          transform: `translate(${parallax.x * -0.6}px, ${parallax.y * -0.6}px)`,
+          transition: "transform 0.15s linear",
+        }}
+      >
+        <div className="absolute inset-0 scale-110">
+          <TerritoryMap opacity={0.9} />
+        </div>
+        {/* Затухание снизу */}
+        <div className="absolute inset-0"
+          style={{ background: "linear-gradient(to bottom, transparent 30%, #0a0a0f 90%)" }} />
+        {/* Затухание по краям */}
+        <div className="absolute inset-0"
+          style={{ background: "radial-gradient(ellipse 70% 100% at 50% 50%, transparent 40%, #0a0a0f 100%)" }} />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        <Reveal delay={0} duration={600} direction="none">
-          <div className="inline-flex items-center gap-3 mb-10 px-4 py-2 border border-ksi-cyan/20 bg-ksi-cyan/[0.04] rounded-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-ksi-cyan animate-pulse flex-shrink-0" />
-            <span className="font-ibm text-ksi-cyan/80 text-xs tracking-[0.2em] uppercase">
-              Виртуальный девелопер · Ранний доступ открыт
-            </span>
-          </div>
-        </Reveal>
+      {/* ── Свечения ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 700, height: 700,
+            top: "5%", left: "50%",
+            transform: `translate(-50%, 0) translate(${parallax.x * 0.4}px, ${parallax.y * 0.4}px)`,
+            background: "radial-gradient(circle, rgba(0,212,255,0.07) 0%, transparent 70%)",
+            transition: "transform 0.2s linear",
+          }}
+        />
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 500, height: 500,
+            bottom: "-10%", right: "-5%",
+            background: "radial-gradient(circle, rgba(123,47,255,0.06) 0%, transparent 70%)",
+          }}
+        />
+      </div>
 
-        <Reveal delay={100} duration={700}>
-          <h1 className="font-oswald text-6xl md:text-8xl lg:text-[96px] font-semibold leading-[0.9] mb-8 text-white tracking-tight">
-            АО КСИ —<br />
-            <span className="text-gradient-main">виртуальный</span><br />
-            девелопер
-          </h1>
-        </Reveal>
+      {/* ── Горизонтальная линия-разделитель вверху ── */}
+      <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(0,212,255,0.15), transparent)" }} />
 
-        <Reveal delay={220} duration={600}>
-          <p className="font-ibm text-white/55 text-xl md:text-2xl max-w-2xl mx-auto mb-4 leading-relaxed">
-            Рынок может подключиться к его интеллекту уже сейчас.
-          </p>
-          <p className="font-ibm text-white/30 text-base max-w-xl mx-auto mb-12 leading-relaxed">
-            Мы продаём не консалтинг и не услуги. Мы продаём доступ к интеллекту девелопера —
-            усиленному ИИ, обученному на реальных проектах.
-          </p>
-        </Reveal>
+      {/* ════════ КОНТЕНТ ════════ */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-28 pb-20 lg:pt-36">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
-        <Reveal delay={340} duration={600}>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-            <Link to="/early-access" className="btn-primary-ksi px-10 py-4 text-base font-medium rounded-sm">
-              Запросить ранний доступ
-            </Link>
-            <Link to="/coauthor" className="flex items-center gap-2 border border-white/15 hover:border-white/35 text-white/55 hover:text-white/90 transition-all px-10 py-4 text-base font-ibm rounded-sm">
-              Стать соавтором
-              <Icon name="ArrowRight" size={16} />
-            </Link>
-          </div>
-          <p className="font-ibm text-white/20 text-xs tracking-[0.15em] mb-20">
-            Только для юридических лиц · B2B · НДС
-          </p>
-        </Reveal>
+          {/* ── Левая колонка: основной контент ── */}
+          <div className="lg:col-span-7 xl:col-span-6">
 
-        {/* Три отличия */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-          {[
-            {
-              label: "Не консалтинг",
-              desc: "Советы не продаём. Решаем реальные девелоперские задачи — от анализа участка до финансовой модели.",
-              delay: 420,
-            },
-            {
-              label: "Не ИИ-стартап",
-              desc: "Реальные команды. Реальные проекты. ИИ усиливает людей, а не заменяет их.",
-              delay: 520,
-            },
-            {
-              label: "Не каталог объектов",
-              desc: "Проекты — это кейсы обучения системы. Не предложения о продаже, а живая практика интеллекта.",
-              delay: 620,
-            },
-          ].map((item) => (
-            <Reveal key={item.label} delay={item.delay} duration={600}>
-              <div className="border border-white/8 bg-white/[0.025] p-6 rounded-sm h-full">
-                <div className="font-ibm text-ksi-cyan/60 text-xs tracking-[0.2em] uppercase mb-2">◆</div>
-                <div className="font-oswald text-white text-xl font-medium mb-2">{item.label}</div>
-                <div className="font-ibm text-white/38 text-sm leading-relaxed">{item.desc}</div>
+            {/* Статус-бейдж */}
+            <div style={fade(v0)}>
+              <div className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 border border-ksi-cyan/20 bg-ksi-cyan/[0.04] rounded-sm backdrop-blur-sm">
+                <span className="w-1.5 h-1.5 rounded-full bg-ksi-cyan animate-pulse flex-shrink-0" />
+                <span className="font-ibm text-ksi-cyan/75 text-xs tracking-[0.22em] uppercase">
+                  Ранний доступ открыт
+                </span>
+                <span className="w-px h-3 bg-white/15" />
+                <span className="font-ibm text-white/30 text-xs tracking-[0.1em]">B2B · НДС</span>
               </div>
-            </Reveal>
-          ))}
+            </div>
+
+            {/* Заголовок */}
+            <div style={fade(v1)}>
+              <h1 className="font-oswald font-semibold text-white leading-[0.92] tracking-tight mb-6"
+                style={{ fontSize: "clamp(52px, 7vw, 88px)" }}>
+                Виртуальный<br />
+                <span className="text-gradient-main">девелопер</span><br />
+                <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.62em", letterSpacing: "0.04em" }}>
+                  АО «КриптоСтройИнвест»
+                </span>
+              </h1>
+            </div>
+
+            {/* Подзаголовок */}
+            <div style={fade(v2)}>
+              <p className="font-ibm text-white/60 leading-relaxed mb-3"
+                style={{ fontSize: "clamp(16px, 1.8vw, 20px)", maxWidth: 480 }}>
+                Рынок получает доступ к интеллекту девелопера.
+                Подключается к его обучению. Занимает раннюю позицию.
+              </p>
+              <p className="font-ibm text-white/30 text-sm leading-relaxed mb-10"
+                style={{ maxWidth: 420 }}>
+                Не консалтинг. Не ИИ-стартап. Не каталог объектов.
+                Интеллектуальная девелоперская система — к которой можно подключиться уже сейчас.
+              </p>
+            </div>
+
+            {/* CTA */}
+            <div style={fade(v3)}>
+              <div className="flex flex-col sm:flex-row gap-3 mb-8">
+                <Link
+                  to="/early-access"
+                  className="btn-primary-ksi px-8 py-3.5 text-sm font-medium rounded-sm text-center"
+                  style={{ minWidth: 200 }}
+                >
+                  Получить ранний доступ
+                </Link>
+                <Link
+                  to="/coauthor"
+                  className="inline-flex items-center justify-center gap-2 border border-white/15 hover:border-ksi-cyan/40 text-white/50 hover:text-white/90 transition-all duration-300 px-8 py-3.5 text-sm font-ibm rounded-sm"
+                >
+                  Стать соавтором
+                  <Icon name="ArrowRight" size={15} />
+                </Link>
+              </div>
+
+              {/* Микротекст соавторства */}
+              <div className="flex items-start gap-2.5 max-w-sm">
+                <Icon name="Info" size={13} className="text-white/20 flex-shrink-0 mt-0.5" />
+                <p className="font-ibm text-white/22 text-xs leading-relaxed">
+                  Тот, кто входит сейчас, — не просто пользователь системы.
+                  Он становится её соавтором и получает КриптоМетры.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Правая колонка: статус-панель ── */}
+          <div className="lg:col-span-5 xl:col-span-6 hidden lg:flex flex-col gap-4">
+
+            {/* Три числа */}
+            <div style={fade(v4)}>
+              <div className="grid grid-cols-3 gap-3">
+                {STATS.map((s) => (
+                  <div key={s.label}
+                    className="border border-white/8 bg-white/[0.03] backdrop-blur-sm p-4 rounded-sm text-center">
+                    <div className="font-oswald text-ksi-cyan text-2xl font-semibold mb-1">{s.value}</div>
+                    <div className="font-ibm text-white/28 text-[11px] leading-tight">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Схема работы */}
+            <div style={fade(v5)}>
+              <div className="border border-white/8 bg-white/[0.025] backdrop-blur-sm rounded-sm overflow-hidden">
+                <div className="border-b border-white/6 px-5 py-3 flex items-center justify-between">
+                  <span className="font-ibm text-white/20 text-[10px] tracking-[0.2em] uppercase">Схема доступа</span>
+                  <div className="flex gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white/10" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-ksi-cyan/30" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-ksi-cyan/60" />
+                  </div>
+                </div>
+                <div className="p-5 space-y-3">
+                  {[
+                    { n: "01", text: "Юрлицо подключается к системе", accent: false },
+                    { n: "02", text: "Ставит реальную девелоперскую задачу", accent: false },
+                    { n: "03", text: "Виртуальный девелопер формирует решение", accent: true },
+                    { n: "04", text: "Система обучается. Начисляются КриптоМетры", accent: true },
+                  ].map((row) => (
+                    <div key={row.n} className="flex items-center gap-3">
+                      <span className={`font-ibm text-[10px] font-bold w-6 flex-shrink-0 ${row.accent ? "text-ksi-cyan" : "text-white/20"}`}>
+                        {row.n}
+                      </span>
+                      <div className={`flex-1 h-px ${row.accent ? "bg-ksi-cyan/20" : "bg-white/6"}`} />
+                      <span className={`font-ibm text-xs text-right max-w-[200px] leading-tight ${row.accent ? "text-white/60" : "text-white/30"}`}>
+                        {row.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t border-white/6 px-5 py-3 flex items-center justify-between">
+                  <span className="font-ibm text-white/18 text-[10px]">Только юридические лица</span>
+                  <Link to="/legal" className="font-ibm text-ksi-cyan/40 hover:text-ksi-cyan/70 text-[10px] transition-colors flex items-center gap-1">
+                    Правовая основа <Icon name="ArrowRight" size={9} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ── Нижняя полоса: три отличия ── */}
+        <div className="mt-16 pt-8 border-t border-white/6"
+          style={{
+            ...fade(v5),
+            transitionDelay: "50ms",
+          }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              {
+                icon: "Ban",
+                label: "Не консалтинг",
+                desc: "Решаем реальные задачи. Анализ участка, концепция, финансовая модель, структура партнёрства.",
+              },
+              {
+                icon: "Cpu",
+                label: "Не ИИ-стартап",
+                desc: "Реальные команды. Реальные проекты. ИИ усиливает людей — не заменяет их.",
+              },
+              {
+                icon: "FolderX",
+                label: "Не каталог объектов",
+                desc: "Проекты — кейсы обучения системы. Живая практика интеллекта, а не витрина.",
+              },
+            ].map((item) => (
+              <div key={item.label}
+                className="flex gap-4 p-5 border border-white/6 bg-white/[0.02] rounded-sm group hover:border-ksi-cyan/20 transition-all duration-300">
+                <Icon name={item.icon as "Ban"} size={16} className="text-ksi-cyan/35 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-oswald text-white text-base font-medium mb-1">{item.label}</div>
+                  <div className="font-ibm text-white/32 text-sm leading-relaxed">{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
-        <Icon name="ChevronDown" size={22} className="text-white" />
+      {/* Стрелка вниз */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce opacity-25">
+        <Icon name="ChevronDown" size={20} className="text-white" />
       </div>
     </section>
   );
