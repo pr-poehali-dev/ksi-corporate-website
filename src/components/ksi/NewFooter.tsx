@@ -47,6 +47,7 @@ export function NewFooter() {
                 { label: "Проекты", href: "/projects" },
                 { label: "Реквизиты", href: "/requisites" },
                 { label: "Документы", href: "/documents" },
+                { label: "Политика конфиденциальности", href: "/privacy" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link to={item.href} className="font-ibm text-white/40 hover:text-white/70 text-sm transition-colors">
