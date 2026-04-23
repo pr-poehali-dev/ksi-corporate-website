@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { api, ApiError } from "@/lib/api";
 import PhoneMessengersField, { MessengerValue, isValidPhoneRU } from "./PhoneMessengersField";
@@ -15,6 +16,7 @@ export function ContactModal({ open, onClose, defaultMessage = "" }: ContactModa
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -36,11 +38,16 @@ export function ContactModal({ open, onClose, defaultMessage = "" }: ContactModa
     setMessengers([]);
     setSent(false);
     setError("");
+    setAgreed(false);
   };
 
   const handleClose = () => { reset(); onClose(); };
 
   const handleSubmit = async () => {
+    if (!agreed) {
+      setError("Необходимо дать согласие на обработку персональных данных");
+      return;
+    }
     if (!form.name.trim() || !form.email.trim()) {
       setError("Заполните обязательные поля: имя и email");
       return;
@@ -180,6 +187,33 @@ export function ContactModal({ open, onClose, defaultMessage = "" }: ContactModa
                   className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors resize-none" />
               </div>
 
+              {/* Согласие на обработку ПД */}
+              <label className="flex items-start gap-3 cursor-pointer">
+                <div
+                  onClick={() => setAgreed(!agreed)}
+                  className="w-4 h-4 mt-0.5 flex-shrink-0 rounded-sm border transition-all duration-200 flex items-center justify-center"
+                  style={{
+                    border: agreed ? "1px solid rgba(0,212,255,0.7)" : "1px solid rgba(255,255,255,0.2)",
+                    background: agreed ? "rgba(0,212,255,0.15)" : "transparent",
+                  }}
+                >
+                  {agreed && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4L3.5 6.5L9 1" stroke="#00d4ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </div>
+                <span className="font-ibm text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  Я даю согласие на обработку персональных данных в соответствии с{" "}
+                  <Link to="/privacy" className="transition-colors" style={{ color: "rgba(0,212,255,0.6)" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "rgba(0,212,255,0.9)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(0,212,255,0.6)")}
+                    onClick={e => { e.stopPropagation(); handleClose(); }}>
+                    Политикой конфиденциальности
+                  </Link>
+                </span>
+              </label>
+
               {error && (
                 <div className="flex items-center gap-2 text-red-400/80 text-sm font-ibm">
                   <Icon name="AlertCircle" size={14} />
@@ -187,19 +221,15 @@ export function ContactModal({ open, onClose, defaultMessage = "" }: ContactModa
                 </div>
               )}
 
-              <button onClick={handleSubmit} disabled={sending}
+              <button onClick={handleSubmit} disabled={sending || !agreed}
                 className="w-full py-4 rounded-sm text-sm font-ibm font-semibold tracking-[0.1em] uppercase flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-50"
                 style={{ background: "#00d4ff", color: "#0a0a0f", boxShadow: "0 0 24px rgba(0,212,255,0.2)" }}
-                onMouseEnter={e => !sending && (e.currentTarget.style.boxShadow = "0 0 40px rgba(0,212,255,0.4)")}
+                onMouseEnter={e => !sending && agreed && (e.currentTarget.style.boxShadow = "0 0 40px rgba(0,212,255,0.4)")}
                 onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 24px rgba(0,212,255,0.2)")}
               >
                 {sending && <Icon name="Loader2" size={16} className="animate-spin" />}
                 {sending ? "Отправка..." : "Отправить обращение"}
               </button>
-
-              <p className="font-ibm text-white/20 text-xs text-center leading-relaxed">
-                Данные не передаются третьим лицам и используются исключительно для обработки вашего обращения
-              </p>
             </div>
           )}
         </div>

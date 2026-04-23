@@ -12,6 +12,7 @@ export default function EarlyAccess() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   const roles = [
     "Землевладелец",
@@ -21,6 +22,10 @@ export default function EarlyAccess() {
   ];
 
   const handleSubmit = async () => {
+    if (!agreed) {
+      setError("Необходимо дать согласие на обработку персональных данных");
+      return;
+    }
     if (!form.name.trim() || !form.org.trim() || !form.email.trim() || !form.role) {
       setError("Заполните обязательные поля: имя, организация, email и роль");
       return;
@@ -213,17 +218,39 @@ export default function EarlyAccess() {
                   placeholder="Опишите задачу: участок, проект, идея, проблема..." />
               </div>
 
+              {/* Согласие на обработку ПД */}
+              <label className="flex items-start gap-3 cursor-pointer mb-5">
+                <div
+                  onClick={() => setAgreed(!agreed)}
+                  className="w-4 h-4 mt-0.5 flex-shrink-0 rounded-sm border transition-all duration-200 flex items-center justify-center"
+                  style={{
+                    border: agreed ? "1px solid rgba(0,212,255,0.7)" : "1px solid rgba(255,255,255,0.2)",
+                    background: agreed ? "rgba(0,212,255,0.15)" : "transparent",
+                  }}
+                >
+                  {agreed && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4L3.5 6.5L9 1" stroke="#00d4ff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </div>
+                <span className="font-ibm text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
+                  Я даю согласие на обработку персональных данных в соответствии с{" "}
+                  <Link to="/privacy" className="transition-colors" style={{ color: "rgba(0,212,255,0.6)" }}
+                    onMouseEnter={e => (e.currentTarget.style.color = "rgba(0,212,255,0.9)")}
+                    onMouseLeave={e => (e.currentTarget.style.color = "rgba(0,212,255,0.6)")}
+                    onClick={e => e.stopPropagation()}>
+                    Политикой конфиденциальности
+                  </Link>
+                </span>
+              </label>
+
               {error && <div className="text-red-400 font-ibm text-sm mb-4">{error}</div>}
 
-              <button onClick={handleSubmit} disabled={sending}
+              <button onClick={handleSubmit} disabled={sending || !agreed}
                 className="btn-primary-ksi w-full py-3.5 text-sm font-medium rounded-sm disabled:opacity-50">
                 {sending ? "Отправляем..." : "Отправить заявку"}
               </button>
-
-              <p className="font-ibm text-white/20 text-xs mt-4 text-center">
-                Отправляя заявку, вы соглашаетесь с{" "}
-                <Link to="/privacy" className="text-white/35 hover:text-white/60 transition-colors">политикой конфиденциальности</Link>
-              </p>
             </div>
           ) : (
             <div className="border border-ksi-cyan/20 bg-ksi-cyan/5 p-8 rounded-sm text-center">
