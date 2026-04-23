@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { ContactModal } from "@/components/ksi/ContactModal";
 
 const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/28655df5-bb72-4ef7-ba50-ca96e9a5ae13.png";
 
@@ -15,6 +16,7 @@ function useFadeIn(delay = 0) {
 export function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -172,8 +174,8 @@ export function HeroSection() {
           >
             Передать актив в работу
           </Link>
-          <Link
-            to="/contact"
+          <button
+            onClick={() => setModalOpen(true)}
             className="inline-flex items-center justify-center font-ibm font-medium text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
               background: "transparent",
@@ -190,7 +192,7 @@ export function HeroSection() {
             }}
           >
             Запросить предложение
-          </Link>
+          </button>
         </div>
 
         {/* Подпись */}
@@ -205,6 +207,8 @@ export function HeroSection() {
       {/* Нижняя линия */}
       <div className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
         style={{ background: "linear-gradient(90deg, transparent, rgba(0,212,255,0.12), transparent)" }} />
+
+      <ContactModal open={modalOpen} onClose={() => setModalOpen(false)} defaultMessage="Запрос предложения" />
     </section>
   );
 }
