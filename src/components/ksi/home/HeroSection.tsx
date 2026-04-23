@@ -38,7 +38,7 @@ export function HeroSection() {
       ref={ref}
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
       style={{
-        background: "radial-gradient(ellipse 140% 90% at 50% -10%, #0c1a10 0%, #0a0a0f 50%, #080808 100%)",
+        background: "radial-gradient(ellipse 140% 90% at 50% -10%, #0d1117 0%, #0a0a0f 55%, #080808 100%)",
       }}
     >
       {/* Тонкая сетка */}
@@ -46,35 +46,35 @@ export function HeroSection() {
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="hero-grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M60 0H0V60" stroke="rgba(0,220,100,0.07)" strokeWidth="0.5" fill="none" />
+              <path d="M60 0H0V60" stroke="rgba(0,212,255,0.06)" strokeWidth="0.5" fill="none" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#hero-grid)" />
         </svg>
       </div>
 
-      {/* Свечение центр */}
+      {/* Свечения */}
       <div className="absolute inset-0 pointer-events-none">
         <div style={{
           position: "absolute",
-          top: "20%", left: "50%",
+          top: "10%", left: "50%",
           transform: "translateX(-50%)",
           width: 900, height: 600,
-          background: "radial-gradient(ellipse, rgba(0,180,80,0.06) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(0,212,255,0.07) 0%, transparent 70%)",
           borderRadius: "50%",
         }} />
         <div style={{
           position: "absolute",
           bottom: "-5%", right: "-5%",
           width: 600, height: 600,
-          background: "radial-gradient(circle, rgba(0,100,40,0.05) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(123,47,255,0.06) 0%, transparent 70%)",
           borderRadius: "50%",
         }} />
       </div>
 
       {/* Горизонтальная линия сверху */}
       <div className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(0,200,80,0.18), transparent)" }} />
+        style={{ background: "linear-gradient(90deg, transparent, rgba(0,212,255,0.18), transparent)" }} />
 
       {/* Логотип (исчезает при скролле) */}
       <div
@@ -92,21 +92,21 @@ export function HeroSection() {
         <img
           src={LOGO_URL}
           alt="АО КСИ"
-          style={{ width: 80, height: 80, objectFit: "contain", filter: "brightness(1.05)" }}
+          style={{ width: 160, height: 160, objectFit: "contain", filter: "brightness(1.05)" }}
         />
       </div>
 
       {/* Контент */}
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center" style={{ paddingTop: "14rem", paddingBottom: "10rem" }}>
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 text-center" style={{ paddingTop: "18rem", paddingBottom: "10rem" }}>
 
         {/* Надпись-метка */}
         <div style={fade(v0)} className="mb-10">
           <span className="inline-flex items-center gap-2.5 font-ibm text-[11px] tracking-[0.28em] uppercase"
-            style={{ color: "rgba(0,200,80,0.6)" }}>
+            style={{ color: "rgba(0,212,255,0.65)" }}>
             <span style={{
               width: 6, height: 6, borderRadius: "50%",
-              background: "rgba(0,200,80,0.7)",
-              boxShadow: "0 0 8px rgba(0,200,80,0.5)",
+              background: "rgba(0,212,255,0.8)",
+              boxShadow: "0 0 8px rgba(0,212,255,0.5)",
               display: "inline-block",
             }} />
             АО «КриптоСтройИнвест»
@@ -122,7 +122,7 @@ export function HeroSection() {
             Оператор интеллектуальной системы
             <br />
             <span style={{
-              background: "linear-gradient(90deg, #00dc64 0%, #00ff85 60%, #00c8ff 100%)",
+              background: "linear-gradient(90deg, #00d4ff 0%, #7b2fff 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
@@ -134,7 +134,7 @@ export function HeroSection() {
         {/* Разделитель */}
         <div style={fade(v2)} className="flex items-center justify-center gap-6 mb-10">
           <div style={{ width: 60, height: 1, background: "rgba(255,255,255,0.08)" }} />
-          <div style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(0,200,80,0.4)" }} />
+          <div style={{ width: 4, height: 4, borderRadius: "50%", background: "rgba(0,212,255,0.4)" }} />
           <div style={{ width: 60, height: 1, background: "rgba(255,255,255,0.08)" }} />
         </div>
 
@@ -150,7 +150,7 @@ export function HeroSection() {
           </p>
           <p
             className="font-ibm font-medium mx-auto"
-            style={{ fontSize: "clamp(14px, 1.4vw, 17px)", color: "rgba(0,200,80,0.55)", maxWidth: 560 }}
+            style={{ fontSize: "clamp(14px, 1.4vw, 17px)", color: "rgba(0,212,255,0.55)", maxWidth: 560 }}
           >
             Приглашаем к практическому развёртыванию системы на реальных объектах и задачах.
           </p>
@@ -162,13 +162,13 @@ export function HeroSection() {
             to="/early-access"
             className="inline-flex items-center justify-center font-ibm font-semibold text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
-              background: "linear-gradient(135deg, rgba(0,180,70,0.9) 0%, rgba(0,140,55,0.9) 100%)",
-              color: "#fff",
-              border: "1px solid rgba(0,220,80,0.35)",
-              boxShadow: "0 0 30px rgba(0,180,70,0.2), inset 0 1px 0 rgba(255,255,255,0.08)",
+              background: "#00d4ff",
+              color: "#0a0a0f",
+              border: "1px solid rgba(0,212,255,0.5)",
+              boxShadow: "0 0 30px rgba(0,212,255,0.2)",
             }}
-            onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 45px rgba(0,180,70,0.35), inset 0 1px 0 rgba(255,255,255,0.1)")}
-            onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 30px rgba(0,180,70,0.2), inset 0 1px 0 rgba(255,255,255,0.08)")}
+            onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 45px rgba(0,212,255,0.4)")}
+            onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 30px rgba(0,212,255,0.2)")}
           >
             Передать актив в работу
           </Link>
@@ -181,7 +181,7 @@ export function HeroSection() {
               border: "1px solid rgba(255,255,255,0.12)",
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = "rgba(0,200,80,0.35)";
+              e.currentTarget.style.borderColor = "rgba(0,212,255,0.35)";
               e.currentTarget.style.color = "rgba(255,255,255,0.85)";
             }}
             onMouseLeave={e => {
@@ -204,7 +204,7 @@ export function HeroSection() {
 
       {/* Нижняя линия */}
       <div className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: "linear-gradient(90deg, transparent, rgba(0,200,80,0.1), transparent)" }} />
+        style={{ background: "linear-gradient(90deg, transparent, rgba(0,212,255,0.12), transparent)" }} />
     </section>
   );
 }
