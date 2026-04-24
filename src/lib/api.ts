@@ -1,4 +1,5 @@
 const urls = {
+  "api-chat": "https://functions.poehali.dev/ddcf36ab-ae63-4ec2-b81a-d038514882c6",
   "api-task-comments": "https://functions.poehali.dev/8516b5a8-cb84-41bf-abad-7045117da932",
   "api-km-balance": "https://functions.poehali.dev/845accff-553a-4de8-a13c-d0a3663dcb1e",
   "api-company-detail": "https://functions.poehali.dev/1b5d9f8d-2b57-45be-9ec6-5cd2c4800cdb",
