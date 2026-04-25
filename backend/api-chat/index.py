@@ -4,10 +4,8 @@ import hashlib
 import uuid
 from datetime import datetime, timezone
 from urllib.request import urlopen, Request
-from urllib.error import URLError
 
 import psycopg2
-import psycopg2.extras
 
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -16,7 +14,6 @@ CORS_HEADERS = {
 }
 
 DATABASE_URL = os.environ.get("DATABASE_URL", "")
-SCHEMA = os.environ.get("MAIN_DB_SCHEMA", "public")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 
 SYSTEM_PROMPT = """Ты — ИИ-ассистент АО «КСИ» (КриптоСтройИнвест), виртуального девелопера.
@@ -86,15 +83,18 @@ def parse_body(event):
     return raw
 
 
+def get_query_param(event, name, default=None):
+    params = event.get("queryStringParameters") or {}
+    return params.get(name, default)
+
+
 def call_openai(messages: list) -> str:
-    """Вызов OpenAI Chat Completions API."""
     payload = json.dumps({
         "model": "gpt-4o-mini",
         "messages": messages,
         "max_tokens": 500,
         "temperature": 0.7,
     }).encode("utf-8")
-
     req = Request(
         "https://api.openai.com/v1/chat/completions",
         data=payload,
@@ -110,15 +110,11 @@ def call_openai(messages: list) -> str:
 
 
 def handler(event: dict, context) -> dict:
-    """ИИ-ассистент чата ЛК: GET - история сообщений, POST - отправка сообщения."""
+    """ИИ-ассистент чата ЛК: GET - история/список, POST - отправка сообщения."""
     method = event.get("httpMethod", event.get("method", "GET"))
 
     if method == "OPTIONS":
-        return {
-            "statusCode": 200,
-            "headers": CORS_HEADERS,
-            "body": "",
-        }
+        return {"statusCode": 200, "headers": CORS_HEADERS, "body": ""}
 
     conn, cur = get_db()
     try:
@@ -126,17 +122,33 @@ def handler(event: dict, context) -> dict:
         if not user:
             return make_response(401, {"error": "Unauthorized"})
 
-        company_id = get_user_company(cur, user["id"])
-        if not company_id and user["user_type"] == "client":
-            return make_response(403, {"error": "No company assigned"})
+        is_internal = user["user_type"] == "internal"
 
         if method == "GET":
-            return handle_get(cur, user, company_id)
+            # Оператор: ?companies=1 — список компаний с последним сообщением
+            if is_internal and get_query_param(event, "companies") == "1":
+                return handle_get_companies(cur)
+            # Оператор или клиент: история чата по company_id
+            company_id = get_query_param(event, "company_id") if is_internal else get_user_company(cur, user["id"])
+            if not company_id:
+                return make_response(403, {"error": "No company"})
+            return handle_get_messages(cur, company_id)
+
         elif method == "POST":
-            result = handle_post(event, cur, conn, user, company_id)
-            return result
-        else:
-            return make_response(405, {"error": "Method not allowed"})
+            body = parse_body(event)
+            # Оператор отправляет от имени оператора
+            if is_internal:
+                company_id = body.get("company_id") or get_query_param(event, "company_id")
+                if not company_id:
+                    return make_response(400, {"error": "company_id required"})
+                return handle_operator_post(body, cur, conn, user, company_id)
+            else:
+                company_id = get_user_company(cur, user["id"])
+                if not company_id:
+                    return make_response(403, {"error": "No company assigned"})
+                return handle_client_post(body, cur, conn, user, company_id)
+
+        return make_response(405, {"error": "Method not allowed"})
 
     except Exception as exc:
         conn.rollback()
@@ -145,15 +157,38 @@ def handler(event: dict, context) -> dict:
         conn.close()
 
 
-def handle_get(cur, user, company_id):
-    """Возвращает историю сообщений чата для компании."""
+def handle_get_companies(cur):
+    """Список компаний с последним сообщением и кол-вом сообщений от клиентов."""
+    cur.execute(
+        "SELECT c.id, c.name, "
+        "  (SELECT message FROM chat_messages WHERE company_id = c.id ORDER BY created_at DESC LIMIT 1) as last_message, "
+        "  (SELECT created_at FROM chat_messages WHERE company_id = c.id ORDER BY created_at DESC LIMIT 1) as last_at, "
+        "  (SELECT COUNT(*) FROM chat_messages WHERE company_id = c.id AND sender_type = 'user') as user_msg_count "
+        "FROM companies c "
+        "WHERE EXISTS (SELECT 1 FROM chat_messages WHERE company_id = c.id) "
+        "ORDER BY last_at DESC NULLS LAST"
+    )
+    rows = cur.fetchall()
+    companies = []
+    for row in rows:
+        companies.append({
+            "id": str(row[0]),
+            "name": row[1],
+            "lastMessage": row[2],
+            "lastAt": row[3].isoformat() if row[3] else None,
+            "userMsgCount": row[4],
+        })
+    return make_response(200, {"companies": companies})
+
+
+def handle_get_messages(cur, company_id):
+    """История сообщений чата компании."""
     cur.execute(
         "SELECT id, message, sender_type, sender_name, task_id, created_at, metadata "
         "FROM chat_messages WHERE company_id = %s "
-        "ORDER BY created_at ASC LIMIT 100",
+        "ORDER BY created_at ASC LIMIT 200",
         (company_id,),
     )
-
     rows = cur.fetchall()
     messages = []
     for row in rows:
@@ -169,16 +204,41 @@ def handle_get(cur, user, company_id):
     return make_response(200, {"messages": messages})
 
 
-def handle_post(event, cur, conn, user, company_id):
-    """Принимает сообщение от клиента, отвечает через ИИ, сохраняет оба."""
-    body = parse_body(event)
+def handle_operator_post(body, cur, conn, user, company_id):
+    """Оператор отправляет сообщение в чат компании."""
+    text = (body.get("message") or "").strip()
+    if not text:
+        return make_response(400, {"error": "Сообщение не может быть пустым"})
+
+    now = datetime.now(timezone.utc)
+    msg_id = str(uuid.uuid4())
+    cur.execute(
+        "INSERT INTO chat_messages (id, company_id, user_id, message, sender_type, sender_name, created_at) "
+        "VALUES (%s, %s, %s, %s, 'operator', %s, %s)",
+        (msg_id, company_id, user["id"], text, user["full_name"], now),
+    )
+    conn.commit()
+
+    return make_response(200, {
+        "message": {
+            "id": msg_id,
+            "text": text,
+            "sender": "operator",
+            "senderName": user["full_name"],
+            "timestamp": now.isoformat(),
+        }
+    })
+
+
+def handle_client_post(body, cur, conn, user, company_id):
+    """Клиент отправляет сообщение — ИИ отвечает и сохраняет оба."""
     text = (body.get("message") or "").strip()
     if not text:
         return make_response(400, {"error": "Сообщение не может быть пустым"})
 
     now = datetime.now(timezone.utc)
 
-    # 1. Сохраняем сообщение пользователя
+    # Сохраняем сообщение клиента
     user_msg_id = str(uuid.uuid4())
     cur.execute(
         "INSERT INTO chat_messages (id, company_id, user_id, message, sender_type, sender_name, created_at) "
@@ -186,7 +246,7 @@ def handle_post(event, cur, conn, user, company_id):
         (user_msg_id, company_id, user["id"], text, user["full_name"], now),
     )
 
-    # 2. Получаем последние 10 сообщений для контекста
+    # Контекст для ИИ (последние 10 сообщений)
     cur.execute(
         "SELECT sender_type, message FROM chat_messages "
         "WHERE company_id = %s ORDER BY created_at DESC LIMIT 10",
@@ -196,24 +256,21 @@ def handle_post(event, cur, conn, user, company_id):
 
     openai_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     for row in history_rows:
-        sender_type = row[0]
-        msg_text = row[1]
-        if sender_type == "user":
-            openai_messages.append({"role": "user", "content": msg_text})
-        elif sender_type in ("ai", "operator", "system"):
-            openai_messages.append({"role": "assistant", "content": msg_text})
+        if row[0] == "user":
+            openai_messages.append({"role": "user", "content": row[1]})
+        elif row[0] in ("ai", "operator", "system"):
+            openai_messages.append({"role": "assistant", "content": row[1]})
 
-    # 3. Получаем ответ от ИИ
-    ai_text = ""
+    # Получаем ответ ИИ
     if OPENAI_API_KEY:
         try:
             ai_text = call_openai(openai_messages)
-        except Exception as e:
+        except Exception:
             ai_text = "Запрос принят. Оператор КСИ ответит вам в ближайшее время в рабочее время (Пн–Пт, 10:00–19:00 МСК)."
     else:
         ai_text = "Запрос принят. Оператор КСИ ответит вам в ближайшее время в рабочее время (Пн–Пт, 10:00–19:00 МСК)."
 
-    # 4. Сохраняем ответ ИИ
+    # Сохраняем ответ ИИ
     ai_msg_id = str(uuid.uuid4())
     cur.execute(
         "INSERT INTO chat_messages (id, company_id, message, sender_type, sender_name, created_at) "

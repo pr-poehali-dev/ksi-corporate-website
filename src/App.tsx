@@ -58,6 +58,7 @@ import AdminAuditLog from "./pages/admin/AuditLog";
 import AdminSettings from "./pages/admin/SystemSettings";
 import AdminSiteSettings from "./pages/admin/SiteSettingsPage";
 import AdminPresentations from "./pages/admin/Presentations";
+import AdminChat from "./pages/admin/Chat";
 
 const queryClient = new QueryClient();
 
@@ -176,6 +177,7 @@ const App = () => (
               <Route path="settings" element={<AdminSettings />} />
               <Route path="site-settings" element={<AdminSiteSettings />} />
               <Route path="presentations" element={<AdminPresentations />} />
+              <Route path="chat" element={<AdminChat />} />
             </Route>
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
