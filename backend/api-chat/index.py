@@ -196,6 +196,7 @@ def handle_get_messages(cur, company_id):
     rows = cur.fetchall()
     messages = []
     for row in rows:
+        meta = row[6] or {}
         messages.append({
             "id": str(row[0]),
             "text": row[1],
@@ -203,7 +204,7 @@ def handle_get_messages(cur, company_id):
             "senderName": row[3],
             "taskId": str(row[4]) if row[4] else None,
             "timestamp": row[5].isoformat() if row[5] else None,
-            "metadata": row[6] or {},
+            "attachments": meta.get("attachments") or [],
         })
     return make_response(200, {"messages": messages})
 
@@ -234,8 +235,25 @@ def handle_operator_post(body, cur, conn, user, company_id):
     })
 
 
+def find_scripted_answer(cur, text: str):
+    """Ищет запрограммированный ответ по тексту вопроса (нечёткое совпадение)."""
+    cur.execute("SELECT messages FROM scripted_dialogs ORDER BY sort_order ASC, created_at ASC")
+    rows = cur.fetchall()
+    text_lower = text.lower().strip()
+    for row in rows:
+        messages = row[0] or []
+        for msg in messages:
+            q = (msg.get("questionText") or "").lower().strip()
+            if not q:
+                continue
+            # Точное или частичное совпадение (вопрос содержится в тексте или текст содержит вопрос)
+            if q == text_lower or q in text_lower or text_lower in q:
+                return msg
+    return None
+
+
 def handle_client_post(body, cur, conn, user, company_id):
-    """Клиент отправляет сообщение — ИИ отвечает и сохраняет оба."""
+    """Клиент отправляет сообщение — сначала ищем запрограммированный ответ, иначе GPT."""
     text = (body.get("message") or "").strip()
     if not text:
         return make_response(400, {"error": "Сообщение не может быть пустым"})
@@ -250,36 +268,44 @@ def handle_client_post(body, cur, conn, user, company_id):
         (user_msg_id, company_id, user["id"], text, user["full_name"], now),
     )
 
-    # Контекст для ИИ (последние 10 сообщений)
-    cur.execute(
-        "SELECT sender_type, message FROM chat_messages "
-        "WHERE company_id = %s ORDER BY created_at DESC LIMIT 10",
-        (company_id,),
-    )
-    history_rows = list(reversed(cur.fetchall()))
+    # Проверяем запрограммированные ответы
+    scripted = find_scripted_answer(cur, text)
 
-    openai_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-    for row in history_rows:
-        if row[0] == "user":
-            openai_messages.append({"role": "user", "content": row[1]})
-        elif row[0] in ("ai", "operator", "system"):
-            openai_messages.append({"role": "assistant", "content": row[1]})
-
-    # Получаем ответ ИИ
-    if OPENAI_API_KEY:
-        try:
-            ai_text = call_openai(openai_messages)
-        except Exception:
-            ai_text = "Запрос принят. Оператор КСИ ответит вам в ближайшее время в рабочее время (Пн–Пт, 10:00–19:00 МСК)."
+    if scripted:
+        ai_text = scripted.get("answerText") or ""
+        ai_attachments = scripted.get("answerAttachments") or []
     else:
-        ai_text = "Запрос принят. Оператор КСИ ответит вам в ближайшее время в рабочее время (Пн–Пт, 10:00–19:00 МСК)."
+        ai_attachments = []
+        # Контекст для ИИ (последние 10 сообщений)
+        cur.execute(
+            "SELECT sender_type, message FROM chat_messages "
+            "WHERE company_id = %s ORDER BY created_at DESC LIMIT 10",
+            (company_id,),
+        )
+        history_rows = list(reversed(cur.fetchall()))
 
-    # Сохраняем ответ ИИ
+        openai_messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        for row in history_rows:
+            if row[0] == "user":
+                openai_messages.append({"role": "user", "content": row[1]})
+            elif row[0] in ("ai", "operator", "system"):
+                openai_messages.append({"role": "assistant", "content": row[1]})
+
+        if OPENAI_API_KEY:
+            try:
+                ai_text = call_openai(openai_messages)
+            except Exception:
+                ai_text = "Запрос принят. Оператор КСИ ответит вам в ближайшее время в рабочее время (Пн–Пт, 10:00–19:00 МСК)."
+        else:
+            ai_text = "Запрос принят. Оператор КСИ ответит вам в ближайшее время в рабочее время (Пн–Пт, 10:00–19:00 МСК)."
+
+    # Сохраняем ответ ИИ (с вложениями в metadata)
     ai_msg_id = str(uuid.uuid4())
+    metadata = {"attachments": ai_attachments} if ai_attachments else {}
     cur.execute(
-        "INSERT INTO chat_messages (id, company_id, message, sender_type, sender_name, created_at) "
-        "VALUES (%s, %s, %s, 'ai', 'ИИ КСИ', %s)",
-        (ai_msg_id, company_id, ai_text, now),
+        "INSERT INTO chat_messages (id, company_id, message, sender_type, sender_name, created_at, metadata) "
+        "VALUES (%s, %s, %s, 'ai', 'ИИ КСИ', %s, %s::jsonb)",
+        (ai_msg_id, company_id, ai_text, now, json.dumps(metadata, ensure_ascii=False)),
     )
 
     conn.commit()
@@ -291,6 +317,7 @@ def handle_client_post(body, cur, conn, user, company_id):
             "sender": "user",
             "senderName": user["full_name"],
             "timestamp": now.isoformat(),
+            "attachments": [],
         },
         "aiMessage": {
             "id": ai_msg_id,
@@ -298,6 +325,7 @@ def handle_client_post(body, cur, conn, user, company_id):
             "sender": "ai",
             "senderName": "ИИ КСИ",
             "timestamp": now.isoformat(),
+            "attachments": ai_attachments,
         },
     })
 
