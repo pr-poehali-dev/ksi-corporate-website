@@ -18,6 +18,7 @@ const urls = {
   "auth-login": "https://functions.poehali.dev/b71cec9c-a5e5-47dd-8fb0-afd40a67732d",
   "site-settings": "https://functions.poehali.dev/de77851c-6234-460f-903b-ca3df97ddc07",
   "contact-form": "https://functions.poehali.dev/d553ddbb-b6e1-494f-bbb6-61d2f1a17148",
+  "api-scripted-dialogs": "https://functions.poehali.dev/d8fb4a7f-551e-4c0d-8e58-79c80e602d2d",
 } as const;
 
 export type ApiEndpoint = keyof typeof urls;

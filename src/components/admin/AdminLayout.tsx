@@ -19,6 +19,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Задачи", icon: "ClipboardList", to: "/admin/tasks" },
   { label: "Финансы КМ", icon: "Banknote", to: "/admin/finance" },
   { label: "Чаты клиентов", icon: "MessageSquare", to: "/admin/chat" },
+  { label: "Сценарии чата", icon: "Clapperboard", to: "/admin/scripted-dialogs" },
   { label: "Подтверждения", icon: "CheckCircle", to: "/admin/approvals" },
   { label: "Аудит", icon: "ScrollText", to: "/admin/audit" },
   { label: "Презентации", icon: "Presentation", to: "/admin/presentations" },

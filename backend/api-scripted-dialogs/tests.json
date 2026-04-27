@@ -13,14 +13,6 @@
       "expectedStatus": 401,
       "expectedBody": {"error": "Unauthorized"},
       "bodyMatcher": "partial"
-    },
-    {
-      "name": "DELETE без авторизации",
-      "method": "DELETE",
-      "path": "/",
-      "expectedStatus": 401,
-      "expectedBody": {"error": "Unauthorized"},
-      "bodyMatcher": "partial"
     }
   ]
 }

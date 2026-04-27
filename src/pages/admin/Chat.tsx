@@ -31,6 +31,8 @@ export default function AdminChat() {
   const [loading, setLoading] = useState(false);
   const [companiesLoading, setCompaniesLoading] = useState(true);
   const [messagesLoading, setMessagesLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -110,6 +112,19 @@ export default function AdminChat() {
       // ignore
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteMessage = async (msgId: string) => {
+    if (deletingId) return;
+    setDeletingId(msgId);
+    try {
+      await api.delete("api-chat", { message_id: msgId });
+      setMessages((prev) => prev.filter((m) => m.id !== msgId));
+    } catch {
+      // ignore
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -254,23 +269,43 @@ export default function AdminChat() {
                   <div
                     key={msg.id}
                     className={cn(
-                      "flex",
+                      "group flex",
                       msg.sender === "operator" ? "justify-end" : "justify-start"
                     )}
+                    onMouseEnter={() => setHoveredId(msg.id)}
+                    onMouseLeave={() => setHoveredId(null)}
                   >
-                    <div className={cn("max-w-[75%] rounded-lg px-4 py-3", getSenderStyle(msg.sender))}>
-                      {msg.senderName && (
-                        <p className={cn("mb-1 text-[10px] font-semibold tracking-wide", getSenderNameColor(msg.sender))}>
-                          {msg.sender === "ai" && <span className="mr-1">🤖</span>}
-                          {msg.sender === "operator" && <span className="mr-1">👤</span>}
-                          {msg.sender === "user" && <span className="mr-1">🏢</span>}
-                          {msg.senderName}
-                        </p>
+                    <div className="relative max-w-[75%]">
+                      {hoveredId === msg.id && (
+                        <button
+                          onClick={() => handleDeleteMessage(msg.id)}
+                          disabled={deletingId === msg.id}
+                          className={cn(
+                            "absolute -top-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-red-500/20 text-red-400/70 hover:bg-red-500/40 hover:text-red-400 transition-all",
+                            msg.sender === "operator" ? "-left-6" : "-right-6"
+                          )}
+                          title="Удалить сообщение"
+                        >
+                          {deletingId === msg.id
+                            ? <Icon name="Loader2" size={10} className="animate-spin" />
+                            : <Icon name="X" size={10} />
+                          }
+                        </button>
                       )}
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</p>
-                      <p className={cn("mt-1 text-right text-[10px]", msg.sender === "operator" ? "text-white/25" : "text-white/15")}>
-                        {formatTime(msg.timestamp)}
-                      </p>
+                      <div className={cn("rounded-lg px-4 py-3", getSenderStyle(msg.sender))}>
+                        {msg.senderName && (
+                          <p className={cn("mb-1 text-[10px] font-semibold tracking-wide", getSenderNameColor(msg.sender))}>
+                            {msg.sender === "ai" && <span className="mr-1">🤖</span>}
+                            {msg.sender === "operator" && <span className="mr-1">👤</span>}
+                            {msg.sender === "user" && <span className="mr-1">🏢</span>}
+                            {msg.senderName}
+                          </p>
+                        )}
+                        <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</p>
+                        <p className={cn("mt-1 text-right text-[10px]", msg.sender === "operator" ? "text-white/25" : "text-white/15")}>
+                          {formatTime(msg.timestamp)}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))

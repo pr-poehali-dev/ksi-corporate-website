@@ -12,6 +12,7 @@ interface Message {
   senderName?: string;
   timestamp: string;
   taskId?: string;
+  attachments?: { url: string; filename: string; contentType: string }[];
 }
 
 const WELCOME_MESSAGE: Message = {
@@ -28,6 +29,8 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -102,6 +105,19 @@ export default function Chat() {
       ]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteMessage = async (msgId: string) => {
+    if (deletingId) return;
+    setDeletingId(msgId);
+    try {
+      await api.delete("api-chat", { message_id: msgId });
+      setMessages((prev) => prev.filter((m) => m.id !== msgId));
+    } catch {
+      // ignore
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -189,9 +205,11 @@ export default function Chat() {
               <div
                 key={msg.id}
                 className={cn(
-                  "flex",
+                  "group flex",
                   msg.sender === "user" ? "justify-end" : "justify-start"
                 )}
+                onMouseEnter={() => setHoveredId(msg.id)}
+                onMouseLeave={() => setHoveredId(null)}
               >
                 {msg.sender !== "user" && (
                   <div className="mr-2 mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white/5">
@@ -210,32 +228,66 @@ export default function Chat() {
                     )}
                   </div>
                 )}
-                <div
-                  className={cn(
-                    "max-w-[75%] rounded-lg px-4 py-3",
-                    getSenderStyle(msg.sender)
-                  )}
-                >
-                  {msg.sender !== "user" && msg.senderName && (
-                    <p className={cn("mb-1 text-[10px] font-semibold tracking-wide", getSenderNameStyle(msg.sender))}>
-                      {msg.senderName}
-                    </p>
-                  )}
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</p>
-                  {msg.taskId && (
-                    <a
-                      href={`/cabinet/tasks/${msg.taskId}`}
-                      className="mt-2 inline-flex items-center gap-1 text-[11px] text-cyan-400/70 hover:text-cyan-400"
+                <div className="relative max-w-[75%]">
+                  {hoveredId === msg.id && !msg.id.startsWith("sys-") && (
+                    <button
+                      onClick={() => handleDeleteMessage(msg.id)}
+                      disabled={deletingId === msg.id}
+                      className={cn(
+                        "absolute -top-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-red-500/20 text-red-400/70 hover:bg-red-500/40 hover:text-red-400 transition-all",
+                        msg.sender === "user" ? "-left-6" : "-right-6"
+                      )}
+                      title="Удалить сообщение"
                     >
-                      <Icon name="ExternalLink" size={10} /> Открыть задачу
-                    </a>
+                      {deletingId === msg.id
+                        ? <Icon name="Loader2" size={10} className="animate-spin" />
+                        : <Icon name="X" size={10} />
+                      }
+                    </button>
                   )}
-                  <p className={cn(
-                    "mt-1 text-right text-[10px]",
-                    msg.sender === "user" ? "text-white/25" : "text-white/15"
-                  )}>
-                    {formatTime(msg.timestamp)}
-                  </p>
+                  <div
+                    className={cn(
+                      "rounded-lg px-4 py-3",
+                      getSenderStyle(msg.sender)
+                    )}
+                  >
+                    {msg.sender !== "user" && msg.senderName && (
+                      <p className={cn("mb-1 text-[10px] font-semibold tracking-wide", getSenderNameStyle(msg.sender))}>
+                        {msg.senderName}
+                      </p>
+                    )}
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.text}</p>
+                    {msg.attachments && msg.attachments.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {msg.attachments.map((att, i) => (
+                          <a
+                            key={i}
+                            href={att.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 rounded bg-white/5 px-2 py-0.5 text-[11px] text-cyan-400/70 hover:text-cyan-400"
+                          >
+                            <Icon name="Paperclip" size={9} />
+                            {att.filename}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                    {msg.taskId && (
+                      <a
+                        href={`/cabinet/tasks/${msg.taskId}`}
+                        className="mt-2 inline-flex items-center gap-1 text-[11px] text-cyan-400/70 hover:text-cyan-400"
+                      >
+                        <Icon name="ExternalLink" size={10} /> Открыть задачу
+                      </a>
+                    )}
+                    <p className={cn(
+                      "mt-1 text-right text-[10px]",
+                      msg.sender === "user" ? "text-white/25" : "text-white/15"
+                    )}>
+                      {formatTime(msg.timestamp)}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

@@ -110,11 +110,11 @@ def call_openai(messages: list) -> str:
 
 
 def handler(event: dict, context) -> dict:
-    """ИИ-ассистент чата ЛК: GET - история/список, POST - отправка сообщения."""
+    """ИИ-ассистент чата ЛК: GET - история/список, POST - отправка сообщения, DELETE - удаление."""
     method = event.get("httpMethod", event.get("method", "GET"))
 
     if method == "OPTIONS":
-        return {"statusCode": 200, "headers": CORS_HEADERS, "body": ""}
+        return {"statusCode": 200, "headers": {**CORS_HEADERS, "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS"}, "body": ""}
 
     conn, cur = get_db()
     try:
@@ -125,10 +125,8 @@ def handler(event: dict, context) -> dict:
         is_internal = user["user_type"] == "internal"
 
         if method == "GET":
-            # Оператор: ?companies=1 — список компаний с последним сообщением
             if is_internal and get_query_param(event, "companies") == "1":
                 return handle_get_companies(cur)
-            # Оператор или клиент: история чата по company_id
             company_id = get_query_param(event, "company_id") if is_internal else get_user_company(cur, user["id"])
             if not company_id:
                 return make_response(403, {"error": "No company"})
@@ -136,7 +134,6 @@ def handler(event: dict, context) -> dict:
 
         elif method == "POST":
             body = parse_body(event)
-            # Оператор отправляет от имени оператора
             if is_internal:
                 company_id = body.get("company_id") or get_query_param(event, "company_id")
                 if not company_id:
@@ -147,6 +144,13 @@ def handler(event: dict, context) -> dict:
                 if not company_id:
                     return make_response(403, {"error": "No company assigned"})
                 return handle_client_post(body, cur, conn, user, company_id)
+
+        elif method == "DELETE":
+            body = parse_body(event)
+            msg_id = body.get("message_id") or get_query_param(event, "message_id")
+            if not msg_id:
+                return make_response(400, {"error": "message_id required"})
+            return handle_delete_message(cur, conn, user, msg_id, is_internal)
 
         return make_response(405, {"error": "Method not allowed"})
 
@@ -296,3 +300,24 @@ def handle_client_post(body, cur, conn, user, company_id):
             "timestamp": now.isoformat(),
         },
     })
+
+
+def handle_delete_message(cur, conn, user, msg_id, is_internal):
+    """Удаление сообщения из чата (оператор — любое, клиент — только своё)."""
+    cur.execute(
+        "SELECT id, sender_type, user_id FROM chat_messages WHERE id = %s",
+        (msg_id,),
+    )
+    row = cur.fetchone()
+    if not row:
+        return make_response(404, {"error": "Сообщение не найдено"})
+
+    sender_type = row[1]
+    owner_user_id = str(row[2]) if row[2] else None
+
+    if not is_internal and owner_user_id != user["id"]:
+        return make_response(403, {"error": "Нет прав для удаления"})
+
+    cur.execute("DELETE FROM chat_messages WHERE id = %s", (msg_id,))
+    conn.commit()
+    return make_response(200, {"deleted": True})
