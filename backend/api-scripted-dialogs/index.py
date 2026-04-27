@@ -76,12 +76,11 @@ def upload_file_to_s3(file_data_b64: str, filename: str, content_type: str) -> s
     file_data = base64.b64decode(file_data_b64)
     key = f"scripted-dialogs/{uuid.uuid4()}/{filename}"
     s3.put_object(Bucket="files", Key=key, Body=file_data, ContentType=content_type)
-    cdn_url = f"https://cdn.poehali.dev/projects/{AWS_ACCESS_KEY_ID}/bucket/{key}"
-    return cdn_url
+    return f"https://cdn.poehali.dev/projects/{AWS_ACCESS_KEY_ID}/bucket/{key}"
 
 
 def handler(event: dict, context) -> dict:
-    """CRUD для запрограммированных диалогов чата с поддержкой файлов."""
+    """CRUD для сценариев чата с множеством пар вопрос-ответ и файлами."""
     method = event.get("httpMethod", event.get("method", "GET"))
 
     if method == "OPTIONS":
@@ -101,8 +100,7 @@ def handler(event: dict, context) -> dict:
 
         elif method == "POST":
             body = parse_body(event)
-            action = body.get("action", "create")
-            if action == "upload_file":
+            if body.get("action") == "upload_file":
                 return handle_upload_file(body)
             return handle_create(body, cur, conn, user)
 
@@ -130,10 +128,9 @@ def handler(event: dict, context) -> dict:
 
 
 def handle_list(cur):
-    """Список всех запрограммированных диалогов."""
+    """Список всех сценариев с массивом пар вопрос-ответ."""
     cur.execute(
-        "SELECT id, title, question_text, question_attachments, "
-        "answer_text, answer_attachments, sort_order, created_at "
+        "SELECT id, title, messages, sort_order, created_at "
         "FROM scripted_dialogs ORDER BY sort_order ASC, created_at ASC"
     )
     rows = cur.fetchall()
@@ -142,36 +139,28 @@ def handle_list(cur):
         dialogs.append({
             "id": str(row[0]),
             "title": row[1],
-            "questionText": row[2],
-            "questionAttachments": row[3] or [],
-            "answerText": row[4],
-            "answerAttachments": row[5] or [],
-            "sortOrder": row[6],
-            "createdAt": row[7].isoformat() if row[7] else None,
+            "messages": row[2] if row[2] else [],
+            "sortOrder": row[3],
+            "createdAt": row[4].isoformat() if row[4] else None,
         })
     return make_response(200, {"dialogs": dialogs})
 
 
 def handle_create(body, cur, conn, user):
-    """Создать новый запрограммированный диалог."""
+    """Создать новый сценарий с массивом пар вопрос-ответ."""
     title = (body.get("title") or "").strip()
-    question_text = (body.get("questionText") or "").strip()
-    answer_text = (body.get("answerText") or "").strip()
-    question_attachments = body.get("questionAttachments") or []
-    answer_attachments = body.get("answerAttachments") or []
+    messages = body.get("messages") or []
     sort_order = body.get("sortOrder") or 0
 
-    if not question_text or not answer_text:
-        return make_response(400, {"error": "questionText и answerText обязательны"})
+    if not messages:
+        return make_response(400, {"error": "messages не может быть пустым"})
 
     dialog_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc)
     cur.execute(
-        "INSERT INTO scripted_dialogs (id, title, question_text, question_attachments, "
-        "answer_text, answer_attachments, sort_order, created_by, created_at) "
-        "VALUES (%s, %s, %s, %s::jsonb, %s, %s::jsonb, %s, %s, %s)",
-        (dialog_id, title, question_text, json.dumps(question_attachments, ensure_ascii=False),
-         answer_text, json.dumps(answer_attachments, ensure_ascii=False),
+        "INSERT INTO scripted_dialogs (id, title, messages, sort_order, created_by, created_at) "
+        "VALUES (%s, %s, %s::jsonb, %s, %s, %s)",
+        (dialog_id, title, json.dumps(messages, ensure_ascii=False),
          sort_order, user["id"], now),
     )
     conn.commit()
@@ -179,41 +168,35 @@ def handle_create(body, cur, conn, user):
 
 
 def handle_update(body, dialog_id, cur, conn):
-    """Обновить запрограммированный диалог."""
+    """Обновить сценарий."""
     title = (body.get("title") or "").strip()
-    question_text = (body.get("questionText") or "").strip()
-    answer_text = (body.get("answerText") or "").strip()
-    question_attachments = body.get("questionAttachments") or []
-    answer_attachments = body.get("answerAttachments") or []
+    messages = body.get("messages") or []
     sort_order = body.get("sortOrder") or 0
 
     cur.execute(
-        "UPDATE scripted_dialogs SET title=%s, question_text=%s, question_attachments=%s::jsonb, "
-        "answer_text=%s, answer_attachments=%s::jsonb, sort_order=%s, updated_at=NOW() "
+        "UPDATE scripted_dialogs SET title=%s, messages=%s::jsonb, sort_order=%s, updated_at=NOW() "
         "WHERE id=%s",
-        (title, question_text, json.dumps(question_attachments, ensure_ascii=False),
-         answer_text, json.dumps(answer_attachments, ensure_ascii=False),
-         sort_order, dialog_id),
+        (title, json.dumps(messages, ensure_ascii=False), sort_order, dialog_id),
     )
     if cur.rowcount == 0:
         conn.rollback()
-        return make_response(404, {"error": "Диалог не найден"})
+        return make_response(404, {"error": "Сценарий не найден"})
     conn.commit()
     return make_response(200, {"updated": True})
 
 
 def handle_delete(dialog_id, cur, conn):
-    """Удалить запрограммированный диалог."""
+    """Удалить сценарий."""
     cur.execute("DELETE FROM scripted_dialogs WHERE id = %s", (dialog_id,))
     if cur.rowcount == 0:
         conn.rollback()
-        return make_response(404, {"error": "Диалог не найден"})
+        return make_response(404, {"error": "Сценарий не найден"})
     conn.commit()
     return make_response(200, {"deleted": True})
 
 
 def handle_upload_file(body):
-    """Загрузить файл для вложения к диалогу."""
+    """Загрузить файл-вложение."""
     file_data = body.get("fileData")
     filename = body.get("filename", "file")
     content_type = body.get("contentType", "application/octet-stream")
@@ -222,8 +205,4 @@ def handle_upload_file(body):
         return make_response(400, {"error": "fileData required"})
 
     url = upload_file_to_s3(file_data, filename, content_type)
-    return make_response(200, {
-        "url": url,
-        "filename": filename,
-        "contentType": content_type,
-    })
+    return make_response(200, {"url": url, "filename": filename, "contentType": content_type})
