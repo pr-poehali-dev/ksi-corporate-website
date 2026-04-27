@@ -42,6 +42,8 @@ export default function ScriptedDialogs() {
   const [sortOrder, setSortOrder] = useState(0);
   const [uploadingFor, setUploadingFor] = useState<{ msgIdx: number; target: "question" | "answer" } | null>(null);
   const [previewId, setPreviewId] = useState<string | null>(null);
+  const [testingId, setTestingId] = useState<string | null>(null);
+  const [testResults, setTestResults] = useState<Record<string, { status: "ok" | "fail" | "testing"; got?: string; gotAttachments?: Attachment[] }[]>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileInputTarget = useRef<{ msgIdx: number; target: "question" | "answer" } | null>(null);
 
@@ -162,6 +164,45 @@ export default function ScriptedDialogs() {
   };
 
   const isImage = (ct: string) => ct.startsWith("image/");
+
+  const handleTest = async (d: ScriptedDialog) => {
+    if (testingId === d.id) {
+      setTestingId(null);
+      return;
+    }
+    setTestingId(d.id);
+    // Инициализируем все пары как "testing"
+    const initial = d.messages.map(() => ({ status: "testing" as const }));
+    setTestResults((prev) => ({ ...prev, [d.id]: initial }));
+
+    const results: typeof initial = [];
+    for (let i = 0; i < d.messages.length; i++) {
+      const msg = d.messages[i];
+      const q = msg.questionText.trim();
+      if (!q) {
+        results.push({ status: "ok", got: "(пустой вопрос — пропущен)" });
+        setTestResults((prev) => ({ ...prev, [d.id]: [...results, ...Array(d.messages.length - results.length).fill({ status: "testing" })] }));
+        continue;
+      }
+      try {
+        const data = await api.post("api-chat", { message: q, _test_mode: true }) as {
+          aiMessage?: { text: string; attachments?: Attachment[] };
+        };
+        const gotText = data.aiMessage?.text || "";
+        const gotAtts = data.aiMessage?.attachments || [];
+        const expectedText = msg.answerText.trim();
+        const ok = gotText.trim() === expectedText || gotText.includes(expectedText.slice(0, 30));
+        results.push({ status: ok ? "ok" : "fail", got: gotText, gotAttachments: gotAtts });
+      } catch {
+        results.push({ status: "fail", got: "Ошибка запроса" });
+      }
+      setTestResults((prev) => ({
+        ...prev,
+        [d.id]: [...results, ...Array(d.messages.length - results.length).fill({ status: "testing" })],
+      }));
+    }
+    setTestResults((prev) => ({ ...prev, [d.id]: results }));
+  };
 
   return (
     <div className="space-y-5">
@@ -350,6 +391,19 @@ export default function ScriptedDialogs() {
                 </div>
                 <div className="flex shrink-0 items-center gap-1">
                   <button
+                    onClick={() => handleTest(d)}
+                    className={cn(
+                      "flex items-center gap-1 rounded px-2 py-1 text-[11px] transition-colors",
+                      testingId === d.id
+                        ? "bg-amber-500/15 text-amber-400"
+                        : "text-white/25 hover:bg-amber-500/10 hover:text-amber-400"
+                    )}
+                    title="Протестировать"
+                  >
+                    <Icon name={testingId === d.id ? "Loader2" : "FlaskConical"} size={13} className={testingId === d.id ? "animate-spin" : ""} />
+                    <span className="hidden sm:inline">{testingId === d.id ? "Тест..." : "Тест"}</span>
+                  </button>
+                  <button
                     onClick={() => setPreviewId(previewId === d.id ? null : d.id)}
                     className={cn(
                       "rounded p-1.5 text-[11px] transition-colors",
@@ -376,21 +430,52 @@ export default function ScriptedDialogs() {
                 </div>
               </div>
 
-              {/* Краткий список пар (без превью) */}
+              {/* Краткий список пар + результаты теста */}
               {previewId !== d.id && (
-                <div className="border-t border-[#1a1a2e] px-4 pb-3 pt-2 space-y-1.5">
-                  {d.messages.map((m, mi) => (
-                    <div key={mi} className="flex gap-2 text-[11px]">
-                      <span className="shrink-0 text-cyan-400/40 w-4">{mi + 1}.</span>
-                      <span className="text-white/30 truncate">
-                        <span className="text-white/20">В: </span>{m.questionText || "—"}
-                      </span>
-                      <span className="shrink-0 text-white/15 mx-1">→</span>
-                      <span className="text-white/30 truncate">
-                        <span className="text-white/20">О: </span>{m.answerText || "—"}
-                      </span>
-                    </div>
-                  ))}
+                <div className="border-t border-[#1a1a2e] px-4 pb-3 pt-2 space-y-2">
+                  {d.messages.map((m, mi) => {
+                    const res = testResults[d.id]?.[mi];
+                    return (
+                      <div key={mi} className="space-y-1">
+                        <div className="flex gap-2 text-[11px]">
+                          <span className="shrink-0 text-cyan-400/40 w-4">{mi + 1}.</span>
+                          <span className="text-white/30 truncate">
+                            <span className="text-white/20">В: </span>{m.questionText || "—"}
+                          </span>
+                          <span className="shrink-0 text-white/15 mx-1">→</span>
+                          <span className="text-white/30 truncate">
+                            <span className="text-white/20">О: </span>{m.answerText || "—"}
+                          </span>
+                          {res && (
+                            <span className={cn(
+                              "shrink-0 ml-auto flex items-center gap-1 text-[10px]",
+                              res.status === "testing" && "text-white/30",
+                              res.status === "ok" && "text-emerald-400",
+                              res.status === "fail" && "text-red-400",
+                            )}>
+                              {res.status === "testing" && <Icon name="Loader2" size={10} className="animate-spin" />}
+                              {res.status === "ok" && <Icon name="CheckCircle2" size={10} />}
+                              {res.status === "fail" && <Icon name="XCircle" size={10} />}
+                              {res.status === "testing" ? "Проверка..." : res.status === "ok" ? "Совпало" : "Не совпало"}
+                            </span>
+                          )}
+                        </div>
+                        {/* Подробности провала */}
+                        {res?.status === "fail" && res.got && (
+                          <div className="ml-5 rounded bg-red-500/5 border border-red-500/15 px-3 py-2 text-[11px] space-y-1">
+                            <p className="text-red-400/70 font-medium">Получен ответ:</p>
+                            <p className="text-white/50 whitespace-pre-wrap line-clamp-3">{res.got}</p>
+                            <p className="text-white/25">Ожидался: <span className="text-white/45">{m.answerText}</span></p>
+                          </div>
+                        )}
+                        {res?.status === "ok" && res.got && (
+                          <div className="ml-5 rounded bg-emerald-500/5 border border-emerald-500/15 px-3 py-1.5 text-[11px]">
+                            <p className="text-emerald-400/60 whitespace-pre-wrap line-clamp-2">{res.got}</p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
 
