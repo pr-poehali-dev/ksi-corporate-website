@@ -25,7 +25,7 @@ const QUICK_QUESTIONS: { label: string; intent: IntentType | null }[] = [
   { label: "Реализация активов", intent: "asset_realization" },
   { label: "Проектный креатив", intent: "project_creative" },
   { label: "КСИ Терминал", intent: "ksi_terminal" },
-  { label: "Подключить проект", intent: "ready_to_lead" },
+  { label: "Подключить проект", intent: "connect_project" },
 ];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -36,6 +36,7 @@ type IntentType =
   | "project_creative"
   | "ksi_terminal"
   | "ai_lab"
+  | "connect_project"
   | "ready_to_lead"
   | "general";
 
@@ -563,6 +564,7 @@ export default function AoksiAiWidget() {
     project_creative: "Проектный креатив",
     ksi_terminal: "КСИ Терминал",
     ai_lab: "Лаборатория ИИ",
+    connect_project: "Подключить проект",
     ready_to_lead: "Передача специалисту",
     general: "Общий вопрос",
   };
