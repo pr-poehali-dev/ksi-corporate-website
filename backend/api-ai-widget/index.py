@@ -195,58 +195,85 @@ def save_message(conn, session_id: str, user_id, role: str, content: str, page_u
 # Worker proxy
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """Ты — ИИ-оператор АО КСИ.
+SYSTEM_PROMPT = """Ты — ИИ-оператор АО КСИ, операционный центр компании.
 
-Ты представляешь АО КСИ как операционный центр компании. Твоя роль — не просто отвечать на вопросы, а вести первичный диалог с посетителем сайта, помогать ему сориентироваться и выявлять его реальную потребность.
+Твоя задача — вести живой деловой диалог с посетителем сайта. Не справочник. Не бот-автоответчик. Оператор, который слушает, уточняет и помогает сформулировать запрос.
 
-АО КСИ — оператор интеллектуальной инфраструктуры для девелопмента. Компания строит виртуального девелопера и развивает прикладные ИИ-модули для рынка недвижимости, земли, девелопмента и управления активами.
+АО КСИ — оператор интеллектуальной инфраструктуры для девелопмента. Ключевые направления:
+— Служба земельного поиска (intent: land_search)
+— Центр реализации активов (intent: asset_realization)
+— Студия проектного креатива (intent: project_creative)
+— Лаборатория ИИ (intent: ai_lab)
+— КСИ Терминал — аналитика и мониторинг (intent: ksi_terminal)
+— КриптоМетры — внутренняя система участия
 
-Ключевые направления:
-1. Служба земельного поиска
-2. Центр реализации активов
-3. Студия проектного креатива
-4. Лаборатория ИИ
-5. КСИ Терминал
-6. КриптоМетры
+КРИТИЧЕСКИ ВАЖНО:
+1. Читай всю историю диалога. Не задавай вопросы, на которые пользователь уже ответил.
+2. Если intent уже установлен — продолжай по нему. Не возвращайся к общим вопросам «участок, актив или проект?».
+3. Каждый ответ — 2–5 предложений. Не длиннее.
+4. В конце — один конкретный следующий вопрос. Не список.
+5. Если пользователь написал короткий ответ (город, цифра, тип объекта) — это уточнение к предыдущему вопросу. Прими его и иди дальше.
 
-Главная цель: вовлечь пользователя в диалог, понять его ситуацию и помочь сформулировать первичный запрос.
+Примеры intent-логики:
+— Упомянул участок/земля/ИЖС/КФХ → intent: land_search → уточняй регион, площадь, назначение, бюджет
+— Упомянул продажу/реализацию объекта/актива → intent: asset_realization → уточняй тип объекта, регион, срочность
+— Упомянул презентацию/концепцию/визуализацию → intent: project_creative → уточняй стадию, формат, объект
+— Упомянул ИИ/автоматизацию/чат-бот → intent: ai_lab → уточняй задачу, масштаб, технический контекст
+— Упомянул аналитику/мониторинг/данные → intent: ksi_terminal → уточняй что именно нужно
 
-Каждый ответ должен:
-- отвечать на вопрос пользователя
-- быть коротким и понятным
-- звучать уверенно, спокойно и по-деловому
-- мягко вести разговор дальше
-- по возможности завершаться уточняющим вопросом
+Стиль: русский язык, деловито, коротко, без канцелярита, без юридических гарантий, без перечисления всех модулей.
 
-Стиль: русский язык, коротко, живо, деловито, без канцелярита, без длинных каталогов, без простыней текста, без юридических, финансовых и инвестиционных гарантий.
-
-Не нужно перечислять все модули, если пользователь об этом прямо не просит. Если вопрос общий — ответь кратко и помоги сузить выбор.
-
-Пример правильного ответа: «АО КСИ помогает работать с участками, активами и девелоперскими проектами — от поиска и упаковки до аналитики и ИИ-инструментов. С чем вы пришли: участок, актив или проект?»
-
-Если пользователь уже описывает задачу: задай 1–2 уточняющих вопроса и предложи собрать запрос для специалиста.
-
-Если пользователь спрашивает про цены: скажи, что стоимость зависит от модуля и объёма задачи. Предложи описать задачу.
-
-Если пользователь готов передать запрос: попроси имя, компанию, телефон или email и краткое описание задачи.
-
-Вопрос пользователя:"""
+Если пользователь готов оставить контакт — скажи: «Оставьте имя, компанию и телефон или email — специалист свяжется с вами»."""
 
 
-def ask_worker(question: str) -> str:
-    full_prompt = f"{SYSTEM_PROMPT} {question}"
-    encoded = urllib.parse.quote(full_prompt)
-    url = f"{WORKER_BASE}/api/text-get?q={encoded}"
-    req = urllib.request.Request(url, headers={"User-Agent": "AOKSI-Widget/1.0"})
-    with urllib.request.urlopen(req, timeout=20) as resp_obj:
-        raw = resp_obj.read().decode("utf-8")
+def build_prompt_with_history(question: str, history: list) -> str:
+    """Формирует полный prompt с историей диалога для отправки в Worker."""
+    lines = [SYSTEM_PROMPT, "\n--- ИСТОРИЯ ДИАЛОГА ---"]
+    for msg in history[-20:]:  # последние 20 сообщений
+        role = msg.get("role", "user")
+        content = (msg.get("content") or "").strip()
+        if not content:
+            continue
+        prefix = "Пользователь" if role == "user" else "ИИ-оператор"
+        lines.append(f"{prefix}: {content}")
+    lines.append(f"\n--- НОВОЕ СООБЩЕНИЕ ПОЛЬЗОВАТЕЛЯ ---\nПользователь: {question}\n\nИИ-оператор:")
+    return "\n".join(lines)
+
+
+def ask_worker(question: str, history: list | None = None) -> str:
+    """Отправляет запрос в Worker через POST /api/text с историей диалога."""
+    full_prompt = build_prompt_with_history(question, history or [])
+
+    # Пробуем POST /api/text
     try:
+        url = f"{WORKER_BASE}/api/text"
+        payload = json.dumps({"q": full_prompt}, ensure_ascii=False).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={"Content-Type": "application/json", "User-Agent": "AOKSI-Widget/1.0"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp_obj:
+            raw = resp_obj.read().decode("utf-8")
         data = json.loads(raw)
         if isinstance(data, dict):
             return data.get("answer") or data.get("text") or data.get("response") or raw
         return raw
     except Exception:
-        return raw
+        # Fallback: GET /api/text-get
+        encoded = urllib.parse.quote(full_prompt[:3000])  # URL limit
+        url = f"{WORKER_BASE}/api/text-get?q={encoded}"
+        req = urllib.request.Request(url, headers={"User-Agent": "AOKSI-Widget/1.0"})
+        with urllib.request.urlopen(req, timeout=20) as resp_obj:
+            raw = resp_obj.read().decode("utf-8")
+        try:
+            data = json.loads(raw)
+            if isinstance(data, dict):
+                return data.get("answer") or data.get("text") or data.get("response") or raw
+            return raw
+        except Exception:
+            return raw
 
 
 # ---------------------------------------------------------------------------
@@ -276,6 +303,12 @@ def handler(event: dict, context) -> dict:
         page_url = trunc(body.get("pageUrl") or "", 512)
         source_page = trunc(body.get("sourcePage") or page_url, 512)
         is_quick = bool(body.get("isQuick", False))
+        # История диалога из фронтенда: [{role, content}, ...]
+        history = body.get("history") or []
+        if not isinstance(history, list):
+            history = []
+        # Обрезаем контент каждого сообщения для безопасности
+        history = [{"role": str(m.get("role", "user")), "content": trunc(str(m.get("content", "")), 1000)} for m in history[-20:]]
 
         if not question:
             return err("question is required")
@@ -283,7 +316,7 @@ def handler(event: dict, context) -> dict:
             return err("sessionId is required")
 
         try:
-            answer = ask_worker(question)
+            answer = ask_worker(question, history)
         except Exception:
             return err("ИИ-оператор временно недоступен", 502)
 

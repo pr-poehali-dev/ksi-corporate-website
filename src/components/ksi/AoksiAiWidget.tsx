@@ -203,6 +203,9 @@ export default function AoksiAiWidget() {
     setThinking(true);
     setHasUnread(false);
 
+    // Берём историю ДО добавления нового сообщения — это контекст для ИИ
+    const historySnapshot = messages.map((m) => ({ role: m.role, content: m.content }));
+
     addMessage({ role: "user", content: question, isQuick });
 
     const startedAt = Date.now();
@@ -215,6 +218,7 @@ export default function AoksiAiWidget() {
         body: JSON.stringify({
           action: "ask",
           question,
+          history: historySnapshot,
           sessionId: sessionId.current,
           userId: user?.id ?? null,
           pageUrl: window.location.href,
@@ -243,7 +247,7 @@ export default function AoksiAiWidget() {
         setLoading(false);
       }, remaining);
     }
-  }, [loading, user, location.pathname, open, addMessage]);
+  }, [loading, messages, user, location.pathname, open, addMessage]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
