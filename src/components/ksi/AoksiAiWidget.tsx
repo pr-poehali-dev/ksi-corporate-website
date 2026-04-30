@@ -792,7 +792,7 @@ export default function AoksiAiWidget() {
             </div>
 
             {/* ─── Быстрые кнопки (активный чат) ─── */}
-            {messages.length > 0 && !showLead && !dialogState.activeIntent && (
+            {messages.length > 0 && !showLead && (
               <div
                 className="relative z-10 flex-shrink-0 px-6 sm:px-8 py-2"
                 style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
