@@ -7,19 +7,22 @@ import { useLocation } from "react-router-dom";
 const WIDGET_URL = "https://functions.poehali.dev/2cd3918f-adc8-4de1-9063-4a0c1827bbe4";
 const SESSION_KEY = "aoksi_ai_session_id";
 const HISTORY_KEY = "aoksi_ai_chat_history";
-const MIN_REPLY_DELAY = 1600;
+const MIN_REPLY_DELAY = 1800;
+
+const GREETING = "Здравствуйте. Я ИИ-оператор АО КСИ, операционный центр компании. Могу коротко сориентировать по нашим возможностям или помочь обсудить уже существующий запрос. Хотите, я сначала расскажу подробнее, или у вас уже есть конкретная задача?";
 
 const QUICK_QUESTIONS = [
   "Чем занимается АО КСИ?",
   "Земельный поиск",
   "Реализация активов",
+  "Проектный креатив",
   "КСИ Терминал",
   "Подключить проект",
 ];
 
 interface ChatMessage {
   id: string;
-  role: "user" | "assistant" | "system";
+  role: "user" | "assistant";
   content: string;
   createdAt: string;
   isQuick?: boolean;
@@ -59,16 +62,79 @@ function saveLocalHistory(msgs: ChatMessage[]) {
   sessionStorage.setItem(HISTORY_KEY, JSON.stringify(msgs));
 }
 
+// Анимированный фоновый граф-сеть
+function NeuralBackground() {
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="neural-grid" width="80" height="80" patternUnits="userSpaceOnUse">
+          <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#00d4ff" strokeWidth="0.5" />
+        </pattern>
+        <radialGradient id="glow-center" cx="50%" cy="40%" r="50%">
+          <stop offset="0%" stopColor="#00d4ff" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#00d4ff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#neural-grid)" />
+      <rect width="100%" height="100%" fill="url(#glow-center)" />
+    </svg>
+  );
+}
+
+// Пульсирующий индикатор статуса
+function StatusIndicator({ thinking }: { thinking: boolean }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="relative flex h-2 w-2">
+        <span className={cn(
+          "absolute inline-flex h-full w-full rounded-full opacity-75",
+          thinking ? "animate-ping bg-amber-400" : "animate-ping bg-emerald-400"
+        )} />
+        <span className={cn(
+          "relative inline-flex h-2 w-2 rounded-full",
+          thinking ? "bg-amber-400" : "bg-emerald-400"
+        )} />
+      </span>
+      <span className={cn(
+        "font-mono text-[11px] tracking-[0.15em] uppercase transition-colors",
+        thinking ? "text-amber-400/70" : "text-emerald-400/70"
+      )}>
+        {thinking ? "формирует ответ…" : "онлайн · готов к диалогу"}
+      </span>
+    </div>
+  );
+}
+
+// Typing indicator
+function TypingIndicator() {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#00d4ff]/10 border border-[#00d4ff]/20 mt-0.5">
+        <Icon name="Bot" size={13} className="text-[#00d4ff]" />
+      </div>
+      <div className="rounded-2xl rounded-bl-sm bg-[#0f1520] border border-white/6 px-4 py-3">
+        <p className="text-[11px] text-[#00d4ff]/50 font-mono tracking-wide mb-2 uppercase">
+          Операционный центр формирует ответ…
+        </p>
+        <div className="flex gap-1.5 items-center">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff]/50 animate-bounce [animation-delay:0ms]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff]/50 animate-bounce [animation-delay:160ms]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff]/50 animate-bounce [animation-delay:320ms]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AoksiAiWidget() {
   const { user } = useAuth();
   const location = useLocation();
 
   const [open, setOpen] = useState(false);
-  const [minimized, setMinimized] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<"online" | "thinking">("online");
+  const [thinking, setThinking] = useState(false);
   const [showLead, setShowLead] = useState(false);
   const [leadSent, setLeadSent] = useState(false);
   const [leadForm, setLeadForm] = useState<LeadForm>({ name: "", company: "", phone: "", email: "", requestText: "" });
@@ -78,22 +144,47 @@ export default function AoksiAiWidget() {
   const sessionId = useRef<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const greetingShown = useRef(false);
 
   useEffect(() => {
     sessionId.current = getOrCreateSessionId();
-    setMessages(loadLocalHistory());
+    const saved = loadLocalHistory();
+    setMessages(saved);
+    if (saved.length > 0) greetingShown.current = true;
   }, []);
 
+  // Блокируем скролл страницы при открытом окне
   useEffect(() => {
     if (open) {
-      setHasUnread(false);
-      setTimeout(() => inputRef.current?.focus(), 100);
+      document.body.style.overflow = "hidden";
+      setTimeout(() => inputRef.current?.focus(), 200);
+      // Показываем приветствие если история пуста
+      if (!greetingShown.current) {
+        greetingShown.current = true;
+        setTimeout(() => {
+          setThinking(true);
+          setTimeout(() => {
+            addMessage({ role: "assistant", content: GREETING });
+            setThinking(false);
+          }, 1200);
+        }, 400);
+      }
+    } else {
+      document.body.style.overflow = "";
     }
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages, loading, thinking]);
+
+  // ESC закрывает
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && open) setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   const addMessage = useCallback((msg: Omit<ChatMessage, "id" | "createdAt">) => {
     const full: ChatMessage = { ...msg, id: generateId(), createdAt: new Date().toISOString() };
@@ -109,7 +200,8 @@ export default function AoksiAiWidget() {
     if (!question.trim() || loading) return;
     setInput("");
     setLoading(true);
-    setStatus("thinking");
+    setThinking(true);
+    setHasUnread(false);
 
     addMessage({ role: "user", content: question, isQuick });
 
@@ -133,13 +225,12 @@ export default function AoksiAiWidget() {
       });
       const data = await resp.json();
       const answer = data.answer || "ИИ-оператор не вернул ответ.";
-
       const elapsed = Date.now() - startedAt;
       const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
 
       setTimeout(() => {
+        setThinking(false);
         addMessage({ role: "assistant", content: answer });
-        setStatus("online");
         setLoading(false);
         if (!open) setHasUnread(true);
       }, remaining);
@@ -147,11 +238,8 @@ export default function AoksiAiWidget() {
       const elapsed = Date.now() - startedAt;
       const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
       setTimeout(() => {
-        addMessage({
-          role: "assistant",
-          content: "ИИ-оператор временно недоступен. Попробуйте позже или направьте запрос специалисту.",
-        });
-        setStatus("online");
+        setThinking(false);
+        addMessage({ role: "assistant", content: "ИИ-оператор временно недоступен. Попробуйте позже или направьте запрос специалисту." });
         setLoading(false);
       }, remaining);
     }
@@ -177,12 +265,14 @@ export default function AoksiAiWidget() {
     setMessages([]);
     setShowLead(false);
     setLeadSent(false);
+    greetingShown.current = false;
   };
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!leadForm.name && !leadForm.phone && !leadForm.email) return;
     setLeadSaving(true);
-    const summary = messages.slice(-6).map((m) => `${m.role === "user" ? "Вопрос" : "ИИ"}: ${m.content}`).join("\n");
+    const summary = messages.slice(-8).map((m) => `${m.role === "user" ? "Пользователь" : "ИИ"}: ${m.content}`).join("\n");
     try {
       await fetch(WIDGET_URL, {
         method: "POST",
@@ -191,276 +281,364 @@ export default function AoksiAiWidget() {
           action: "lead",
           sessionId: sessionId.current,
           userId: user?.id ?? null,
+          pageUrl: window.location.href,
           ...leadForm,
           chatSummary: summary,
         }),
       });
       setLeadSent(true);
-      addMessage({
-        role: "assistant",
-        content: "Ваша заявка принята. Специалист АО КСИ свяжется с вами в ближайшее время.",
-      });
+      setShowLead(false);
+      addMessage({ role: "assistant", content: "Запрос принят. Специалист АО КСИ свяжется с вами в ближайшее время." });
     } catch {
       addMessage({ role: "assistant", content: "Не удалось отправить заявку. Попробуйте позже." });
     } finally {
       setLeadSaving(false);
-      setShowLead(false);
     }
   };
 
   return (
     <>
-      {/* Floating button */}
+      {/* ─── Плавающая кнопка ─── */}
       <button
-        onClick={() => { setOpen(true); setMinimized(false); }}
+        onClick={() => setOpen(true)}
         aria-label="Вызвать ИИ-оператора АО КСИ"
         className={cn(
           "fixed bottom-6 right-6 z-[9990] flex items-center gap-2.5 rounded-full px-5 py-3",
-          "bg-[#0a0a0f] border border-[#00d4ff]/30 shadow-[0_0_24px_rgba(0,212,255,0.18)]",
-          "text-white/90 text-sm font-medium font-[IBM_Plex_Sans]",
-          "transition-all duration-300 hover:border-[#00d4ff]/60 hover:shadow-[0_0_32px_rgba(0,212,255,0.3)]",
-          "hover:bg-[#0f0f18] active:scale-95",
+          "bg-[#080b12] border border-[#00d4ff]/25 shadow-[0_0_28px_rgba(0,212,255,0.15)]",
+          "text-white/85 text-sm font-medium transition-all duration-300",
+          "hover:border-[#00d4ff]/55 hover:shadow-[0_0_40px_rgba(0,212,255,0.28)] hover:bg-[#0c1019]",
+          "active:scale-95",
           open && "opacity-0 pointer-events-none scale-90"
         )}
+        style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}
       >
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00d4ff] opacity-60" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#00d4ff]" />
+        <span className="relative flex h-2 w-2">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
         </span>
-        <Icon name="Bot" size={16} className="text-[#00d4ff]" />
-        Вызвать ИИ
+        <Icon name="Bot" size={15} className="text-[#00d4ff]" />
+        <span>Вызвать ИИ</span>
         {hasUnread && (
-          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-[#00d4ff] border-2 border-[#0a0a0f]" />
+          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-[#00d4ff] border-2 border-[#080b12]" />
         )}
       </button>
 
-      {/* Chat window */}
+      {/* ─── Fullscreen overlay ─── */}
       {open && (
         <div
-          className={cn(
-            "fixed z-[9999] flex flex-col",
-            "bottom-4 right-4",
-            "w-[calc(100vw-2rem)] max-w-[460px]",
-            minimized
-              ? "h-[56px] overflow-hidden"
-              : "h-[min(720px,calc(100vh-2rem))]",
-            "rounded-2xl border border-[#00d4ff]/20",
-            "bg-[#09090f]/95 backdrop-blur-xl",
-            "shadow-[0_0_60px_rgba(0,212,255,0.12),0_20px_60px_rgba(0,0,0,0.6)]",
-            "transition-all duration-300 ease-out",
-            "sm:w-[460px]"
-          )}
-          style={{ fontFamily: "'IBM Plex Sans', sans-serif" }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          style={{
+            background: "rgba(4,6,12,0.88)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
         >
-          {/* Header */}
-          <div className="flex shrink-0 items-center gap-3 border-b border-[#00d4ff]/10 bg-[#0d0d18] px-4 py-3 rounded-t-2xl">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#00d4ff]/10 border border-[#00d4ff]/20">
-              <Icon name="Bot" size={16} className="text-[#00d4ff]" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-semibold text-white/90 leading-tight">ИИ-оператор АО КСИ</p>
-              <p className={cn("text-[11px] leading-tight transition-colors", status === "thinking" ? "text-amber-400/80" : "text-[#00d4ff]/60")}>
-                {status === "thinking" ? "анализирует запрос…" : "онлайн"}
-              </p>
-            </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={clearHistory}
-                className="rounded p-1.5 text-white/20 hover:text-white/50 transition-colors"
-                title="Очистить диалог"
-              >
-                <Icon name="Trash2" size={13} />
-              </button>
-              <button
-                onClick={() => setMinimized((v) => !v)}
-                className="rounded p-1.5 text-white/20 hover:text-white/50 transition-colors"
-                title={minimized ? "Развернуть" : "Свернуть"}
-              >
-                <Icon name={minimized ? "ChevronUp" : "Minus"} size={14} />
-              </button>
-              <button
-                onClick={() => setOpen(false)}
-                className="rounded p-1.5 text-white/20 hover:text-red-400/70 transition-colors"
-                title="Закрыть"
-              >
-                <Icon name="X" size={14} />
-              </button>
-            </div>
-          </div>
+          <div
+            className="relative flex flex-col w-full h-full sm:h-auto sm:max-h-[92vh] sm:max-w-3xl sm:rounded-xl overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, #080c15 0%, #060a11 60%, #050810 100%)",
+              border: "1px solid rgba(0,212,255,0.12)",
+              boxShadow: "0 0 0 1px rgba(0,212,255,0.04), 0 0 80px rgba(0,212,255,0.08), 0 40px 120px rgba(0,0,0,0.8)",
+              fontFamily: "'IBM Plex Sans', sans-serif",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <NeuralBackground />
 
-          {!minimized && (
-            <>
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin">
-                {messages.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full py-8 text-center gap-3">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#00d4ff]/8 border border-[#00d4ff]/15">
-                      <Icon name="Bot" size={26} className="text-[#00d4ff]/60" />
-                    </div>
-                    <div>
-                      <p className="text-white/70 text-sm font-medium">ИИ-оператор АО КСИ</p>
-                      <p className="text-white/35 text-xs mt-1">Виртуальный девелопер. Спросите о модулях,<br/>земельном поиске, реализации активов, КСИ Терминале.</p>
-                    </div>
+            {/* ─── Header ─── */}
+            <div
+              className="relative z-10 flex-shrink-0 px-6 py-4 sm:px-8 sm:py-5"
+              style={{ borderBottom: "1px solid rgba(0,212,255,0.08)" }}
+            >
+              {/* Верхняя строка: заголовок + кнопки */}
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div className="min-w-0">
+                  {/* Лейбл */}
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-[#00d4ff]/40">
+                      ◆ АО «КРИПТОСТРОЙИНВЕСТ»
+                    </span>
                   </div>
-                )}
+                  <h1 className="font-oswald text-white text-xl sm:text-2xl font-semibold leading-tight tracking-wide">
+                    Операционный центр АО КСИ
+                  </h1>
+                  <p className="font-ibm text-white/30 text-xs mt-0.5 leading-relaxed hidden sm:block">
+                    ИИ-оператор готов к диалогу, первичной навигации и формированию запроса
+                  </p>
+                </div>
 
-                {messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={cn("flex gap-2", msg.role === "user" ? "justify-end" : "justify-start")}
-                  >
-                    {msg.role === "assistant" && (
-                      <div className="shrink-0 h-6 w-6 rounded-full bg-[#00d4ff]/10 border border-[#00d4ff]/20 flex items-center justify-center mt-0.5">
-                        <Icon name="Bot" size={12} className="text-[#00d4ff]" />
-                      </div>
-                    )}
-                    <div
-                      className={cn(
-                        "max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed",
-                        msg.role === "user"
-                          ? "bg-[#00d4ff]/12 border border-[#00d4ff]/20 text-white/85 rounded-br-sm"
-                          : "bg-[#0f0f18] border border-white/6 text-white/75 rounded-bl-sm"
-                      )}
+                {/* Кнопки управления */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Голосовой режим — disabled */}
+                  <div className="relative group">
+                    <button
+                      disabled
+                      className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] border border-white/8 text-white/20 cursor-not-allowed"
                     >
-                      <p className="whitespace-pre-wrap">{msg.content}</p>
-                    </div>
-                  </div>
-                ))}
-
-                {loading && (
-                  <div className="flex gap-2 justify-start">
-                    <div className="shrink-0 h-6 w-6 rounded-full bg-[#00d4ff]/10 border border-[#00d4ff]/20 flex items-center justify-center mt-0.5">
-                      <Icon name="Bot" size={12} className="text-[#00d4ff]" />
-                    </div>
-                    <div className="bg-[#0f0f18] border border-white/6 rounded-2xl rounded-bl-sm px-4 py-3">
-                      <div className="flex gap-1 items-center">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff]/60 animate-bounce [animation-delay:0ms]" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff]/60 animate-bounce [animation-delay:150ms]" />
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#00d4ff]/60 animate-bounce [animation-delay:300ms]" />
+                      <Icon name="Mic" size={12} />
+                      <span className="hidden sm:inline">Голосовой режим</span>
+                    </button>
+                    <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block z-20">
+                      <div className="bg-[#0f1520] border border-white/10 rounded-lg px-3 py-2 text-[11px] text-white/50 whitespace-nowrap shadow-xl">
+                        Скоро эта функция будет доступна
                       </div>
                     </div>
                   </div>
-                )}
 
-                <div ref={bottomRef} />
+                  {/* Очистить */}
+                  <button
+                    onClick={clearHistory}
+                    className="rounded-lg p-2 text-white/20 hover:text-white/50 hover:bg-white/5 transition-colors"
+                    title="Очистить диалог"
+                  >
+                    <Icon name="Trash2" size={14} />
+                  </button>
+
+                  {/* Закрыть */}
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="rounded-lg p-2 text-white/25 hover:text-white/70 hover:bg-white/5 transition-colors"
+                    title="Закрыть"
+                  >
+                    <Icon name="X" size={16} />
+                  </button>
+                </div>
               </div>
 
-              {/* Lead form */}
-              {showLead && !leadSent && (
-                <div className="shrink-0 border-t border-white/6 bg-[#0d0d18] px-4 py-3">
-                  <p className="text-[12px] text-white/50 mb-3 leading-relaxed">
-                    Оставьте имя, компанию, телефон или email и кратко опишите задачу. Специалист АО КСИ вернётся с предложением.
-                  </p>
-                  <form onSubmit={handleLeadSubmit} className="space-y-2">
-                    {[
-                      { key: "name", placeholder: "Имя" },
-                      { key: "company", placeholder: "Компания" },
-                      { key: "phone", placeholder: "Телефон" },
-                      { key: "email", placeholder: "Email" },
-                    ].map(({ key, placeholder }) => (
-                      <input
-                        key={key}
-                        value={leadForm[key as keyof LeadForm]}
-                        onChange={(e) => setLeadForm((f) => ({ ...f, [key]: e.target.value }))}
-                        placeholder={placeholder}
-                        className="w-full rounded-lg border border-white/8 bg-[#0a0a12] px-3 py-2 text-[13px] text-white/80 placeholder:text-white/25 focus:outline-none focus:border-[#00d4ff]/30"
-                      />
-                    ))}
-                    <textarea
-                      value={leadForm.requestText}
-                      onChange={(e) => setLeadForm((f) => ({ ...f, requestText: e.target.value }))}
-                      placeholder="Кратко опишите задачу"
-                      rows={2}
-                      className="w-full rounded-lg border border-white/8 bg-[#0a0a12] px-3 py-2 text-[13px] text-white/80 placeholder:text-white/25 focus:outline-none focus:border-[#00d4ff]/30 resize-none"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        type="submit"
-                        disabled={leadSaving}
-                        className="flex-1 rounded-lg bg-[#00d4ff]/15 border border-[#00d4ff]/25 px-3 py-2 text-[13px] text-[#00d4ff] font-medium hover:bg-[#00d4ff]/22 transition-colors disabled:opacity-50"
-                      >
-                        {leadSaving ? "Отправка…" : "Отправить заявку"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setShowLead(false)}
-                        className="rounded-lg border border-white/8 px-3 py-2 text-[13px] text-white/30 hover:text-white/50 transition-colors"
-                      >
-                        Отмена
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
+              {/* Статус */}
+              <StatusIndicator thinking={thinking} />
+            </div>
 
-              {/* Quick questions */}
-              {!showLead && messages.length === 0 && (
-                <div className="shrink-0 px-4 pb-2">
-                  <p className="text-[11px] text-white/25 mb-2">Быстрые вопросы:</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {QUICK_QUESTIONS.map((q) => (
-                      <button
-                        key={q}
-                        onClick={() => sendQuestion(q, true)}
-                        disabled={loading}
-                        className="rounded-full border border-[#00d4ff]/20 bg-[#00d4ff]/6 px-3 py-1 text-[11px] text-[#00d4ff]/70 hover:bg-[#00d4ff]/12 hover:text-[#00d4ff] transition-colors disabled:opacity-40"
-                      >
-                        {q}
-                      </button>
-                    ))}
+            {/* ─── Быстрые вопросы (только если история пуста) ─── */}
+            {messages.length === 0 && !thinking && (
+              <div
+                className="relative z-10 flex-shrink-0 px-6 py-3 sm:px-8"
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+              >
+                <p className="text-[10px] font-mono tracking-[0.18em] uppercase text-white/20 mb-2">
+                  Быстрый старт
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {QUICK_QUESTIONS.map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendQuestion(q, true)}
+                      disabled={loading}
+                      className="rounded-full border border-[#00d4ff]/15 bg-[#00d4ff]/5 px-3 py-1 text-[11px] text-[#00d4ff]/55 hover:bg-[#00d4ff]/10 hover:text-[#00d4ff]/80 hover:border-[#00d4ff]/30 transition-all disabled:opacity-30"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ─── Сообщения ─── */}
+            <div className="relative z-10 flex-1 overflow-y-auto px-6 py-5 sm:px-8 space-y-4 min-h-0"
+              style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(0,212,255,0.1) transparent" }}
+            >
+              {messages.length === 0 && !thinking && (
+                <div className="flex flex-col items-center justify-center h-full text-center py-16 gap-4">
+                  <div
+                    className="flex h-16 w-16 items-center justify-center rounded-full"
+                    style={{
+                      background: "rgba(0,212,255,0.06)",
+                      border: "1px solid rgba(0,212,255,0.12)",
+                      boxShadow: "0 0 40px rgba(0,212,255,0.08)",
+                    }}
+                  >
+                    <Icon name="Bot" size={28} className="text-[#00d4ff]/50" />
+                  </div>
+                  <div>
+                    <p className="font-oswald text-white/50 text-lg font-medium">ИИ-оператор АО КСИ</p>
+                    <p className="font-ibm text-white/20 text-sm mt-1">Выберите вопрос или напишите свой</p>
                   </div>
                 </div>
               )}
 
-              {/* Input */}
-              {!showLead && (
-                <div className="shrink-0 border-t border-white/6 px-3 py-3">
-                  <form onSubmit={handleSubmit} className="flex gap-2 items-end">
-                    <textarea
-                      ref={inputRef}
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      placeholder="Напишите вопрос…"
-                      rows={1}
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={cn("flex gap-3", msg.role === "user" ? "justify-end" : "justify-start")}
+                >
+                  {msg.role === "assistant" && (
+                    <div
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full mt-0.5"
+                      style={{ background: "rgba(0,212,255,0.08)", border: "1px solid rgba(0,212,255,0.15)" }}
+                    >
+                      <Icon name="Bot" size={13} className="text-[#00d4ff]" />
+                    </div>
+                  )}
+
+                  <div
+                    className={cn(
+                      "max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                      msg.role === "user"
+                        ? "rounded-br-sm text-white/85"
+                        : "rounded-bl-sm text-white/75"
+                    )}
+                    style={msg.role === "user"
+                      ? { background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.15)" }
+                      : { background: "rgba(15,21,32,0.9)", border: "1px solid rgba(255,255,255,0.06)" }
+                    }
+                  >
+                    <p className="whitespace-pre-wrap font-ibm">{msg.content}</p>
+                  </div>
+
+                  {msg.role === "user" && (
+                    <div
+                      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full mt-0.5"
+                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
+                    >
+                      <Icon name="User" size={13} className="text-white/40" />
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {thinking && <TypingIndicator />}
+              <div ref={bottomRef} />
+            </div>
+
+            {/* ─── Быстрые вопросы (когда есть история) ─── */}
+            {messages.length > 0 && !showLead && (
+              <div
+                className="relative z-10 flex-shrink-0 px-6 sm:px-8 py-2"
+                style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+              >
+                <div className="flex flex-wrap gap-1.5">
+                  {QUICK_QUESTIONS.map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => sendQuestion(q, true)}
                       disabled={loading}
-                      className="flex-1 min-h-[38px] max-h-[96px] resize-none rounded-xl border border-white/8 bg-[#0a0a12] px-3 py-2.5 text-[13px] text-white/85 placeholder:text-white/25 focus:outline-none focus:border-[#00d4ff]/30 disabled:opacity-50 leading-snug overflow-y-auto"
+                      className="rounded-full border border-white/8 bg-white/[0.03] px-3 py-1 text-[10px] text-white/30 hover:border-[#00d4ff]/20 hover:text-[#00d4ff]/60 transition-all disabled:opacity-30"
+                    >
+                      {q}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ─── Форма лида ─── */}
+            {showLead && !leadSent && (
+              <div
+                className="relative z-10 flex-shrink-0 px-6 sm:px-8 py-4"
+                style={{ borderTop: "1px solid rgba(0,212,255,0.1)", background: "rgba(0,212,255,0.02)" }}
+              >
+                <p className="font-ibm text-[12px] text-white/40 mb-3 leading-relaxed">
+                  Давайте соберём запрос. Оставьте имя, компанию, телефон или email — специалист свяжется с вами.
+                </p>
+                <form onSubmit={handleLeadSubmit} className="grid grid-cols-2 gap-2">
+                  {[
+                    { key: "name", placeholder: "Имя" },
+                    { key: "company", placeholder: "Компания" },
+                    { key: "phone", placeholder: "Телефон" },
+                    { key: "email", placeholder: "Email" },
+                  ].map(({ key, placeholder }) => (
+                    <input
+                      key={key}
+                      value={leadForm[key as keyof LeadForm]}
+                      onChange={(e) => setLeadForm((f) => ({ ...f, [key]: e.target.value }))}
+                      placeholder={placeholder}
+                      className="rounded-lg border border-white/8 bg-white/[0.04] px-3 py-2 text-[13px] text-white/80 placeholder:text-white/20 focus:outline-none focus:border-[#00d4ff]/30 transition-colors"
                     />
+                  ))}
+                  <textarea
+                    value={leadForm.requestText}
+                    onChange={(e) => setLeadForm((f) => ({ ...f, requestText: e.target.value }))}
+                    placeholder="Кратко опишите задачу"
+                    rows={2}
+                    className="col-span-2 rounded-lg border border-white/8 bg-white/[0.04] px-3 py-2 text-[13px] text-white/80 placeholder:text-white/20 focus:outline-none focus:border-[#00d4ff]/30 resize-none transition-colors"
+                  />
+                  <div className="col-span-2 flex gap-2">
                     <button
                       type="submit"
-                      disabled={loading || !input.trim()}
-                      className="h-[38px] w-[38px] shrink-0 flex items-center justify-center rounded-xl bg-[#00d4ff]/15 border border-[#00d4ff]/25 text-[#00d4ff] hover:bg-[#00d4ff]/25 transition-colors disabled:opacity-30"
+                      disabled={leadSaving}
+                      className="flex-1 rounded-lg py-2 text-[13px] font-medium text-[#00d4ff] transition-all disabled:opacity-50"
+                      style={{ background: "rgba(0,212,255,0.12)", border: "1px solid rgba(0,212,255,0.2)" }}
                     >
-                      <Icon name="Send" size={15} />
-                    </button>
-                  </form>
-                  {/* Specialist button */}
-                  <div className="flex items-center justify-between mt-2">
-                    <button
-                      onClick={() => setShowLead(true)}
-                      className="flex items-center gap-1.5 text-[11px] text-white/25 hover:text-[#00d4ff]/60 transition-colors"
-                    >
-                      <Icon name="UserRound" size={11} />
-                      Передать запрос специалисту
+                      {leadSaving ? "Отправка…" : "Отправить запрос"}
                     </button>
                     <button
-                      onClick={clearHistory}
-                      className="text-[10px] text-white/15 hover:text-white/30 transition-colors"
+                      type="button"
+                      onClick={() => setShowLead(false)}
+                      className="rounded-lg px-4 py-2 text-[13px] text-white/30 hover:text-white/50 transition-colors"
+                      style={{ border: "1px solid rgba(255,255,255,0.06)" }}
                     >
-                      Очистить диалог
+                      Отмена
                     </button>
                   </div>
-                </div>
-              )}
-
-              {/* Disclaimer */}
-              <div className="shrink-0 px-4 pb-3">
-                <p className="text-[10px] text-white/18 leading-relaxed text-center">
-                  Ответы ИИ-оператора носят информационный характер и требуют проверки специалистом АО КСИ перед практическим использованием.
-                </p>
+                </form>
               </div>
-            </>
-          )}
+            )}
+
+            {/* ─── Поле ввода ─── */}
+            {!showLead && (
+              <div
+                className="relative z-10 flex-shrink-0 px-6 sm:px-8 py-4"
+                style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+              >
+                <form onSubmit={handleSubmit} className="flex gap-3 items-end">
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Напишите вопрос или опишите задачу…"
+                    rows={1}
+                    disabled={loading}
+                    className="flex-1 min-h-[42px] max-h-[120px] resize-none rounded-xl px-4 py-2.5 text-[14px] text-white/85 placeholder:text-white/20 focus:outline-none transition-colors disabled:opacity-50 leading-relaxed overflow-y-auto font-ibm"
+                    style={{
+                      background: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                    onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(0,212,255,0.25)")}
+                    onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading || !input.trim()}
+                    className="h-[42px] w-[42px] shrink-0 flex items-center justify-center rounded-xl transition-all disabled:opacity-30"
+                    style={{ background: "rgba(0,212,255,0.15)", border: "1px solid rgba(0,212,255,0.25)" }}
+                    onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "rgba(0,212,255,0.22)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(0,212,255,0.15)")}
+                  >
+                    <Icon name="Send" size={16} className="text-[#00d4ff]" />
+                  </button>
+                </form>
+
+                {/* Нижняя строка: кнопка специалиста + дисклеймер */}
+                <div className="flex items-center justify-between mt-2.5 gap-2">
+                  <button
+                    onClick={() => setShowLead(true)}
+                    className="flex items-center gap-1.5 text-[11px] text-white/20 hover:text-[#00d4ff]/50 transition-colors font-ibm"
+                  >
+                    <Icon name="UserRound" size={11} />
+                    Передать запрос специалисту
+                  </button>
+                  <button
+                    onClick={clearHistory}
+                    className="text-[10px] text-white/12 hover:text-white/25 transition-colors font-ibm"
+                  >
+                    Очистить диалог
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* ─── Дисклеймер ─── */}
+            <div
+              className="relative z-10 flex-shrink-0 px-6 sm:px-8 pb-3 pt-0"
+              style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}
+            >
+              <p className="text-center text-[10px] text-white/14 leading-relaxed font-ibm">
+                Ответы ИИ-оператора носят информационный характер и требуют проверки специалистом АО КСИ перед практическим использованием.
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </>
