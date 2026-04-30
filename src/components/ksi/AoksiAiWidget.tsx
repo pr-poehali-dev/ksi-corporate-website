@@ -259,6 +259,57 @@ function StatusIndicator({ thinking }: { thinking: boolean }) {
   );
 }
 
+// Метки полей для отображения
+const COLLECTED_FIELD_LABELS: Partial<Record<keyof CollectedData, string>> = {
+  city: "Город / регион",
+  region: "Регион",
+  area: "Площадь",
+  purpose: "Назначение",
+  budget: "Бюджет",
+  assetType: "Тип объекта",
+  documents: "Документы",
+  role: "Роль",
+};
+
+function CollectedDataPanel({ data }: { data: CollectedData }) {
+  const entries = Object.entries(COLLECTED_FIELD_LABELS)
+    .map(([key, label]) => ({ key, label, value: data[key as keyof CollectedData] }))
+    .filter(({ key, value }) => {
+      if (!value) return false;
+      // Не дублируем city и region если они одинаковые
+      if (key === "region" && data.city === data.region) return false;
+      return true;
+    });
+
+  if (entries.length === 0) return null;
+
+  return (
+    <div
+      className="relative z-10 flex-shrink-0 px-6 sm:px-8 py-2"
+      style={{ borderBottom: "1px solid rgba(0,212,255,0.06)", background: "rgba(0,212,255,0.02)" }}
+    >
+      <div className="flex items-center gap-1.5 mb-1.5">
+        <Icon name="ClipboardList" size={10} className="text-[#00d4ff]/30" />
+        <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#00d4ff]/30">
+          Зафиксировано
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {entries.map(({ key, label, value }) => (
+          <div
+            key={key}
+            className="flex items-center gap-1.5 rounded-full px-2.5 py-1"
+            style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.12)" }}
+          >
+            <span className="text-[9px] font-mono text-[#00d4ff]/35 uppercase tracking-wide">{label}</span>
+            <span className="text-[11px] text-white/60 font-ibm">{value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function TypingIndicator() {
   return (
     <div className="flex items-start gap-3">
@@ -656,6 +707,9 @@ export default function AoksiAiWidget() {
                 </div>
               </div>
             )}
+
+            {/* ─── Зафиксированные данные ─── */}
+            <CollectedDataPanel data={dialogState.collectedData} />
 
             {/* ─── Сообщения ─── */}
             <div
