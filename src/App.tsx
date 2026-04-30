@@ -29,6 +29,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import CabinetLayout from "./components/cabinet/CabinetLayout";
 import AdminLayout from "./components/admin/AdminLayout";
+import AoksiAiWidget from "./components/ksi/AoksiAiWidget";
 
 /* Cabinet pages */
 import CabinetDashboard from "./pages/cabinet/Dashboard";
@@ -118,6 +119,7 @@ const App = () => (
       <Sonner />
       <AuthProvider>
         <BrowserRouter>
+          <AoksiAiWidget />
           <Routes>
             {/* Public site pages */}
             <Route path="/" element={<Index />} />

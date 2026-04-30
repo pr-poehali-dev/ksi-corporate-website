@@ -1,0 +1,18 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "GET history without sessionId returns error",
+      "method": "GET",
+      "path": "/?sessionId=",
+      "expectedStatus": 400,
+      "expectedBody": { "error": "sessionId is required" },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
