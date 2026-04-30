@@ -341,40 +341,89 @@ def build_prompt_with_history(question: str, history: list, dialog_state: dict |
     return "\n".join(lines)
 
 
-def ask_worker(question: str, history: list | None = None, dialog_state: dict | None = None) -> str:
-    """Отправляет запрос в Worker через POST /api/text с историей диалога и dialogState."""
-    full_prompt = build_prompt_with_history(question, history or [], dialog_state)
+def extract_answer(raw: str) -> str | None:
+    """Извлекает текст ответа из любого формата Worker-ответа."""
+    try:
+        data = json.loads(raw)
+        if isinstance(data, dict):
+            # Перебираем все возможные поля
+            for key in ("answer", "text", "response", "result", "output", "message", "content"):
+                val = data.get(key)
+                if val and isinstance(val, str) and val.strip():
+                    return val.strip()
+            # Логируем неизвестную структуру
+            print(f"[WORKER] Unknown response keys: {list(data.keys())}, raw={raw[:200]}")
+            return None
+        if isinstance(data, str) and data.strip():
+            return data.strip()
+        if isinstance(data, list) and data:
+            first = data[0]
+            if isinstance(first, str):
+                return first.strip()
+            if isinstance(first, dict):
+                for key in ("answer", "text", "response", "content"):
+                    val = first.get(key)
+                    if val and isinstance(val, str):
+                        return val.strip()
+    except Exception:
+        # Не JSON — возвращаем как текст если не пустой
+        if raw and raw.strip():
+            return raw.strip()
+    print(f"[WORKER] Could not extract answer, raw={raw[:200]}")
+    return None
 
-    # Пробуем POST /api/text
+
+def ask_worker(question: str, history: list | None = None, dialog_state: dict | None = None) -> str:
+    """Отправляет запрос в Worker. POST /api/text → fallback GET /api/text-get."""
+    full_prompt = build_prompt_with_history(question, history or [], dialog_state)
+    prompt_len = len(full_prompt)
+    print(f"[WORKER] Prompt length: {prompt_len} chars")
+
+    # Попытка 1: POST /api/text
+    post_error = None
     try:
         url = f"{WORKER_BASE}/api/text"
         payload = json.dumps({"q": full_prompt}, ensure_ascii=False).encode("utf-8")
         req = urllib.request.Request(
-            url,
-            data=payload,
+            url, data=payload,
             headers={"Content-Type": "application/json", "User-Agent": "AOKSI-Widget/1.0"},
             method="POST",
         )
         with urllib.request.urlopen(req, timeout=20) as resp_obj:
+            status = resp_obj.status
             raw = resp_obj.read().decode("utf-8")
-        data = json.loads(raw)
-        if isinstance(data, dict):
-            return data.get("answer") or data.get("text") or data.get("response") or raw
-        return raw
-    except Exception:
-        # Fallback: GET /api/text-get
-        encoded = urllib.parse.quote(full_prompt[:3000])  # URL limit
-        url = f"{WORKER_BASE}/api/text-get?q={encoded}"
+        print(f"[WORKER] POST status={status}, raw_len={len(raw)}, preview={raw[:100]}")
+        answer = extract_answer(raw)
+        if answer:
+            return answer
+        post_error = f"POST returned no usable answer (raw={raw[:100]})"
+    except Exception as e:
+        post_error = str(e)
+        print(f"[WORKER] POST failed: {post_error}")
+
+    # Попытка 2: GET /api/text-get — только последний вопрос + минимальный контекст
+    print(f"[WORKER] Falling back to GET, post_error={post_error}")
+    # Для GET берём только вопрос + последние 3 сообщения — иначе URL слишком длинный
+    history_short = (history or [])[-6:]
+    short_prompt = build_prompt_with_history(question, history_short, dialog_state)
+    # Ещё раз обрезаем если не влезает
+    if len(short_prompt) > 4000:
+        short_prompt = f"Ты — ИИ-оператор АО КСИ. Отвечай коротко и по-деловому, один вопрос в конце.\n\nПользователь: {question}\n\nИИ-оператор:"
+    encoded = urllib.parse.quote(short_prompt)
+    url = f"{WORKER_BASE}/api/text-get?q={encoded}"
+    try:
         req = urllib.request.Request(url, headers={"User-Agent": "AOKSI-Widget/1.0"})
         with urllib.request.urlopen(req, timeout=20) as resp_obj:
+            status = resp_obj.status
             raw = resp_obj.read().decode("utf-8")
-        try:
-            data = json.loads(raw)
-            if isinstance(data, dict):
-                return data.get("answer") or data.get("text") or data.get("response") or raw
-            return raw
-        except Exception:
-            return raw
+        print(f"[WORKER] GET status={status}, raw_len={len(raw)}, preview={raw[:100]}")
+        answer = extract_answer(raw)
+        if answer:
+            return answer
+    except Exception as e:
+        print(f"[WORKER] GET failed: {e}")
+
+    raise RuntimeError("Worker вернул пустой или нечитаемый ответ")
 
 
 # ---------------------------------------------------------------------------

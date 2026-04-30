@@ -13,6 +13,23 @@
       "expectedStatus": 400,
       "expectedBody": { "error": "sessionId is required" },
       "bodyMatcher": "partial"
+    },
+    {
+      "name": "ASK — real worker call",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "ask",
+        "question": "Чем занимается АО КСИ?",
+        "history": [],
+        "sessionId": "test_diag_001",
+        "userId": null,
+        "pageUrl": "https://test.local/",
+        "sourcePage": "/"
+      },
+      "expectedStatus": 200,
+      "expectedBody": { "answer": "string" },
+      "bodyMatcher": "partial"
     }
   ]
 }
