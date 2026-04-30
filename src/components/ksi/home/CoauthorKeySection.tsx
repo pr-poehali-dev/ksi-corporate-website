@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { Reveal } from "./Reveal";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 export function CoauthorKeySection() {
+  const { openModal } = useEarlyAccessModal();
   return (
     <section className="py-28 relative overflow-hidden">
       {/* Фоновое свечение */}
@@ -62,9 +63,9 @@ export function CoauthorKeySection() {
         </Reveal>
 
         <Reveal delay={350}>
-          <Link to="/coauthor" className="btn-primary-ksi inline-flex px-10 py-4 text-base rounded-sm">
+          <button onClick={openModal} className="btn-primary-ksi inline-flex px-10 py-4 text-base rounded-sm">
             Стать соавтором
-          </Link>
+          </button>
         </Reveal>
       </div>
     </section>

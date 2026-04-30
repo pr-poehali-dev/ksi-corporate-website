@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import { Reveal } from "./Reveal";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 const COAUTHORS = [
   { name: "ООО «РегионСтрой»", type: "Землевладелец" },
@@ -11,6 +11,7 @@ const COAUTHORS = [
 ];
 
 export function CoauthorsSection() {
+  const { openModal } = useEarlyAccessModal();
   return (
     <section className="py-20 border-t border-white/6">
       <div className="max-w-7xl mx-auto px-6">
@@ -42,9 +43,9 @@ export function CoauthorsSection() {
               <div className="font-ibm text-ksi-cyan/40 text-[10px] tracking-[0.2em] uppercase mb-2">Следующий соавтор</div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="font-oswald text-white/40 text-base">Ваша организация</div>
-                <Link to="/early-access" className="btn-primary-ksi inline-flex px-6 py-2.5 text-sm rounded-sm self-start sm:self-auto">
+                <button onClick={openModal} className="btn-primary-ksi inline-flex px-6 py-2.5 text-sm rounded-sm self-start sm:self-auto">
                   Подключиться к системе
-                </Link>
+                </button>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { ContactModal } from "@/components/ksi/ContactModal";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 const LOGO_URL = "https://cdn.poehali.dev/projects/03ddefe8-b860-4510-9458-b49f9b2a8b44/bucket/28655df5-bb72-4ef7-ba50-ca96e9a5ae13.png";
 
@@ -17,6 +17,7 @@ export function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const { openModal: openEarlyAccessModal } = useEarlyAccessModal();
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -160,8 +161,8 @@ export function HeroSection() {
 
         {/* Кнопки */}
         <div style={fade(v3)} className="flex flex-col sm:flex-row gap-4 justify-center mt-14 mb-7">
-          <Link
-            to="/early-access"
+          <button
+            onClick={openEarlyAccessModal}
             className="inline-flex items-center justify-center font-ibm font-semibold text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
               background: "#00d4ff",
@@ -173,7 +174,7 @@ export function HeroSection() {
             onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 30px rgba(0,212,255,0.2)")}
           >
             Передать актив в работу
-          </Link>
+          </button>
           <button
             onClick={() => setModalOpen(true)}
             className="inline-flex items-center justify-center font-ibm font-medium text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"

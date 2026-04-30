@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { Reveal } from "./Reveal";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 export function LandownersSection() {
+  const { openModal } = useEarlyAccessModal();
   return (
     <section className="py-24 border-t border-white/6 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -50,9 +51,9 @@ export function LandownersSection() {
                 ))}
               </ul>
 
-              <Link to="/early-access" className="btn-primary-ksi inline-flex px-8 py-3.5 text-sm rounded-sm">
+              <button onClick={openModal} className="btn-primary-ksi inline-flex px-8 py-3.5 text-sm rounded-sm">
                 Подключить участок к системе
-              </Link>
+              </button>
             </div>
           </Reveal>
 

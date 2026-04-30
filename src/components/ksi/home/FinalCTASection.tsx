@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { Reveal } from "./Reveal";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 export function FinalCTASection() {
+  const { openModal } = useEarlyAccessModal();
   return (
     <section className="py-32 border-t border-white/6 relative overflow-hidden">
       {/* Фоновое свечение */}
@@ -50,9 +52,9 @@ export function FinalCTASection() {
         {/* CTA кнопки */}
         <Reveal delay={300}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link to="/early-access" className="btn-primary-ksi px-12 py-4 text-base font-medium rounded-sm">
+            <button onClick={openModal} className="btn-primary-ksi px-12 py-4 text-base font-medium rounded-sm">
               Запросить ранний доступ
-            </Link>
+            </button>
             <Link to="/contacts" className="flex items-center gap-2 border border-white/15 hover:border-white/35 text-white/55 hover:text-white/90 transition-all px-10 py-4 text-base font-ibm rounded-sm">
               Персональное приглашение
               <Icon name="ArrowRight" size={16} />

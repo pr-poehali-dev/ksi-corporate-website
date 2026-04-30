@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 export function NewHeroSection() {
+  const { openModal } = useEarlyAccessModal();
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Фоновые элементы */}
@@ -52,13 +54,13 @@ export function NewHeroSection() {
 
         {/* CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/early-access" className="btn-primary-ksi px-8 py-4 text-base font-medium rounded-sm">
+          <button onClick={openModal} className="btn-primary-ksi px-8 py-4 text-base font-medium rounded-sm">
             Запросить ранний доступ
-          </Link>
-          <Link to="/coauthor" className="flex items-center gap-2 border border-white/15 hover:border-white/30 text-white/60 hover:text-white/90 transition-all px-8 py-4 text-base rounded-sm">
+          </button>
+          <button onClick={openModal} className="flex items-center gap-2 border border-white/15 hover:border-white/30 text-white/60 hover:text-white/90 transition-all px-8 py-4 text-base rounded-sm">
             Стать соавтором
             <Icon name="ArrowRight" size={16} />
-          </Link>
+          </button>
         </div>
 
         {/* Три тезиса */}

@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import Icon from "@/components/ui/icon";
 import { REAL_PROJECTS } from "@/components/ksi/data";
 import { Reveal } from "./Reveal";
+import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 export function ProjectsSection() {
+  const { openModal } = useEarlyAccessModal();
   return (
     <section className="py-24 border-t border-white/6">
       <div className="max-w-7xl mx-auto px-6">
@@ -81,9 +83,9 @@ export function ProjectsSection() {
             <p className="font-ibm text-white/38 text-sm">
               Ваш актив может стать следующим обучающим кейсом виртуального девелопера.
             </p>
-            <Link to="/early-access" className="btn-primary-ksi px-6 py-2.5 text-sm rounded-sm flex-shrink-0">
+            <button onClick={openModal} className="btn-primary-ksi px-6 py-2.5 text-sm rounded-sm flex-shrink-0">
               Поставить задачу
-            </Link>
+            </button>
           </div>
         </Reveal>
       </div>
