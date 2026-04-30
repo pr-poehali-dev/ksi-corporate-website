@@ -5,13 +5,14 @@
 
 import json
 import os
-import time
 import urllib.request
 import urllib.parse
+import urllib.error
 import psycopg2
-from datetime import datetime
+import psycopg2.extras
 
 WORKER_BASE = "https://patient-union-74df.landsearchservice.workers.dev"
+SCHEMA = "t_p64876520_ksi_corporate_websit"
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -22,6 +23,53 @@ CORS_HEADERS = {
 
 def get_db():
     return psycopg2.connect(os.environ["DATABASE_URL"])
+
+
+def get_telegram_settings(conn) -> dict:
+    with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(
+            f"SELECT key, value FROM {SCHEMA}.site_settings "
+            "WHERE key IN ('telegram_bot_token', 'telegram_chat_id', 'telegram_notifications_enabled')"
+        )
+        return {row["key"]: row["value"] for row in cur.fetchall()}
+
+
+def escape_html(text: str) -> str:
+    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def send_telegram(bot_token: str, chat_id: str, text: str):
+    url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    payload = json.dumps({"chat_id": chat_id, "text": text, "parse_mode": "HTML"}).encode()
+    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"}, method="POST")
+    try:
+        urllib.request.urlopen(req, timeout=10)
+    except Exception as e:
+        print(f"Telegram error: {e}")
+
+
+def notify_lead(conn, name, company, phone, email, request_text, chat_summary, page_url):
+    try:
+        tg = get_telegram_settings(conn)
+        token = tg.get("telegram_bot_token", "").strip()
+        chat_id = tg.get("telegram_chat_id", "").strip()
+        enabled = tg.get("telegram_notifications_enabled", "false")
+        if enabled != "true" or not token or not chat_id:
+            return
+        summary_short = chat_summary[:400] + "…" if len(chat_summary) > 400 else chat_summary
+        text = (
+            "🤖 <b>Новая заявка через ИИ-виджет</b>\n\n"
+            f"<b>Имя:</b> {escape_html(name or '—')}\n"
+            f"<b>Компания:</b> {escape_html(company or '—')}\n"
+            f"<b>Телефон:</b> {escape_html(phone or '—')}\n"
+            f"<b>Email:</b> {escape_html(email or '—')}\n"
+            f"<b>Задача:</b> {escape_html(request_text or '—')}\n"
+            f"<b>Страница:</b> {escape_html(page_url or '—')}\n\n"
+            f"<b>Фрагмент диалога:</b>\n{escape_html(summary_short or '—')}"
+        )
+        send_telegram(token, chat_id, text)
+    except Exception as e:
+        print(f"notify_lead error: {e}")
 
 
 def ok(data: dict) -> dict:
@@ -161,6 +209,8 @@ def handler(event: dict, context) -> dict:
                     (session_id, user_id, name, company, phone, email, request_text, chat_summary)
                 )
             conn.commit()
+            page_url = body.get("pageUrl") or ""
+            notify_lead(conn, name, company, phone, email, request_text, chat_summary, page_url)
             conn.close()
         except Exception as e:
             return err(str(e), 500)
