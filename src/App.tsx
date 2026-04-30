@@ -119,8 +119,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
-        <EarlyAccessModalProvider>
         <BrowserRouter>
+          <EarlyAccessModalProvider>
           <AoksiAiWidget />
           <Routes>
             {/* Public site pages */}
@@ -189,8 +189,8 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </EarlyAccessModalProvider>
         </BrowserRouter>
-        </EarlyAccessModalProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
