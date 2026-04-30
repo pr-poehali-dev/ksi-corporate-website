@@ -246,23 +246,71 @@ SYSTEM_PROMPT = """Ты — ИИ-оператор АО КСИ. Твоя глав
 Если пользователь готов оставить контакт — скажи: «Оставьте имя, компанию и телефон или email — специалист свяжется с вами»."""
 
 
-def build_prompt_with_history(question: str, history: list) -> str:
-    """Формирует полный prompt с историей диалога для отправки в Worker."""
-    lines = [SYSTEM_PROMPT, "\n--- ИСТОРИЯ ДИАЛОГА ---"]
-    for msg in history[-20:]:  # последние 20 сообщений
+INTENT_LABELS = {
+    "land_search": "Земельный поиск",
+    "asset_realization": "Реализация активов",
+    "project_creative": "Проектный креатив",
+    "ksi_terminal": "КСИ Терминал",
+    "ai_lab": "Лаборатория ИИ",
+    "general": "Общий вопрос",
+}
+
+STAGE_LABELS = {
+    "new": "новый диалог",
+    "collecting_requirements": "сбор параметров",
+    "answering": "отвечаю на вопрос",
+    "ready_to_lead": "готов к передаче специалисту",
+}
+
+
+def build_prompt_with_history(question: str, history: list, dialog_state: dict | None = None) -> str:
+    """Формирует полный prompt с историей диалога и dialogState для отправки в Worker."""
+    lines = [SYSTEM_PROMPT]
+
+    # Вставляем контекст состояния диалога
+    if dialog_state:
+        intent = dialog_state.get("activeIntent")
+        stage = dialog_state.get("stage", "new")
+        last_q = dialog_state.get("lastAssistantQuestion")
+        collected = dialog_state.get("collectedData") or {}
+
+        lines.append("\n--- ТЕКУЩЕЕ СОСТОЯНИЕ ДИАЛОГА ---")
+        if intent:
+            label = INTENT_LABELS.get(intent, intent)
+            lines.append(f"Активный сценарий: {label} (intent={intent})")
+        else:
+            lines.append("Активный сценарий: не определён")
+        lines.append(f"Этап: {STAGE_LABELS.get(stage, stage)}")
+        if last_q:
+            lines.append(f"Последний вопрос ИИ-оператора: «{last_q}»")
+
+        # Уже собранные данные
+        filled = {k: v for k, v in collected.items() if v}
+        if filled:
+            lines.append("Уже известно о пользователе: " + "; ".join(f"{k}={v}" for k, v in filled.items()))
+
+        if intent and stage == "collecting_requirements":
+            lines.append(
+                "\nВАЖНО: Сценарий уже выбран. Не возвращайся к общему вопросу «участок, актив или проект?». "
+                "Продолжай по текущему сценарию и задай следующий уточняющий вопрос."
+            )
+
+    lines.append("\n--- ИСТОРИЯ ДИАЛОГА ---")
+    for msg in history[-20:]:
         role = msg.get("role", "user")
         content = (msg.get("content") or "").strip()
         if not content:
             continue
         prefix = "Пользователь" if role == "user" else "ИИ-оператор"
         lines.append(f"{prefix}: {content}")
+
     lines.append(f"\n--- НОВОЕ СООБЩЕНИЕ ПОЛЬЗОВАТЕЛЯ ---\nПользователь: {question}\n\nИИ-оператор:")
     return "\n".join(lines)
 
 
-def ask_worker(question: str, history: list | None = None) -> str:
-    """Отправляет запрос в Worker через POST /api/text с историей диалога."""
-    full_prompt = build_prompt_with_history(question, history or [])
+def ask_worker(question: str, history: list | None = None, dialog_state: dict | None = None) -> str:
+    """Отправляет запрос в Worker через POST /api/text с историей диалога и dialogState."""
+    full_prompt = build_prompt_with_history(question, history or [], dialog_state)
 
     # Пробуем POST /api/text
     try:
@@ -330,13 +378,27 @@ def handler(event: dict, context) -> dict:
         # Обрезаем контент каждого сообщения для безопасности
         history = [{"role": str(m.get("role", "user")), "content": trunc(str(m.get("content", "")), 1000)} for m in history[-20:]]
 
+        # dialogState — состояние диалога с фронтенда
+        dialog_state = body.get("dialogState")
+        if not isinstance(dialog_state, dict):
+            dialog_state = None
+        else:
+            # Обрезаем строки внутри состояния для безопасности
+            safe_ds = {}
+            for k in ("activeIntent", "stage", "lastAssistantQuestion"):
+                v = dialog_state.get(k)
+                safe_ds[k] = trunc(str(v), 200) if v else None
+            cd = dialog_state.get("collectedData") or {}
+            safe_ds["collectedData"] = {ck: trunc(str(cv), 200) if cv else None for ck, cv in cd.items()}
+            dialog_state = safe_ds
+
         if not question:
             return err("question is required")
         if not session_id:
             return err("sessionId is required")
 
         try:
-            answer = ask_worker(question, history)
+            answer = ask_worker(question, history, dialog_state)
         except Exception:
             return err("ИИ-оператор временно недоступен", 502)
 

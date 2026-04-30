@@ -4,21 +4,62 @@ import Icon from "@/components/ui/icon";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const WIDGET_URL = "https://functions.poehali.dev/2cd3918f-adc8-4de1-9063-4a0c1827bbe4";
 const SESSION_KEY = "aoksi_ai_session_id";
 const HISTORY_KEY = "aoksi_ai_chat_history";
+const DIALOG_STATE_KEY = "aoksi_ai_dialog_state";
 const MIN_REPLY_DELAY = 1800;
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 минут
 
-const GREETING = "Здравствуйте. Я ИИ-оператор АО КСИ, операционный центр компании. Могу коротко сориентировать по нашим возможностям или помочь обсудить уже существующий запрос. Хотите, я сначала расскажу подробнее, или у вас уже есть конкретная задача?";
+const GREETING =
+  "Здравствуйте. Я ИИ-оператор АО КСИ. Могу помочь с участком, активом, проектом или аналитикой. С чем вы пришли?";
 
-const QUICK_QUESTIONS = [
-  "Чем занимается АО КСИ?",
-  "Земельный поиск",
-  "Реализация активов",
-  "Проектный креатив",
-  "КСИ Терминал",
-  "Подключить проект",
+const INACTIVITY_MESSAGE =
+  "Можем продолжить прежнюю тему или начать новый запрос. Что выбираете?";
+
+const QUICK_QUESTIONS: { label: string; intent: IntentType | null }[] = [
+  { label: "Чем занимается АО КСИ?", intent: "general" },
+  { label: "Земельный поиск", intent: "land_search" },
+  { label: "Реализация активов", intent: "asset_realization" },
+  { label: "Проектный креатив", intent: "project_creative" },
+  { label: "КСИ Терминал", intent: "ksi_terminal" },
+  { label: "Подключить проект", intent: "ready_to_lead" },
 ];
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type IntentType =
+  | "land_search"
+  | "asset_realization"
+  | "project_creative"
+  | "ksi_terminal"
+  | "ai_lab"
+  | "ready_to_lead"
+  | "general";
+
+type StageType = "new" | "collecting_requirements" | "answering" | "ready_to_lead";
+
+interface CollectedData {
+  role: string | null;
+  region: string | null;
+  city: string | null;
+  assetType: string | null;
+  purpose: string | null;
+  area: string | null;
+  budget: string | null;
+  documents: string | null;
+  contact: string | null;
+}
+
+interface DialogState {
+  activeIntent: IntentType | null;
+  stage: StageType;
+  lastAssistantQuestion: string | null;
+  collectedData: CollectedData;
+  lastActivityAt: number;
+}
 
 interface ChatMessage {
   id: string;
@@ -35,6 +76,23 @@ interface LeadForm {
   email: string;
   requestText: string;
 }
+
+// ─── Default state ────────────────────────────────────────────────────────────
+
+function defaultDialogState(): DialogState {
+  return {
+    activeIntent: null,
+    stage: "new",
+    lastAssistantQuestion: null,
+    collectedData: {
+      role: null, region: null, city: null, assetType: null,
+      purpose: null, area: null, budget: null, documents: null, contact: null,
+    },
+    lastActivityAt: Date.now(),
+  };
+}
+
+// ─── Storage helpers ──────────────────────────────────────────────────────────
 
 function generateId(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -53,16 +111,113 @@ function loadLocalHistory(): ChatMessage[] {
   try {
     const raw = sessionStorage.getItem(HISTORY_KEY);
     return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+  } catch { return []; }
 }
 
 function saveLocalHistory(msgs: ChatMessage[]) {
   sessionStorage.setItem(HISTORY_KEY, JSON.stringify(msgs));
 }
 
-// Анимированный фоновый граф-сеть
+function loadDialogState(): DialogState {
+  try {
+    const raw = sessionStorage.getItem(DIALOG_STATE_KEY);
+    return raw ? { ...defaultDialogState(), ...JSON.parse(raw) } : defaultDialogState();
+  } catch { return defaultDialogState(); }
+}
+
+function saveDialogState(state: DialogState) {
+  sessionStorage.setItem(DIALOG_STATE_KEY, JSON.stringify(state));
+}
+
+// ─── Intent detection from quick buttons ─────────────────────────────────────
+
+function intentFromQuickLabel(label: string): IntentType | null {
+  const q = QUICK_QUESTIONS.find((x) => x.label === label);
+  return q?.intent ?? null;
+}
+
+// ─── Frontend dialogState updater (по простым правилам) ──────────────────────
+
+function updateDialogStateAfterExchange(
+  state: DialogState,
+  userText: string,
+  aiAnswer: string,
+  forcedIntent?: IntentType | null,
+): DialogState {
+  const next = { ...state, lastActivityAt: Date.now() };
+
+  // Установить intent если передан принудительно (быстрая кнопка)
+  if (forcedIntent) {
+    next.activeIntent = forcedIntent === "ready_to_lead" ? "ready_to_lead" : forcedIntent;
+    next.stage = forcedIntent === "ready_to_lead" ? "ready_to_lead" : "collecting_requirements";
+  }
+
+  // Автоопределение intent по тексту пользователя (если ещё не установлен)
+  if (!next.activeIntent) {
+    const t = userText.toLowerCase();
+    if (/участ|земл|ижс|кфх|надел|гектар|га\b/.test(t)) {
+      next.activeIntent = "land_search";
+      next.stage = "collecting_requirements";
+    } else if (/продать|реализ|актив|объект|склад|здани/.test(t)) {
+      next.activeIntent = "asset_realization";
+      next.stage = "collecting_requirements";
+    } else if (/презентац|концепц|визуализ|бренд|айдентик|креатив/.test(t)) {
+      next.activeIntent = "project_creative";
+      next.stage = "collecting_requirements";
+    } else if (/аналитик|монитор|данн|терминал/.test(t)) {
+      next.activeIntent = "ksi_terminal";
+      next.stage = "collecting_requirements";
+    } else if (/ии|чат.бот|автоматиз|нейр|алгоритм/.test(t)) {
+      next.activeIntent = "ai_lab";
+      next.stage = "collecting_requirements";
+    }
+  }
+
+  // Извлечение данных по ключевым словам из последнего вопроса ИИ
+  const lastQ = (state.lastAssistantQuestion || "").toLowerCase();
+  const userLower = userText.toLowerCase();
+  const cd = { ...next.collectedData };
+
+  if (/регион|город|где|москв|питер|областi/.test(lastQ)) {
+    cd.region = userText.trim();
+    cd.city = userText.trim();
+  } else if (/площадь|гектар|га|соток|размер/.test(lastQ)) {
+    cd.area = userText.trim();
+  } else if (/бюджет|стоимость|цена|сколько/.test(lastQ)) {
+    cd.budget = userText.trim();
+  } else if (/назначени|жильё|жилой|коммерч/.test(lastQ)) {
+    cd.purpose = userText.trim();
+  } else if (/документ|гпзу|разрешен/.test(lastQ)) {
+    cd.documents = userText.trim();
+  } else if (/тип|вид|формат|объект/.test(lastQ)) {
+    cd.assetType = userText.trim();
+  }
+
+  // Прямые сигналы из текста (без привязки к вопросу)
+  if (/старая москва|старые границы/.test(userLower)) cd.city = "Москва (старые границы)";
+  if (/новая москва/.test(userLower)) cd.city = "Новая Москва";
+
+  next.collectedData = cd;
+
+  // Сохранить последний вопрос ИИ (если ответ содержит вопросительный знак)
+  const lastSentence = aiAnswer.split(/[.!]/).reverse().find((s) => s.includes("?")) || null;
+  next.lastAssistantQuestion = lastSentence ? lastSentence.trim() : null;
+
+  // Переход в ready_to_lead если ИИ предложил оставить контакт
+  if (/оставьте|телефон|email|специалист свяжется/.test(aiAnswer.toLowerCase())) {
+    next.stage = "ready_to_lead";
+  }
+
+  return next;
+}
+
+// ─── Greeting messages ────────────────────────────────────────────────────────
+
+const isGreeting = (text: string) =>
+  /^(привет|здравствуй|добрый|доброе|hello|hi|ку|хай)\b/i.test(text.trim());
+
+// ─── Visual components ────────────────────────────────────────────────────────
+
 function NeuralBackground() {
   return (
     <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
@@ -81,7 +236,6 @@ function NeuralBackground() {
   );
 }
 
-// Пульсирующий индикатор статуса
 function StatusIndicator({ thinking }: { thinking: boolean }) {
   return (
     <div className="flex items-center gap-2">
@@ -105,7 +259,6 @@ function StatusIndicator({ thinking }: { thinking: boolean }) {
   );
 }
 
-// Typing indicator
 function TypingIndicator() {
   return (
     <div className="flex items-start gap-3">
@@ -126,12 +279,15 @@ function TypingIndicator() {
   );
 }
 
+// ─── Main component ───────────────────────────────────────────────────────────
+
 export default function AoksiAiWidget() {
   const { user } = useAuth();
   const location = useLocation();
 
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [dialogState, setDialogState] = useState<DialogState>(defaultDialogState);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [thinking, setThinking] = useState(false);
@@ -140,25 +296,46 @@ export default function AoksiAiWidget() {
   const [leadForm, setLeadForm] = useState<LeadForm>({ name: "", company: "", phone: "", email: "", requestText: "" });
   const [leadSaving, setLeadSaving] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
+  const [showInactivityPrompt, setShowInactivityPrompt] = useState(false);
 
   const sessionId = useRef<string>("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const greetingShown = useRef(false);
+  const inactivityTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Загрузка из хранилища при старте
   useEffect(() => {
     sessionId.current = getOrCreateSessionId();
     const saved = loadLocalHistory();
+    const savedState = loadDialogState();
     setMessages(saved);
+    setDialogState(savedState);
     if (saved.length > 0) greetingShown.current = true;
   }, []);
 
-  // Блокируем скролл страницы при открытом окне
+  // Таймер неактивности 30 мин
+  const resetInactivityTimer = useCallback(() => {
+    if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    setShowInactivityPrompt(false);
+    inactivityTimer.current = setTimeout(() => {
+      setShowInactivityPrompt(true);
+    }, INACTIVITY_TIMEOUT_MS);
+  }, []);
+
+  useEffect(() => {
+    if (open) resetInactivityTimer();
+    return () => {
+      if (inactivityTimer.current) clearTimeout(inactivityTimer.current);
+    };
+  }, [open, resetInactivityTimer]);
+
+  // Блокировка скролла + приветствие
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
       setTimeout(() => inputRef.current?.focus(), 200);
-      // Показываем приветствие если история пуста
+
       if (!greetingShown.current) {
         greetingShown.current = true;
         setTimeout(() => {
@@ -166,20 +343,20 @@ export default function AoksiAiWidget() {
           setTimeout(() => {
             addMessage({ role: "assistant", content: GREETING });
             setThinking(false);
-          }, 1200);
-        }, 400);
+          }, 1000);
+        }, 300);
       }
     } else {
       document.body.style.overflow = "";
     }
     return () => { document.body.style.overflow = ""; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading, thinking]);
 
-  // ESC закрывает
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && open) setOpen(false); };
     window.addEventListener("keydown", onKey);
@@ -196,15 +373,27 @@ export default function AoksiAiWidget() {
     return full;
   }, []);
 
-  const sendQuestion = useCallback(async (question: string, isQuick = false) => {
+  const sendQuestion = useCallback(async (
+    question: string,
+    isQuick = false,
+    forcedIntent?: IntentType | null,
+  ) => {
     if (!question.trim() || loading) return;
     setInput("");
     setLoading(true);
     setThinking(true);
     setHasUnread(false);
+    setShowInactivityPrompt(false);
+    resetInactivityTimer();
 
-    // Берём историю ДО добавления нового сообщения — это контекст для ИИ
+    // Снимаем историю и состояние ДО добавления нового сообщения
     const historySnapshot = messages.map((m) => ({ role: m.role, content: m.content }));
+    const stateSnapshot = { ...dialogState };
+
+    // Для приветствий — не передаём активный intent, чтобы ИИ начал мягко
+    const stateToSend = isGreeting(question)
+      ? { ...stateSnapshot, activeIntent: null, stage: "new" as StageType }
+      : stateSnapshot;
 
     addMessage({ role: "user", content: question, isQuick });
 
@@ -219,6 +408,7 @@ export default function AoksiAiWidget() {
           action: "ask",
           question,
           history: historySnapshot,
+          dialogState: stateToSend,
           sessionId: sessionId.current,
           userId: user?.id ?? null,
           pageUrl: window.location.href,
@@ -237,6 +427,13 @@ export default function AoksiAiWidget() {
         addMessage({ role: "assistant", content: answer });
         setLoading(false);
         if (!open) setHasUnread(true);
+
+        // Обновляем dialogState по правилам фронтенда
+        setDialogState((prev) => {
+          const updated = updateDialogStateAfterExchange(prev, question, answer, forcedIntent ?? undefined);
+          saveDialogState(updated);
+          return updated;
+        });
       }, remaining);
     } catch {
       const elapsed = Date.now() - startedAt;
@@ -247,7 +444,7 @@ export default function AoksiAiWidget() {
         setLoading(false);
       }, remaining);
     }
-  }, [loading, messages, user, location.pathname, open, addMessage]);
+  }, [loading, messages, dialogState, user, location.pathname, open, addMessage, resetInactivityTimer]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -263,12 +460,15 @@ export default function AoksiAiWidget() {
 
   const clearHistory = () => {
     sessionStorage.removeItem(HISTORY_KEY);
+    sessionStorage.removeItem(DIALOG_STATE_KEY);
     const newSid = "s_" + generateId();
     sessionStorage.setItem(SESSION_KEY, newSid);
     sessionId.current = newSid;
     setMessages([]);
+    setDialogState(defaultDialogState());
     setShowLead(false);
     setLeadSent(false);
+    setShowInactivityPrompt(false);
     greetingShown.current = false;
   };
 
@@ -293,11 +493,27 @@ export default function AoksiAiWidget() {
       setLeadSent(true);
       setShowLead(false);
       addMessage({ role: "assistant", content: "Запрос принят. Специалист АО КСИ свяжется с вами в ближайшее время." });
+      setDialogState((prev) => {
+        const updated = { ...prev, stage: "ready_to_lead" as StageType, lastActivityAt: Date.now() };
+        saveDialogState(updated);
+        return updated;
+      });
     } catch {
       addMessage({ role: "assistant", content: "Не удалось отправить заявку. Попробуйте позже." });
     } finally {
       setLeadSaving(false);
     }
+  };
+
+  // Intent badge для хедера
+  const intentLabels: Record<string, string> = {
+    land_search: "Земельный поиск",
+    asset_realization: "Реализация актива",
+    project_creative: "Проектный креатив",
+    ksi_terminal: "КСИ Терминал",
+    ai_lab: "Лаборатория ИИ",
+    ready_to_lead: "Передача специалисту",
+    general: "Общий вопрос",
   };
 
   return (
@@ -355,14 +571,19 @@ export default function AoksiAiWidget() {
               className="relative z-10 flex-shrink-0 px-6 py-4 sm:px-8 sm:py-5"
               style={{ borderBottom: "1px solid rgba(0,212,255,0.08)" }}
             >
-              {/* Верхняя строка: заголовок + кнопки */}
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div className="min-w-0">
-                  {/* Лейбл */}
                   <div className="flex items-center gap-2 mb-1">
                     <span className="font-mono text-[9px] tracking-[0.25em] uppercase text-[#00d4ff]/40">
                       ◆ АО «КРИПТОСТРОЙИНВЕСТ»
                     </span>
+                    {/* Intent badge */}
+                    {dialogState.activeIntent && (
+                      <span className="rounded-full px-2 py-0.5 text-[9px] font-mono tracking-wide uppercase"
+                        style={{ background: "rgba(0,212,255,0.08)", border: "1px solid rgba(0,212,255,0.15)", color: "rgba(0,212,255,0.6)" }}>
+                        {intentLabels[dialogState.activeIntent] ?? dialogState.activeIntent}
+                      </span>
+                    )}
                   </div>
                   <h1 className="font-oswald text-white text-xl sm:text-2xl font-semibold leading-tight tracking-wide">
                     Операционный центр АО КСИ
@@ -372,7 +593,6 @@ export default function AoksiAiWidget() {
                   </p>
                 </div>
 
-                {/* Кнопки управления */}
                 <div className="flex items-center gap-2 flex-shrink-0">
                   {/* Голосовой режим — disabled */}
                   <div className="relative group">
@@ -381,7 +601,7 @@ export default function AoksiAiWidget() {
                       className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] border border-white/8 text-white/20 cursor-not-allowed"
                     >
                       <Icon name="Mic" size={12} />
-                      <span className="hidden sm:inline">Голосовой режим</span>
+                      <span className="hidden sm:inline">Голосовой</span>
                     </button>
                     <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block z-20">
                       <div className="bg-[#0f1520] border border-white/10 rounded-lg px-3 py-2 text-[11px] text-white/50 whitespace-nowrap shadow-xl">
@@ -390,13 +610,13 @@ export default function AoksiAiWidget() {
                     </div>
                   </div>
 
-                  {/* Очистить */}
+                  {/* Новый диалог */}
                   <button
                     onClick={clearHistory}
                     className="rounded-lg p-2 text-white/20 hover:text-white/50 hover:bg-white/5 transition-colors"
-                    title="Очистить диалог"
+                    title="Начать новый диалог"
                   >
-                    <Icon name="Trash2" size={14} />
+                    <Icon name="RotateCcw" size={14} />
                   </button>
 
                   {/* Закрыть */}
@@ -410,11 +630,10 @@ export default function AoksiAiWidget() {
                 </div>
               </div>
 
-              {/* Статус */}
               <StatusIndicator thinking={thinking} />
             </div>
 
-            {/* ─── Быстрые вопросы (только если история пуста) ─── */}
+            {/* ─── Быстрые вопросы (пустой чат) ─── */}
             {messages.length === 0 && !thinking && (
               <div
                 className="relative z-10 flex-shrink-0 px-6 py-3 sm:px-8"
@@ -424,14 +643,14 @@ export default function AoksiAiWidget() {
                   Быстрый старт
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {QUICK_QUESTIONS.map((q) => (
+                  {QUICK_QUESTIONS.map(({ label, intent }) => (
                     <button
-                      key={q}
-                      onClick={() => sendQuestion(q, true)}
+                      key={label}
+                      onClick={() => sendQuestion(label, true, intent)}
                       disabled={loading}
                       className="rounded-full border border-[#00d4ff]/15 bg-[#00d4ff]/5 px-3 py-1 text-[11px] text-[#00d4ff]/55 hover:bg-[#00d4ff]/10 hover:text-[#00d4ff]/80 hover:border-[#00d4ff]/30 transition-all disabled:opacity-30"
                     >
-                      {q}
+                      {label}
                     </button>
                   ))}
                 </div>
@@ -439,18 +658,15 @@ export default function AoksiAiWidget() {
             )}
 
             {/* ─── Сообщения ─── */}
-            <div className="relative z-10 flex-1 overflow-y-auto px-6 py-5 sm:px-8 space-y-4 min-h-0"
+            <div
+              className="relative z-10 flex-1 overflow-y-auto px-6 py-5 sm:px-8 space-y-4 min-h-0"
               style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(0,212,255,0.1) transparent" }}
             >
               {messages.length === 0 && !thinking && (
                 <div className="flex flex-col items-center justify-center h-full text-center py-16 gap-4">
                   <div
                     className="flex h-16 w-16 items-center justify-center rounded-full"
-                    style={{
-                      background: "rgba(0,212,255,0.06)",
-                      border: "1px solid rgba(0,212,255,0.12)",
-                      boxShadow: "0 0 40px rgba(0,212,255,0.08)",
-                    }}
+                    style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.12)", boxShadow: "0 0 40px rgba(0,212,255,0.08)" }}
                   >
                     <Icon name="Bot" size={28} className="text-[#00d4ff]/50" />
                   </div>
@@ -462,10 +678,7 @@ export default function AoksiAiWidget() {
               )}
 
               {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={cn("flex gap-3", msg.role === "user" ? "justify-end" : "justify-start")}
-                >
+                <div key={msg.id} className={cn("flex gap-3", msg.role === "user" ? "justify-end" : "justify-start")}>
                   {msg.role === "assistant" && (
                     <div
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full mt-0.5"
@@ -474,22 +687,14 @@ export default function AoksiAiWidget() {
                       <Icon name="Bot" size={13} className="text-[#00d4ff]" />
                     </div>
                   )}
-
                   <div
-                    className={cn(
-                      "max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed",
-                      msg.role === "user"
-                        ? "rounded-br-sm text-white/85"
-                        : "rounded-bl-sm text-white/75"
-                    )}
+                    className={cn("max-w-[78%] rounded-2xl px-4 py-3 text-sm leading-relaxed", msg.role === "user" ? "rounded-br-sm text-white/85" : "rounded-bl-sm text-white/75")}
                     style={msg.role === "user"
                       ? { background: "rgba(0,212,255,0.1)", border: "1px solid rgba(0,212,255,0.15)" }
-                      : { background: "rgba(15,21,32,0.9)", border: "1px solid rgba(255,255,255,0.06)" }
-                    }
+                      : { background: "rgba(15,21,32,0.9)", border: "1px solid rgba(255,255,255,0.06)" }}
                   >
                     <p className="whitespace-pre-wrap font-ibm">{msg.content}</p>
                   </div>
-
                   {msg.role === "user" && (
                     <div
                       className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full mt-0.5"
@@ -502,24 +707,51 @@ export default function AoksiAiWidget() {
               ))}
 
               {thinking && <TypingIndicator />}
+
+              {/* ─── Подсказка неактивности ─── */}
+              {showInactivityPrompt && !thinking && (
+                <div
+                  className="rounded-xl px-4 py-3 text-sm text-white/50 font-ibm"
+                  style={{ background: "rgba(0,212,255,0.04)", border: "1px solid rgba(0,212,255,0.1)" }}
+                >
+                  <p className="mb-2">{INACTIVITY_MESSAGE}</p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => { setShowInactivityPrompt(false); resetInactivityTimer(); }}
+                      className="rounded-lg px-3 py-1 text-[12px] text-[#00d4ff]/70 transition-all"
+                      style={{ background: "rgba(0,212,255,0.08)", border: "1px solid rgba(0,212,255,0.15)" }}
+                    >
+                      Продолжить тему
+                    </button>
+                    <button
+                      onClick={clearHistory}
+                      className="rounded-lg px-3 py-1 text-[12px] text-white/40 transition-all"
+                      style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+                    >
+                      Новый диалог
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div ref={bottomRef} />
             </div>
 
-            {/* ─── Быстрые вопросы (когда есть история) ─── */}
-            {messages.length > 0 && !showLead && (
+            {/* ─── Быстрые кнопки (активный чат) ─── */}
+            {messages.length > 0 && !showLead && !dialogState.activeIntent && (
               <div
                 className="relative z-10 flex-shrink-0 px-6 sm:px-8 py-2"
                 style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
               >
                 <div className="flex flex-wrap gap-1.5">
-                  {QUICK_QUESTIONS.map((q) => (
+                  {QUICK_QUESTIONS.map(({ label, intent }) => (
                     <button
-                      key={q}
-                      onClick={() => sendQuestion(q, true)}
+                      key={label}
+                      onClick={() => sendQuestion(label, true, intent)}
                       disabled={loading}
                       className="rounded-full border border-white/8 bg-white/[0.03] px-3 py-1 text-[10px] text-white/30 hover:border-[#00d4ff]/20 hover:text-[#00d4ff]/60 transition-all disabled:opacity-30"
                     >
-                      {q}
+                      {label}
                     </button>
                   ))}
                 </div>
@@ -595,10 +827,7 @@ export default function AoksiAiWidget() {
                     rows={1}
                     disabled={loading}
                     className="flex-1 min-h-[42px] max-h-[120px] resize-none rounded-xl px-4 py-2.5 text-[14px] text-white/85 placeholder:text-white/20 focus:outline-none transition-colors disabled:opacity-50 leading-relaxed overflow-y-auto font-ibm"
-                    style={{
-                      background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                    }}
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
                     onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(0,212,255,0.25)")}
                     onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
                   />
@@ -607,14 +836,11 @@ export default function AoksiAiWidget() {
                     disabled={loading || !input.trim()}
                     className="h-[42px] w-[42px] shrink-0 flex items-center justify-center rounded-xl transition-all disabled:opacity-30"
                     style={{ background: "rgba(0,212,255,0.15)", border: "1px solid rgba(0,212,255,0.25)" }}
-                    onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "rgba(0,212,255,0.22)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(0,212,255,0.15)")}
                   >
                     <Icon name="Send" size={16} className="text-[#00d4ff]" />
                   </button>
                 </form>
 
-                {/* Нижняя строка: кнопка специалиста + дисклеймер */}
                 <div className="flex items-center justify-between mt-2.5 gap-2">
                   <button
                     onClick={() => setShowLead(true)}
@@ -625,9 +851,11 @@ export default function AoksiAiWidget() {
                   </button>
                   <button
                     onClick={clearHistory}
-                    className="text-[10px] text-white/12 hover:text-white/25 transition-colors font-ibm"
+                    className="flex items-center gap-1 text-[10px] text-white/15 hover:text-white/30 transition-colors font-ibm"
+                    title="Начать новый диалог"
                   >
-                    Очистить диалог
+                    <Icon name="RotateCcw" size={10} />
+                    Новый диалог
                   </button>
                 </div>
               </div>
