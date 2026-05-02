@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 
 const CHAT_API_URL = "https://patient-union-74df.landsearchservice.workers.dev/api/chat";
 const LEAD_API_URL = "https://functions.poehali.dev/2cd3918f-adc8-4de1-9063-4a0c1827bbe4";
-const SESSION_KEY = "aoksi_ai_session_id";
+const SESSION_KEY = "aoksi_chat_session_id";
 const HISTORY_KEY = "aoksi_ai_chat_history";
 const DIALOG_STATE_KEY = "aoksi_ai_dialog_state";
 const MIN_REPLY_DELAY = 1800;
@@ -101,10 +101,10 @@ function generateId(): string {
 }
 
 function getOrCreateSessionId(): string {
-  let sid = sessionStorage.getItem(SESSION_KEY);
+  let sid = localStorage.getItem(SESSION_KEY);
   if (!sid) {
-    sid = "s_" + generateId();
-    sessionStorage.setItem(SESSION_KEY, sid);
+    sid = `aoksi-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    localStorage.setItem(SESSION_KEY, sid);
   }
   return sid;
 }
@@ -439,75 +439,79 @@ export default function AoksiAiWidget() {
     setShowInactivityPrompt(false);
     resetInactivityTimer();
 
-    // Снимаем историю и состояние ДО добавления нового сообщения
+    // Снимаем историю ДО добавления нового сообщения
     const historySnapshot = messages.map((m) => ({ role: m.role, content: m.content }));
-    const stateSnapshot = { ...dialogState };
-
-    // Для приветствий — не передаём активный intent, чтобы ИИ начал мягко
-    const stateToSend = isGreeting(question)
-      ? { ...stateSnapshot, activeIntent: null, stage: "new" as StageType }
-      : stateSnapshot;
 
     addMessage({ role: "user", content: question, isQuick });
 
     const startedAt = Date.now();
 
+    const cleanHistory = historySnapshot
+      .filter((item) => item && (item.role === "user" || item.role === "assistant") && item.content)
+      .slice(-8)
+      .map((item) => ({ role: item.role, content: item.content }));
+
+    let answer = "Не удалось получить ответ. Попробуйте ещё раз или передайте запрос специалисту.";
+
     try {
+      const payload = {
+        message: question,
+        pageContext: location.pathname,
+        sessionId: sessionId.current,
+        history: cleanHistory,
+      };
+
       const resp = await fetch(CHAT_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(20000),
-        body: JSON.stringify({
-          message: question,
-          pageContext: location.pathname,
-          sessionId: sessionId.current,
-          history: historySnapshot,
-        }),
+        body: JSON.stringify(payload),
       });
 
+      let data: Record<string, unknown> | null = null;
+      let rawText = "";
+
+      try {
+        rawText = await resp.text();
+        data = rawText ? JSON.parse(rawText) : null;
+      } catch (parseErr) {
+        console.error("[AOKSI CHAT] JSON parse error:", parseErr);
+        console.error("[AOKSI CHAT] Raw response:", rawText);
+      }
+
       if (!resp.ok) {
-        const errorBody = await resp.text();
-        console.error("[AoksiChat] Ошибка ответа сервера:", {
-          status: resp.status,
-          url: CHAT_API_URL,
-          body: errorBody,
-        });
-        throw new Error(`HTTP ${resp.status}`);
+        console.error("[AOKSI CHAT] Backend error");
+        console.error("[AOKSI CHAT] URL:", CHAT_API_URL);
+        console.error("[AOKSI CHAT] Status:", resp.status);
+        console.error("[AOKSI CHAT] Response body:", data);
+      } else if (!data || typeof data.answer !== "string" || !(data.answer as string).trim()) {
+        console.error("[AOKSI CHAT] Empty or invalid answer");
+        console.error("[AOKSI CHAT] URL:", CHAT_API_URL);
+        console.error("[AOKSI CHAT] Response body:", data);
+      } else {
+        answer = (data.answer as string).trim();
       }
-
-      const data = await resp.json();
-
-      if (!data.answer) {
-        console.error("[AoksiChat] Пустой answer в ответе:", data);
-      }
-
-      const answer = data.answer || "Не удалось получить ответ. Попробуйте ещё раз или передайте запрос специалисту.";
-      const elapsed = Date.now() - startedAt;
-      const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
-
-      setTimeout(() => {
-        setThinking(false);
-        addMessage({ role: "assistant", content: answer });
-        setLoading(false);
-        if (!open) setHasUnread(true);
-
-        setDialogState((prev) => {
-          const updated = updateDialogStateAfterExchange(prev, question, answer, forcedIntent ?? undefined);
-          saveDialogState(updated);
-          return updated;
-        });
-      }, remaining);
     } catch (err) {
-      console.error("[AoksiChat] Сетевая ошибка:", err);
-      const elapsed = Date.now() - startedAt;
-      const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
-      setTimeout(() => {
-        setThinking(false);
-        addMessage({ role: "assistant", content: "Не удалось получить ответ. Попробуйте ещё раз или передайте запрос специалисту." });
-        setLoading(false);
-      }, remaining);
+      console.error("[AOKSI CHAT] Network/runtime error:", err);
+      console.error("[AOKSI CHAT] URL:", CHAT_API_URL);
     }
-  }, [loading, messages, dialogState, user, location.pathname, open, addMessage, resetInactivityTimer]);
+
+    const elapsed = Date.now() - startedAt;
+    const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
+
+    setTimeout(() => {
+      setThinking(false);
+      addMessage({ role: "assistant", content: answer });
+      setLoading(false);
+      if (!open) setHasUnread(true);
+
+      setDialogState((prev) => {
+        const updated = updateDialogStateAfterExchange(prev, question, answer, forcedIntent ?? undefined);
+        saveDialogState(updated);
+        return updated;
+      });
+    }, remaining);
+  }, [loading, messages, user, location.pathname, open, addMessage, resetInactivityTimer]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
