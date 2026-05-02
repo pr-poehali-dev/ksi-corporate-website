@@ -6,7 +6,8 @@ import { useLocation } from "react-router-dom";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const WIDGET_URL = "https://functions.poehali.dev/2cd3918f-adc8-4de1-9063-4a0c1827bbe4";
+const CHAT_API_URL = "https://patient-union-74df.landsearchservice.workers.dev/api/chat";
+const LEAD_API_URL = "https://functions.poehali.dev/2cd3918f-adc8-4de1-9063-4a0c1827bbe4";
 const SESSION_KEY = "aoksi_ai_session_id";
 const HISTORY_KEY = "aoksi_ai_chat_history";
 const DIALOG_STATE_KEY = "aoksi_ai_dialog_state";
@@ -452,25 +453,35 @@ export default function AoksiAiWidget() {
     const startedAt = Date.now();
 
     try {
-      const resp = await fetch(WIDGET_URL, {
+      const resp = await fetch(CHAT_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(20000),
         body: JSON.stringify({
-          action: "ask",
-          question,
-          history: historySnapshot,
-          dialogState: stateToSend,
+          message: question,
+          pageContext: location.pathname,
           sessionId: sessionId.current,
-          userId: user?.id ?? null,
-          pageUrl: window.location.href,
-          sourcePage: location.pathname,
-          isQuick,
-          userAgent: navigator.userAgent,
+          history: historySnapshot,
         }),
       });
+
+      if (!resp.ok) {
+        const errorBody = await resp.text();
+        console.error("[AoksiChat] Ошибка ответа сервера:", {
+          status: resp.status,
+          url: CHAT_API_URL,
+          body: errorBody,
+        });
+        throw new Error(`HTTP ${resp.status}`);
+      }
+
       const data = await resp.json();
-      const answer = data.answer || "ИИ-оператор не вернул ответ.";
+
+      if (!data.answer) {
+        console.error("[AoksiChat] Пустой answer в ответе:", data);
+      }
+
+      const answer = data.answer || "Не удалось получить ответ. Попробуйте ещё раз или передайте запрос специалисту.";
       const elapsed = Date.now() - startedAt;
       const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
 
@@ -480,19 +491,19 @@ export default function AoksiAiWidget() {
         setLoading(false);
         if (!open) setHasUnread(true);
 
-        // Обновляем dialogState по правилам фронтенда
         setDialogState((prev) => {
           const updated = updateDialogStateAfterExchange(prev, question, answer, forcedIntent ?? undefined);
           saveDialogState(updated);
           return updated;
         });
       }, remaining);
-    } catch {
+    } catch (err) {
+      console.error("[AoksiChat] Сетевая ошибка:", err);
       const elapsed = Date.now() - startedAt;
       const remaining = Math.max(0, MIN_REPLY_DELAY - elapsed);
       setTimeout(() => {
         setThinking(false);
-        addMessage({ role: "assistant", content: "ИИ-оператор временно недоступен. Попробуйте позже или направьте запрос специалисту." });
+        addMessage({ role: "assistant", content: "Не удалось получить ответ. Попробуйте ещё раз или передайте запрос специалисту." });
         setLoading(false);
       }, remaining);
     }
@@ -530,7 +541,7 @@ export default function AoksiAiWidget() {
     setLeadSaving(true);
     const summary = messages.slice(-8).map((m) => `${m.role === "user" ? "Пользователь" : "ИИ"}: ${m.content}`).join("\n");
     try {
-      await fetch(WIDGET_URL, {
+      await fetch(LEAD_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
