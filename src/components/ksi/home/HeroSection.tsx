@@ -160,7 +160,7 @@ export function HeroSection() {
         {/* Кнопки */}
         <div style={fade(v3)} className="flex flex-col sm:flex-row gap-4 justify-center mt-14 mb-7">
           <button
-            onClick={openEarlyAccessModal}
+            onClick={() => setModalOpen(true)}
             className="inline-flex items-center justify-center font-ibm font-semibold text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
               background: "#00d4ff",
@@ -171,10 +171,10 @@ export function HeroSection() {
             onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 45px rgba(0,212,255,0.4)")}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 30px rgba(0,212,255,0.2)")}
           >
-            О проекте КриптоМетры
+            Обсудить задачу
           </button>
-          <button
-            onClick={() => setModalOpen(true)}
+          <a
+            href="#contours"
             className="inline-flex items-center justify-center font-ibm font-medium text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
               background: "transparent",
@@ -191,9 +191,9 @@ export function HeroSection() {
             }}
           >
             Внутренние контуры АО КСИ
-          </button>
+          </a>
           <button
-            onClick={() => setModalOpen(true)}
+            onClick={openEarlyAccessModal}
             className="inline-flex items-center justify-center font-ibm font-medium text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
               background: "transparent",
@@ -209,7 +209,7 @@ export function HeroSection() {
               e.currentTarget.style.color = "rgba(255,255,255,0.5)";
             }}
           >
-            Обсудить участие
+            О проекте КриптоМетры
           </button>
         </div>
 

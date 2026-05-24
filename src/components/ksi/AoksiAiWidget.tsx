@@ -30,7 +30,7 @@ import {
 
 import { AoksiChatPanel } from "@/components/ksi/AoksiChatPanel";
 
-export function AoksiAiWidget() {
+export default function AoksiAiWidget() {
   const { user } = useAuth();
   const location = useLocation();
 
