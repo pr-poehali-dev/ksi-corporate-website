@@ -112,7 +112,7 @@ export function HeroSection() {
               boxShadow: "0 0 8px rgba(0,212,255,0.5)",
               display: "inline-block",
             }} />
-            АО «КриптоСтройИнвест»
+            Акционерное общество «КриптоСтройИнвест» (АО КСИ)
           </span>
         </div>
 
@@ -145,17 +145,15 @@ export function HeroSection() {
         <div style={fade(v2)}>
           <p
             className="font-ibm text-white/55 leading-relaxed mx-auto mb-5"
-            style={{ fontSize: "clamp(15px, 1.6vw, 19px)", maxWidth: 680 }}
+            style={{ fontSize: "clamp(15px, 1.6vw, 19px)", maxWidth: 720 }}
           >
-            Мы создаём виртуального девелопера — технологическую систему нового типа
-            для работы с активами и проектами, которые классический рынок реализует долго,
-            неэффективно или не реализует на приемлемых условиях вовсе.
+            АО КСИ разрабатывает инновационные прикладные решения для девелопмента и поэтапно формирует единую интеллектуальную систему нового поколения — от автономных цифровых контуров и веб-приложений до роботизированной строительной техники и систем автономного домостроения.
           </p>
           <p
             className="font-ibm font-medium mx-auto"
-            style={{ fontSize: "clamp(14px, 1.4vw, 17px)", color: "rgba(0,212,255,0.55)", maxWidth: 560 }}
+            style={{ fontSize: "clamp(14px, 1.4vw, 17px)", color: "rgba(0,212,255,0.55)", maxWidth: 640 }}
           >
-            Приглашаем к практическому развёртыванию системы на реальных объектах и задачах.
+            Подключайтесь к формированию новой интеллектуальной инфраструктуры девелопмента и участвуйте в практической сборке системы будущего.
           </p>
         </div>
 
@@ -173,7 +171,7 @@ export function HeroSection() {
             onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 45px rgba(0,212,255,0.4)")}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 30px rgba(0,212,255,0.2)")}
           >
-            Передать актив в работу
+            О проекте КриптоМетры
           </button>
           <button
             onClick={() => setModalOpen(true)}
@@ -192,7 +190,26 @@ export function HeroSection() {
               e.currentTarget.style.color = "rgba(255,255,255,0.5)";
             }}
           >
-            Запросить предложение
+            Внутренние контуры АО КСИ
+          </button>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="inline-flex items-center justify-center font-ibm font-medium text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
+            style={{
+              background: "transparent",
+              color: "rgba(255,255,255,0.5)",
+              border: "1px solid rgba(255,255,255,0.12)",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = "rgba(123,47,255,0.45)";
+              e.currentTarget.style.color = "rgba(255,255,255,0.85)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+              e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+            }}
+          >
+            Обсудить участие
           </button>
         </div>
 
