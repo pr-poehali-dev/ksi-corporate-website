@@ -8,8 +8,10 @@ import PhoneMessengersField, { MessengerValue, isValidPhoneRU } from "@/componen
 
 const ROLE_OPTIONS = [
   { id: "land", label: "Землевладелец" },
-  { id: "developer", label: "Действующий девелопер" },
-  { id: "investor", label: "Инвестор / партнёр" },
+  { id: "developer", label: "Девелопер" },
+  { id: "asset-owner", label: "Владелец актива" },
+  { id: "partner", label: "Стратегический партнёр" },
+  { id: "pilot", label: "Участник пилотного контура" },
   { id: "other", label: "Другое" },
 ];
 
@@ -98,15 +100,16 @@ export default function Contacts() {
             style={{ background: "radial-gradient(ellipse, #00d4ff 0%, transparent 70%)" }} />
         </div>
         <div className="max-w-5xl mx-auto px-6 relative z-10">
-          <div className="section-label mb-4">◆ Персональное приглашение</div>
+          <div className="section-label mb-4">◆ Вход в контур</div>
           <h1 className="font-oswald text-5xl md:text-6xl font-semibold text-white mb-6 leading-tight">
             Это не форма обратной<br />
             связи.<br />
-            <span className="text-gradient-main">Это приглашение.</span>
+            <span className="text-gradient-main">Это вход в систему.</span>
           </h1>
           <p className="font-ibm text-white/45 text-lg max-w-xl">
-            АО КСИ ведёт предметный диалог с профессиональными участниками рынка. 
-            Расскажите о задаче — мы ответим по существу.
+            АО КСИ — оператор кооперативной системы распределённого девелопмента.
+            Опишите задачу, актив или сценарий участия — и команда предложит формат
+            подключения к контуру.
           </p>
         </div>
       </section>
@@ -120,12 +123,12 @@ export default function Contacts() {
               {!sent ? (
                 <div className="border border-white/10 bg-white/[0.02] p-8 rounded-sm">
                   <div className="font-ibm text-white/20 text-xs tracking-[0.2em] uppercase mb-6">
-                    Форма персонального обращения
+                    Форма входа в кооперативную систему
                   </div>
 
                   {/* Роль */}
                   <div className="mb-5">
-                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-2">Ваша роль</div>
+                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-2">Роль в системе</div>
                     <div className="grid grid-cols-2 gap-2">
                       {ROLE_OPTIONS.map((r) => (
                         <button
@@ -184,12 +187,12 @@ export default function Contacts() {
                   </div>
 
                   <div className="mb-6">
-                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-1">Суть запроса</div>
+                    <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-1">Задача, актив или сценарий участия</div>
                     <textarea
                       value={form.message}
                       onChange={e => setForm({ ...form, message: e.target.value })}
                       rows={4}
-                      placeholder="Опишите задачу, актив или вопрос. Чем конкретнее — тем предметнее наш ответ."
+                      placeholder="Опишите задачу, актив или формат участия в кооперативной системе. Чем конкретнее — тем предметнее наш ответ."
                       className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors resize-none"
                     />
                   </div>
@@ -230,7 +233,7 @@ export default function Contacts() {
                     disabled={sending || !agreed}
                     className="btn-primary-ksi w-full py-3.5 text-sm font-medium rounded-sm disabled:opacity-50"
                   >
-                    {sending ? "Отправляем..." : "Отправить приглашение"}
+                    {sending ? "Отправляем..." : "Войти в контур"}
                   </button>
 
                   <p className="font-ibm text-white/20 text-xs mt-4 text-center">
@@ -243,17 +246,17 @@ export default function Contacts() {
                     <Icon name="Check" size={26} className="text-ksi-cyan" />
                   </div>
                   <h3 className="font-oswald text-2xl font-semibold text-white mb-2">
-                    Приглашение принято
+                    Запрос принят системой
                   </h3>
                   <p className="font-ibm text-white/40 text-sm max-w-sm mx-auto mb-6">
-                    Мы получили ваше обращение и ответим в течение рабочего дня. 
+                    Мы получили ваше обращение и ответим в течение рабочего дня.
                     Если задача срочная — напишите напрямую на email.
                   </p>
                   <button
                     onClick={() => setSent(false)}
                     className="font-ibm text-ksi-cyan/50 text-sm hover:text-ksi-cyan transition-colors"
                   >
-                    Отправить ещё одно обращение
+                    Отправить ещё один запрос
                   </button>
                 </div>
               )}
@@ -264,13 +267,13 @@ export default function Contacts() {
               {/* Как мы работаем */}
               <div className="border border-white/8 bg-white/[0.02] p-6 rounded-sm">
                 <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">
-                  Как мы работаем с запросами
+                  Как система принимает запрос
                 </div>
                 <div className="space-y-4">
                   {[
-                    { step: "01", text: "Получаем обращение и изучаем задачу" },
-                    { step: "02", text: "Отвечаем по существу — не шаблоном" },
-                    { step: "03", text: "Предлагаем формат: звонок, встреча или документ" },
+                    { step: "01", text: "Запрос принимает оператор АО КСИ и сверяет контекст" },
+                    { step: "02", text: "Подключается нужный прикладной контур и управляющий ИИ-слой" },
+                    { step: "03", text: "Возвращаем формат входа: задача, актив или сценарий участия" },
                   ].map((s) => (
                     <div key={s.step} className="flex items-start gap-3">
                       <span className="font-ibm text-ksi-cyan/40 text-xs font-bold w-6 flex-shrink-0 mt-0.5">
