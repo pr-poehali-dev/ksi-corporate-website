@@ -2,26 +2,34 @@ import PageLayout from "@/components/ksi/PageLayout";
 import Icon from "@/components/ui/icon";
 
 const LAYERS = [
-  { label: "ОПЕРАТОР ИНФРАСТРУКТУРЫ", name: "АО КСИ", desc: "Оператор интеллектуальной инфраструктуры для девелопмента", color: "#00d4ff", primary: true },
-  { label: "КЛЮЧЕВОЙ ПРОЕКТ", name: "КриптоМетры", desc: "Интеллектуальная система распределённого девелопмента", color: "#00d4ff", href: "/cryptometry" },
-  { label: "ТЕХНОЛОГИЧЕСКОЕ ЯДРО", name: "Лаборатория ИИ", desc: "Интеллектуальная инфраструктура, обучение и развитие системы", color: "#7b2fff", href: "/directions/ai-lab" },
-  { label: "ОПЕРАТОРСКИЙ КОНТУР", name: "Центр реализации активов", desc: "Сопровождение и реализация активов в логике проекта", color: "#00d4ff", href: "/directions/fee-dev" },
-  { label: "ЗЕМЕЛЬНЫЙ КОНТУР", name: "Служба земельного поиска", desc: "Поиск, анализ площадок, земельно-имущественные задачи", color: "#7b2fff", href: "/directions/lss" },
-  { label: "КРЕАТИВНЫЙ КОНТУР", name: "Студия проектного креатива", desc: "Визуальная, концептуальная и презентационная упаковка", color: "#00d4ff", href: "/directions/ai-production" },
+  { label: "ОПЕРАТОР СИСТЕМЫ", name: "АО КСИ", desc: "Оператор кооперативной системы распределённого девелопмента", color: "#00d4ff", primary: true },
+  { label: "ИНТЕЛЛЕКТУАЛЬНЫЙ КОНТУР", name: "КриптоМетры", desc: "Интеллектуальный и цифровой контур кооперативной системы", color: "#00d4ff", href: "/cryptometry" },
+  { label: "УПРАВЛЯЮЩИЙ СЛОЙ ИИ", name: "Лаборатория ИИ", desc: "Единый управляющий контур: нейронные модели, обучение, развитие системы", color: "#7b2fff", href: "/directions/ai-lab" },
+  { label: "ПРИКЛАДНОЙ КОНТУР", name: "Центр реализации активов", desc: "Капитализация, упаковка и вывод активов внутри кооперативной системы", color: "#00d4ff", href: "/directions/fee-dev" },
+  { label: "ЗЕМЕЛЬНЫЙ КОНТУР", name: "Служба земельного поиска", desc: "Поиск, анализ площадок и работа с земельно-имущественными активами", color: "#7b2fff", href: "/directions/lss" },
+  { label: "КРЕАТИВНЫЙ КОНТУР", name: "Студия проектного креатива", desc: "Визуальная, концептуальная и презентационная упаковка проектов и активов", color: "#00d4ff", href: "/directions/ai-production" },
+];
+
+const ASSEMBLY = [
+  { icon: "Users", title: "Участники", desc: "девелоперы, владельцы активов, землевладельцы, стратегические партнёры" },
+  { icon: "Building2", title: "Активы", desc: "земельные участки, объекты, проекты и портфельные позиции" },
+  { icon: "Puzzle", title: "Прикладные контуры", desc: "земельный поиск, реализация активов, проектный креатив" },
+  { icon: "BrainCircuit", title: "ИИ-контур", desc: "единый управляющий слой: нейронные модели и интеллектуальная логика" },
+  { icon: "Route", title: "Сценарии реализации", desc: "продажа, совместное освоение, инвестиционный диалог, партнёрские конструкции" },
 ];
 
 const SYNERGY = [
-  { from: "Служба земельного поиска", arrow: "Данные и активы", to: "КриптоМетры" },
-  { from: "Лаборатория ИИ", arrow: "Аналитика и интеллект", to: "Все контуры системы" },
-  { from: "Студия проектного креатива", arrow: "Визуальная упаковка", to: "КриптоМетры / Заказчик" },
-  { from: "Центр реализации активов", arrow: "Сопровождение и сделки", to: "Реальные проекты" },
+  { from: "Служба земельного поиска", arrow: "Данные и активы", to: "Интеллектуальный контур" },
+  { from: "Лаборатория ИИ", arrow: "Управляющий слой", to: "Все контуры системы" },
+  { from: "Студия проектного креатива", arrow: "Упаковка и коммуникация", to: "Участники системы" },
+  { from: "Центр реализации активов", arrow: "Капитализация и вывод", to: "Реальные проекты" },
 ];
 
 const PRINCIPLES = [
-  { icon: "Layers", title: "Единая система", desc: "Каждая служба — не изолированный отдел, а рабочий контур единой интеллектуальной среды." },
+  { icon: "Layers", title: "Кооперативная архитектура", desc: "Каждая служба — не изолированный отдел, а прикладной контур кооперативной системы." },
   { icon: "RefreshCw", title: "Обратная связь", desc: "Опыт каждой задачи возвращается в систему — данные, методология и точность растут с каждым запросом." },
   { icon: "GitBranch", title: "Распределённая логика", desc: "Задачи решаются через подключение нужных контуров, а не через жёсткую маршрутизацию." },
-  { icon: "BrainCircuit", title: "Гибридная модель", desc: "ИИ, методология и операторская верификация работают вместе — не автономный ИИ и не ручной сервис." },
+  { icon: "BrainCircuit", title: "Единый управляющий контур", desc: "ИИ внутри системы — не автономный сервис, а связывающий и усиливающий слой для всех элементов." },
 ];
 
 export default function Ecosystem() {
@@ -35,15 +43,16 @@ export default function Ecosystem() {
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
-            <div className="section-label mb-5">◆ Архитектура проекта</div>
+            <div className="section-label mb-5">◆ Архитектура системы</div>
             <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-              Как устроен<br />
-              <span className="text-gradient-cyan">проект АО КСИ</span>
+              Архитектура<br />
+              <span className="text-gradient-cyan">кооперативной системы</span>
             </h1>
             <p className="font-ibm text-white/55 text-xl leading-relaxed">
-              Оператор интеллектуальной инфраструктуры для девелопмента.
-              Управляющая компания проекта «КриптоМетры». Четыре внутренние службы
-              обеспечивают создание виртуального девелопера.
+              АО КСИ — оператор кооперативной системы распределённого девелопмента.
+              КриптоМетры — её интеллектуальный и цифровой контур. Внутренние службы —
+              прикладные контуры, через которые система работает с участниками, активами
+              и сценариями реализации.
             </p>
           </div>
         </div>
@@ -53,10 +62,10 @@ export default function Ecosystem() {
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-label mb-5">◆ Структура</div>
-          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">Слои проекта</h2>
+          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">Слои системы</h2>
           <p className="font-ibm text-white/42 text-base mb-12 max-w-2xl">
-            АО КСИ развивает систему послойно: от оператора инфраструктуры через ключевой
-            проект КриптоМетры к прикладным контурам внутренних служб.
+            Кооперативная система собирается послойно: оператор → интеллектуальный и цифровой
+            контур (КриптоМетры) → управляющий слой ИИ → прикладные контуры внутренних служб.
           </p>
 
           <div className="space-y-1">
@@ -100,13 +109,14 @@ export default function Ecosystem() {
                 Как контуры<br /><span className="text-gradient-main">работают вместе</span>
               </h2>
               <p className="font-ibm text-white/48 text-base leading-relaxed mb-5">
-                Каждая внутренняя служба — не изолированный отдел. Земельный поиск питает
-                данные для анализа, Лаборатория ИИ обрабатывает и усиливает все процессы,
-                Студия креатива упаковывает результаты, а Центр реализации доводит проект до сделки.
+                Каждая внутренняя служба — не изолированный отдел, а контур кооперативной
+                системы. Земельный поиск даёт данные и активы, Лаборатория ИИ выступает единым
+                управляющим слоем, Студия креатива упаковывает результаты, Центр реализации
+                доводит актив до сделки.
               </p>
               <p className="font-ibm text-white/30 text-sm leading-relaxed">
-                Вместе они формируют основу КриптоМетров — интеллектуальной системы
-                распределённого девелопмента, где задачи решаются в единой среде.
+                Вместе они формируют КриптоМетры — интеллектуальный и цифровой контур
+                кооперативной системы распределённого девелопмента, где задачи решаются в единой среде.
               </p>
             </div>
             <div className="space-y-3">
@@ -133,13 +143,56 @@ export default function Ecosystem() {
         </div>
       </section>
 
+      {/* Что собирает кооперативная система */}
+      <section className="py-20 border-t border-ksi-border/30">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="section-label mb-5">◆ Что собирает система</div>
+          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">
+            Элементы<br /><span className="text-gradient-main">кооперативной модели</span>
+          </h2>
+          <p className="font-ibm text-white/42 text-base mb-12 max-w-2xl">
+            Экосистема АО КСИ собирает в единой управляемой среде пять ключевых элементов
+            кооперативной системы распределённого девелопмента.
+          </p>
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {ASSEMBLY.map((a, i) => {
+              const accent = i === 3 ? "#7b2fff" : "#00d4ff";
+              return (
+                <div
+                  key={i}
+                  className="p-5 rounded-sm transition-all"
+                  style={{
+                    background: "rgba(255,255,255,0.015)",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-sm flex items-center justify-center mb-4"
+                    style={{
+                      background: `${accent}08`,
+                      border: `1px solid ${accent}20`,
+                    }}
+                  >
+                    <Icon name={a.icon} size={16} style={{ color: accent, opacity: 0.8 }} />
+                  </div>
+                  <div className="font-oswald text-white/85 font-medium text-sm mb-1.5 tracking-wide">
+                    {a.title}
+                  </div>
+                  <p className="font-ibm text-white/38 text-xs leading-relaxed">{a.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Принципы архитектуры */}
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="section-label mb-5">◆ Принципы</div>
           <h2 className="font-oswald text-4xl font-semibold text-white mb-3">Архитектурные принципы</h2>
           <p className="font-ibm text-white/40 text-base mb-12 max-w-2xl">
-            Почему это не набор отдельных проектов, а единая система.
+            Почему это не набор отдельных проектов, а единая кооперативная система.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {PRINCIPLES.map((p, i) => (
