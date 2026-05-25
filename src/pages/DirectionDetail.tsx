@@ -36,6 +36,29 @@ export default function DirectionDetail({ slug }: Props) {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
+              <a
+                href="/cryptometry"
+                className="inline-flex items-center gap-2 px-2.5 py-1 rounded-sm mb-4 transition-colors group"
+                style={{
+                  background: "rgba(255,255,255,0.025)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(0,212,255,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+                }}
+                title="Перейти к КриптоМетрам"
+              >
+                <span
+                  className="w-1 h-1 rounded-full"
+                  style={{ background: "rgba(0,212,255,0.7)", boxShadow: "0 0 6px rgba(0,212,255,0.5)" }}
+                />
+                <span className="font-mono-ibm text-[9.5px] tracking-[0.22em] uppercase text-white/40 group-hover:text-white/65 transition-colors">
+                  Контур кооперативной системы АО КСИ
+                </span>
+              </a>
               <div className="flex items-center gap-3 mb-5">
                 <span className="font-mono-ibm text-xs px-2.5 py-1 rounded-sm" style={{ background: bgAccent, color: accentColor, border: `1px solid ${borderAccent}` }}>{detail.tag}</span>
                 <div className="flex items-center gap-2">
