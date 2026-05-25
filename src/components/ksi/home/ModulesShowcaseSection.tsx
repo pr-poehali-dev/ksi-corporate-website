@@ -80,10 +80,14 @@ export function ModulesShowcaseSection() {
           <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[#00d4ff]/45 mb-5">
             ◆ Примеры работы с модулями
           </p>
-          <h2 className="font-oswald text-white font-semibold leading-[1.05]"
+          <h2 className="font-oswald text-white font-semibold leading-[1.05] mb-6"
             style={{ fontSize: "clamp(32px, 4vw, 56px)" }}>
             Три прикладных контура
           </h2>
+          <p className="font-ibm text-white/45 text-base sm:text-lg leading-relaxed max-w-2xl">
+            Прикладные модули АО КСИ уже сейчас работают как отдельные контуры кооперативной системы
+            и дают предметный результат для девелоперов, владельцев активов и участников рынка.
+          </p>
         </div>
 
         {/* Tabs */}

@@ -5,10 +5,10 @@ import { useEarlyAccessModal } from "@/contexts/EarlyAccessModalContext";
 
 const DIRECTIONS = [
   { icon: "Target", text: "Пилотные задачи" },
-  { icon: "Plug", text: "Подключение модулей" },
-  { icon: "Beaker", text: "Тестирование контуров" },
-  { icon: "Briefcase", text: "Подготовка активов и проектов" },
-  { icon: "Network", text: "Участие в развитии КриптоМетров" },
+  { icon: "Plug", text: "Прикладные контуры" },
+  { icon: "Beaker", text: "Тестирование модулей" },
+  { icon: "Briefcase", text: "Работа с активами и проектами в новой логике" },
+  { icon: "Network", text: "Участие в развитии кооперативной системы" },
 ];
 
 export function PartnershipSection() {
@@ -30,11 +30,11 @@ export function PartnershipSection() {
           </p>
           <h2 className="font-oswald text-white font-semibold leading-[1.05] mb-6"
             style={{ fontSize: "clamp(30px, 3.6vw, 52px)" }}>
-            Для девелоперов, владельцев активов<br />и стратегических партнёров
+            Для девелоперов, владельцев активов,<br />землевладельцев и партнёров системы
           </h2>
           <p className="font-ibm text-white/45 text-base sm:text-lg leading-relaxed max-w-2xl">
-            АО КСИ открыто к пилотным задачам, партнёрскому диалогу и участию
-            в практической сборке будущей системы.
+            АО КСИ приглашает к диалогу не только заказчиков, но и участников будущей кооперативной системы —
+            тех, кто готов участвовать в её практической сборке и развитии вместе с нами.
           </p>
         </div>
 

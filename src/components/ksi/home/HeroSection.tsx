@@ -122,7 +122,7 @@ export function HeroSection() {
             className="font-oswald font-bold text-white leading-[0.9] tracking-tight"
             style={{ fontSize: "clamp(42px, 6.5vw, 96px)" }}
           >
-            Оператор интеллектуальной системы
+            Оператор кооперативной системы
             <br />
             <span style={{
               background: "linear-gradient(90deg, #00d4ff 0%, #7b2fff 100%)",
@@ -147,20 +147,20 @@ export function HeroSection() {
             className="font-ibm text-white/55 leading-relaxed mx-auto mb-5"
             style={{ fontSize: "clamp(15px, 1.6vw, 19px)", maxWidth: 720 }}
           >
-            АО КСИ разрабатывает инновационные прикладные решения для девелопмента и поэтапно формирует единую интеллектуальную систему нового поколения — от автономных цифровых контуров и веб-приложений до роботизированной строительной техники и систем автономного домостроения.
+            АО КСИ развивает кооперативную систему нового поколения для работы с недвижимостью и девелоперскими проектами, объединяя прикладные ИИ-решения, цифровые контуры, внутренние модули и модели коллективного участия в единую инфраструктуру.
           </p>
           <p
             className="font-ibm font-medium mx-auto"
-            style={{ fontSize: "clamp(14px, 1.4vw, 17px)", color: "rgba(0,212,255,0.55)", maxWidth: 640 }}
+            style={{ fontSize: "clamp(14px, 1.4vw, 17px)", color: "rgba(0,212,255,0.55)", maxWidth: 680 }}
           >
-            Подключайтесь к формированию новой интеллектуальной инфраструктуры девелопмента и участвуйте в практической сборке системы будущего.
+            Искусственный интеллект в этой системе — не отдельный сервис, а единый управляющий контур, который поэтапно усиливает все элементы будущего девелопера.
           </p>
         </div>
 
         {/* Кнопки */}
         <div style={fade(v3)} className="flex flex-col sm:flex-row gap-4 justify-center mt-14 mb-7">
-          <button
-            onClick={() => setModalOpen(true)}
+          <a
+            href="#how-it-works"
             className="inline-flex items-center justify-center font-ibm font-semibold text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
             style={{
               background: "#00d4ff",
@@ -171,8 +171,8 @@ export function HeroSection() {
             onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 45px rgba(0,212,255,0.4)")}
             onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 0 30px rgba(0,212,255,0.2)")}
           >
-            Обсудить задачу
-          </button>
+            Как устроена система
+          </a>
           <a
             href="#contours"
             className="inline-flex items-center justify-center font-ibm font-medium text-sm tracking-[0.12em] uppercase px-10 py-4 rounded-sm transition-all duration-300"
@@ -209,7 +209,7 @@ export function HeroSection() {
               e.currentTarget.style.color = "rgba(255,255,255,0.5)";
             }}
           >
-            О проекте КриптоМетры
+            Обсудить участие
           </button>
         </div>
 
