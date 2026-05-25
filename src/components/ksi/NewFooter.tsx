@@ -16,19 +16,20 @@ export function NewFooter() {
               <span className="font-oswald text-white font-semibold tracking-wide">АО КСИ</span>
             </Link>
             <p className="font-ibm text-white/30 text-sm leading-relaxed">
-              Виртуальный девелопер. Доступ к интеллекту — для юридических лиц.
+              Оператор кооперативной системы распределённого девелопмента. Вход в контур —
+              для юридических лиц.
             </p>
           </div>
 
           {/* Навигация */}
           <div>
-            <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">Доступ</div>
+            <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">Вход в систему</div>
             <ul className="space-y-2">
               {[
                 { label: "Ранний доступ", href: "/early-access" },
-                { label: "Стоимость", href: "/pricing" },
-                { label: "Стать соавтором", href: "/coauthor" },
-                { label: "Персональное приглашение", href: "/contacts" },
+                { label: "Форматы входа", href: "/pricing" },
+                { label: "Участие в системе", href: "/coauthor" },
+                { label: "Войти в контур", href: "/contacts" },
               ].map((item) => (
                 <li key={item.href}>
                   <Link to={item.href} className="font-ibm text-white/40 hover:text-white/70 text-sm transition-colors">
@@ -62,10 +63,10 @@ export function NewFooter() {
           <div>
             <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">Начать</div>
             <p className="font-ibm text-white/35 text-sm mb-4 leading-relaxed">
-              Ранний доступ открыт. Только для юридических лиц.
+              Вход в кооперативную систему открыт. Только для юридических лиц.
             </p>
             <Link to="/early-access" className="btn-primary-ksi inline-flex px-5 py-2.5 text-sm rounded-sm">
-              Запросить доступ
+              Запросить вход
             </Link>
           </div>
         </div>

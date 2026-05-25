@@ -16,8 +16,10 @@ export default function EarlyAccess() {
 
   const roles = [
     "Землевладелец",
-    "Действующий девелопер",
-    "Инвестор / партнёр",
+    "Девелопер",
+    "Владелец актива",
+    "Стратегический партнёр",
+    "Участник пилотного контура",
     "Другое",
   ];
 
@@ -44,7 +46,7 @@ export default function EarlyAccess() {
         phone: form.phone.trim(),
         messengers,
         role: form.role,
-        message: `[РАННИЙ ДОСТУП] ИНН: ${form.inn}. Задача: ${form.task}`,
+        message: `[РАННИЙ ВХОД В КОНТУР] ИНН: ${form.inn}. Задача/сценарий: ${form.task}`,
       });
       setSent(true);
     } catch (err) {
@@ -67,14 +69,15 @@ export default function EarlyAccess() {
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <div className="inline-flex items-center gap-2 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            <span className="font-ibm text-green-400/80 text-xs tracking-[0.2em] uppercase">Ранний доступ открыт</span>
+            <span className="font-ibm text-green-400/80 text-xs tracking-[0.2em] uppercase">Вход в систему открыт</span>
           </div>
           <h1 className="font-oswald text-5xl md:text-6xl font-semibold text-white mb-6 leading-tight">
-            Запросить<br /><span className="text-gradient-main">ранний доступ</span>
+            Ранний вход<br /><span className="text-gradient-main">в кооперативную систему</span>
           </h1>
           <p className="font-ibm text-white/50 text-lg max-w-2xl mx-auto">
-            Подключитесь к интеллекту виртуального девелопера. Поставьте реальную задачу. 
-            Станьте соавтором системы.
+            Подключитесь к прикладным контурам АО КСИ, поставьте реальную задачу
+            или передайте актив — и станьте участником сборки кооперативной модели
+            распределённого девелопмента.
           </p>
         </div>
       </section>
@@ -85,19 +88,19 @@ export default function EarlyAccess() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                icon: "Brain",
-                title: "Интеллект девелопера",
-                desc: "Доступ к системе АО КСИ: сотрудники + ИИ-инструменты решают вашу реальную задачу.",
+                icon: "Network",
+                title: "Доступ к прикладным контурам",
+                desc: "Подключение к земельному, операторскому, креативному и управляющему ИИ-контурам кооперативной системы.",
               },
               {
-                icon: "Coins",
-                title: "КриптоМетры",
-                desc: "За каждую поставленную задачу начисляются КриптоМетры — единицы вашего участия в системе.",
+                icon: "BrainCircuit",
+                title: "Управляющий ИИ-слой",
+                desc: "Интеллектуальный контур Лаборатории ИИ маршрутизирует и усиливает каждую задачу внутри системы.",
               },
               {
                 icon: "Star",
-                title: "Статус соавтора",
-                desc: "Ранние участники получают проектные привилегии и статус соавтора виртуального девелопера.",
+                title: "Статус участника системы",
+                desc: "Ранние участники получают приоритет, статус и право голоса в практической сборке кооперативной модели.",
               },
             ].map((item) => (
               <div key={item.title} className="flex gap-4">
@@ -132,12 +135,12 @@ export default function EarlyAccess() {
 
           {/* Шаги */}
           <div className="mb-12">
-            <h3 className="font-oswald text-xl font-medium text-white mb-6">Как начать: 3 шага</h3>
+            <h3 className="font-oswald text-xl font-medium text-white mb-6">Как войти: 3 шага</h3>
             <div className="space-y-4">
               {[
-                { step: "01", title: "Заполните заявку", desc: "Укажите вашу роль, организацию и задачу, с которой хотите начать." },
-                { step: "02", title: "Мы рассматриваем запрос", desc: "В течение 24 часов. Уточним задачу, расскажем о формате работы." },
-                { step: "03", title: "Подписываем договор и начинаем", desc: "Договор, НДС, документооборот. Первая задача запускает обучение системы." },
+                { step: "01", title: "Заполните заявку", desc: "Укажите вашу роль в системе, организацию и задачу или сценарий участия." },
+                { step: "02", title: "Оператор рассматривает запрос", desc: "В течение 24 часов. Уточним контекст и предложим конфигурацию входа в контур." },
+                { step: "03", title: "Подписываем договор и подключаем контур", desc: "Договор, НДС, документооборот. Первая задача проходит через прикладной контур системы." },
               ].map((item) => (
                 <div key={item.step} className="flex gap-4 items-start">
                   <span className="font-ibm text-ksi-cyan/40 text-sm font-bold w-8 flex-shrink-0">{item.step}</span>
@@ -153,11 +156,11 @@ export default function EarlyAccess() {
           {/* Форма */}
           {!sent ? (
             <div className="border border-white/10 bg-white/[0.02] p-8 rounded-sm">
-              <h3 className="font-oswald text-2xl font-semibold text-white mb-6">Заявка на ранний доступ</h3>
+              <h3 className="font-oswald text-2xl font-semibold text-white mb-6">Заявка на ранний вход в контур</h3>
 
               {/* Роль */}
               <div className="mb-5">
-                <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-2">Ваша роль *</div>
+                <div className="font-ibm text-white/30 text-xs tracking-[0.1em] uppercase mb-2">Роль в системе *</div>
                 <div className="grid grid-cols-2 gap-2">
                   {roles.map((r) => (
                     <button
@@ -249,15 +252,16 @@ export default function EarlyAccess() {
 
               <button onClick={handleSubmit} disabled={sending || !agreed}
                 className="btn-primary-ksi w-full py-3.5 text-sm font-medium rounded-sm disabled:opacity-50">
-                {sending ? "Отправляем..." : "Отправить заявку"}
+                {sending ? "Отправляем..." : "Запросить вход в контур"}
               </button>
             </div>
           ) : (
             <div className="border border-ksi-cyan/20 bg-ksi-cyan/5 p-8 rounded-sm text-center">
               <Icon name="CheckCircle" size={40} className="text-ksi-cyan mx-auto mb-4" />
-              <h3 className="font-oswald text-2xl font-semibold text-white mb-2">Заявка получена</h3>
+              <h3 className="font-oswald text-2xl font-semibold text-white mb-2">Заявка принята системой</h3>
               <p className="font-ibm text-white/50 text-sm">
-                Мы рассмотрим ваш запрос в течение 24 часов и свяжемся с вами.
+                Оператор АО КСИ рассмотрит ваш запрос в течение 24 часов и предложит
+                формат входа в контур.
               </p>
             </div>
           )}

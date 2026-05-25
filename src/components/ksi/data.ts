@@ -1,7 +1,7 @@
 export const NAV_ITEMS = [
   { label: "Ранний доступ", href: "/early-access" },
   { label: "Проекты", href: "/projects" },
-  { label: "Соавторство", href: "/coauthor" },
+  { label: "Участие", href: "/coauthor" },
   { label: "Стоимость", href: "/pricing" },
   { label: "Правовая основа", href: "/legal" },
   { label: "Контакты", href: "/contacts" },

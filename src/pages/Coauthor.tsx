@@ -15,16 +15,17 @@ export default function Coauthor() {
             style={{ background: "radial-gradient(ellipse, #7b2fff 0%, transparent 70%)" }} />
         </div>
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          <div className="section-label mb-4">◆ Соавторство</div>
+          <div className="section-label mb-4">◆ Участие в системе</div>
           <h1 className="font-oswald text-5xl md:text-7xl font-semibold text-white mb-6 leading-[0.95]">
-            Стать<br /><span className="text-gradient-main">соавтором</span><br />проекта
+            Стать<br /><span className="text-gradient-main">соавтором</span><br />системы
           </h1>
           <p className="font-ibm text-white/50 text-lg max-w-2xl mx-auto mb-8">
-            Те, кто входит в систему сейчас, — не просто клиенты. Это соавторы виртуального девелопера, 
-            которого строит АО КСИ.
+            Соавторство — это не отдельная программа лояльности, а форма участия в сборке
+            кооперативной системы распределённого девелопмента. Те, кто входит в контур сейчас,
+            становятся участниками её практической архитектуры.
           </p>
           <Link to="/early-access" className="btn-primary-ksi inline-flex px-8 py-4 text-base rounded-sm">
-            Запросить ранний доступ
+            Запросить вход в контур
           </Link>
         </div>
       </section>
@@ -38,25 +39,27 @@ export default function Coauthor() {
                 Кто такой<br /><span className="text-gradient-main">соавтор системы?</span>
               </h2>
               <p className="font-ibm text-white/50 text-base leading-relaxed mb-6">
-                Виртуальный девелопер — это система, которую строит АО КСИ. Она обучается на реальных задачах 
-                реальных участников рынка. Соавтор — это тот, кто участвует в этом обучении прямо сейчас.
+                АО КСИ строит кооперативную систему распределённого девелопмента. Её прикладные
+                контуры и интеллектуальный слой собираются из реальных задач реальных участников.
+                Соавтор — это тот, кто входит в эту сборку сейчас.
               </p>
               <p className="font-ibm text-white/40 text-base leading-relaxed mb-6">
-                Каждая поставленная задача, каждый кейс, каждое взаимодействие — это вклад в систему. 
-                Этот вклад фиксируется в КриптоМетрах и закрепляет за участником статус соавтора.
+                Каждая задача, каждый актив и каждое взаимодействие усиливают прикладные модули
+                и интеллектуальный контур КриптоМетров. Этот вклад фиксируется и закрепляет
+                за участником статус соавтора системы.
               </p>
               <p className="font-ibm text-white/35 text-base leading-relaxed">
-                По мере роста системы соавторы получают проектные привилегии, которые недоступны 
-                для поздних участников.
+                По мере роста кооперативной модели соавторы получают приоритет и право голоса
+                в архитектурных решениях системы.
               </p>
             </div>
 
             <div className="space-y-4">
               {[
-                { num: "01", title: "Вы ставите задачу", desc: "Реальная девелоперская задача становится обучающим кейсом." },
-                { num: "02", title: "Система решает её", desc: "Сотрудники АО КСИ + ИИ работают над задачей. Вы получаете результат." },
-                { num: "03", title: "Фиксируется вклад", desc: "На ваш счёт начисляются КриптоМетры — единицы участия." },
-                { num: "04", title: "Система умнеет", desc: "Ваш кейс становится частью интеллекта виртуального девелопера." },
+                { num: "01", title: "Вы передаёте задачу или актив", desc: "Реальная задача или актив входит в прикладной контур кооперативной системы." },
+                { num: "02", title: "Система решает её", desc: "Оператор АО КСИ, прикладные модули и управляющий ИИ-слой работают совместно. Вы получаете результат." },
+                { num: "03", title: "Фиксируется вклад", desc: "Ваше участие в системе закрепляется как вклад в её практическую сборку." },
+                { num: "04", title: "Контур усиливается", desc: "Ваш кейс становится частью интеллектуального и цифрового контура КриптоМетров." },
               ].map((item) => (
                 <div key={item.num} className="flex gap-4 p-5 border border-white/8 bg-white/[0.02] rounded-sm">
                   <span className="font-ibm text-purple-400/50 text-xs font-bold w-7 flex-shrink-0 mt-0.5">{item.num}</span>
@@ -74,16 +77,16 @@ export default function Coauthor() {
       {/* КриптоМетры */}
       <section className="py-20 border-t border-white/6">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="section-label mb-4">◆ КриптоМетры</div>
+          <div className="section-label mb-4">◆ Фиксация участия</div>
           <h2 className="font-oswald text-4xl font-semibold text-white mb-10 leading-tight">
-            Как начисляются<br /><span className="text-gradient-main">КриптоМетры</span>
+            Как фиксируется<br /><span className="text-gradient-main">вклад в систему</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              { icon: "MessageSquare", title: "За поставленную задачу", desc: "Каждый запрос в систему — начисление КриптоМетров." },
-              { icon: "MapPin", title: "За земельный актив", desc: "Землевладельцы получают повышенный коэффициент — земля важнее всего." },
-              { icon: "Users", title: "За приглашённых участников", desc: "Расширение сети соавторов также отражается в начислении." },
+              { icon: "MessageSquare", title: "За задачу в контуре", desc: "Каждая задача, прошедшая через прикладной контур системы, фиксируется как вклад." },
+              { icon: "MapPin", title: "За земельный актив", desc: "Передача участка в кооперативную систему даёт повышенный коэффициент участия." },
+              { icon: "Users", title: "За расширение сети участников", desc: "Подключение новых участников системы также отражается в фиксации вклада." },
             ].map((item) => (
               <div key={item.title} className="p-6 border border-white/8 bg-white/[0.02] rounded-sm">
                 <Icon name={item.icon as "MessageSquare"} size={24} className="text-ksi-cyan/60 mb-4" />
@@ -95,8 +98,8 @@ export default function Coauthor() {
 
           <div className="border border-white/8 bg-white/[0.015] p-6 rounded-sm">
             <p className="font-ibm text-white/35 text-sm leading-relaxed">
-              КриптоМетры не являются ценными бумагами или финансовыми инструментами. 
-              Это единицы зафиксированного участия в системе.{" "}
+              Внутренние единицы участия в кооперативной системе не являются ценными бумагами
+              или финансовыми инструментами. Это зафиксированный вклад в практическую сборку системы.{" "}
               <Link to="/legal" className="text-ksi-cyan/60 hover:text-ksi-cyan transition-colors">
                 Правовая основа →
               </Link>
@@ -109,14 +112,14 @@ export default function Coauthor() {
       <section className="py-20 border-t border-white/6">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="font-oswald text-4xl font-semibold text-white mb-10 leading-tight">
-            Привилегии соавтора
+            Что даёт участие в системе
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             {[
-              { icon: "Zap", title: "Приоритетный доступ", desc: "Ранние участники первыми получают доступ к новым возможностям системы." },
-              { icon: "Star", title: "Проектные механики", desc: "Участие в будущих проектных инструментах, доступных только соавторам." },
-              { icon: "Eye", title: "Прозрачность системы", desc: "Соавторы видят, как система развивается, и влияют на её приоритеты." },
-              { icon: "HandCoins", title: "Экономические условия", desc: "Улучшенные условия доступа для тех, кто входит на раннем этапе." },
+              { icon: "Zap", title: "Приоритетный доступ к контурам", desc: "Ранние участники первыми подключаются к новым прикладным модулям системы." },
+              { icon: "Star", title: "Право голоса в архитектуре", desc: "Соавторы участвуют в формировании логики и приоритетов кооперативной модели." },
+              { icon: "Eye", title: "Прозрачность сборки", desc: "Соавторы видят, как поэтапно собирается кооперативная система распределённого девелопмента." },
+              { icon: "HandCoins", title: "Условия раннего входа", desc: "Улучшенные условия подключения для тех, кто входит в контур на ранней стадии." },
             ].map((item) => (
               <div key={item.title} className="flex gap-4 p-6 border border-white/8 bg-white/[0.02] rounded-sm">
                 <Icon name={item.icon as "Zap"} size={20} className="text-ksi-cyan/60 flex-shrink-0 mt-0.5" />
@@ -147,15 +150,16 @@ export default function Coauthor() {
                 Особый статус для тех,<br />у кого есть земля
               </h2>
               <p className="font-ibm text-white/50 text-base leading-relaxed mb-6">
-                С земли начинается девелопмент. Землевладелец, подключающий свой актив к системе 
-                АО КСИ, получает особый статус и повышенный коэффициент начисления КриптоМетров.
+                С земли начинается девелопмент. Землевладелец, передающий свой актив в земельный
+                контур кооперативной системы АО КСИ, получает особый статус и повышенный коэффициент
+                фиксации вклада.
               </p>
               <ul className="space-y-3 mb-6">
                 {[
-                  "Анализ участка системой без инвестиций с вашей стороны",
-                  "Концепция использования от виртуального девелопера",
-                  "Партнёрские схемы без прямого кредитования",
-                  "Максимальный коэффициент КриптоМетров",
+                  "Анализ участка через земельный контур системы без инвестиций с вашей стороны",
+                  "Сценарий освоения от прикладных модулей и управляющего ИИ-контура",
+                  "Партнёрские схемы внутри кооперативной модели без прямого кредитования",
+                  "Максимальный коэффициент фиксации участия в системе",
                 ].map((p) => (
                   <li key={p} className="flex items-start gap-3">
                     <span className="text-ksi-cyan mt-1 flex-shrink-0 text-sm">◆</span>
@@ -181,16 +185,16 @@ export default function Coauthor() {
                 Переупаковка активов.<br />Движение к Fee Development.
               </h2>
               <p className="font-ibm text-white/50 text-base leading-relaxed mb-6">
-                Для действующих девелоперов АО КСИ предлагает отдельный контур: 
-                помощь в структурировании сложных активов, снижении кредитной нагрузки 
-                и переходу к модели Fee Development.
+                Для действующих девелоперов АО КСИ открывает отдельный контур внутри кооперативной
+                системы: структурирование сложных активов, снижение кредитной нагрузки и переход
+                к модели Fee Development через прикладные модули системы.
               </p>
               <ul className="space-y-3 mb-6">
                 {[
-                  "Структурирование зависших и проблемных активов",
-                  "Снижение кредитной нагрузки через партнёрские механики",
-                  "Переход к модели Fee Development",
-                  "Интеллект системы без найма в штат",
+                  "Структурирование зависших и проблемных активов через контур реализации",
+                  "Снижение кредитной нагрузки через партнёрские конструкции системы",
+                  "Переход к модели Fee Development внутри кооперативной архитектуры",
+                  "Управляющий ИИ-контур системы без найма в штат",
                 ].map((p) => (
                   <li key={p} className="flex items-start gap-3">
                     <span className="text-purple-400 mt-1 flex-shrink-0 text-sm">◆</span>
@@ -217,13 +221,14 @@ export default function Coauthor() {
       <section className="py-20 border-t border-white/6">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="font-oswald text-4xl font-semibold text-white mb-4">
-            Войдите пока ещё рано
+            Войдите пока система собирается
           </h2>
           <p className="font-ibm text-white/40 text-base mb-8">
-            Ранний доступ открыт. Чем раньше вы входите — тем больше ваш вклад зафиксирован.
+            Ранний вход в контур открыт. Чем раньше вы подключаетесь — тем больше ваш вклад
+            в практическую сборку кооперативной системы.
           </p>
           <Link to="/early-access" className="btn-primary-ksi inline-flex px-10 py-4 text-base rounded-sm">
-            Запросить ранний доступ
+            Запросить вход в контур
           </Link>
         </div>
       </section>
