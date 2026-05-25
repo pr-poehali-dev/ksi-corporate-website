@@ -16,13 +16,14 @@ export default function ProjectsList() {
             style={{ background: "radial-gradient(ellipse, #00d4ff 0%, transparent 70%)" }} />
         </div>
         <div className="max-w-5xl mx-auto px-6 relative z-10">
-          <div className="section-label mb-4">◆ Кейсы обучения</div>
+          <div className="section-label mb-4">◆ Узлы кооперативной системы</div>
           <h1 className="font-oswald text-5xl md:text-6xl font-semibold text-white mb-6 leading-tight">
-            Проекты АО КСИ —<br /><span className="text-gradient-main">не объекты продажи</span>
+            Проекты АО КСИ —<br /><span className="text-gradient-main">узлы системы,<br />не портфель</span>
           </h1>
           <p className="font-ibm text-white/45 text-lg max-w-2xl">
-            Каждый проект — это задача, которую виртуальный девелопер решил и запомнил. 
-            Это кейсы обучения системы. Реальные активы, реальные задачи, реальный интеллект.
+            Каждый проект — это актив, сценарий или задача, прошедшая через прикладные контуры
+            кооперативной системы. Через них собираются данные, методология и интеллектуальный
+            контур КриптоМетров.
           </p>
         </div>
       </section>
@@ -61,7 +62,7 @@ export default function ProjectsList() {
                 </p>
 
                 <div className="border-t border-white/6 pt-4">
-                  <div className="font-ibm text-white/20 text-xs tracking-[0.1em] uppercase mb-2">Система изучила</div>
+                  <div className="font-ibm text-white/20 text-xs tracking-[0.1em] uppercase mb-2">Контур усилила</div>
                   <div className="flex flex-wrap gap-2">
                     {project.lessons.slice(0, 2).map((l) => (
                       <span key={l} className="font-ibm text-xs text-white/35 bg-white/[0.04] border border-white/8 px-2 py-1 rounded-sm">
@@ -82,13 +83,14 @@ export default function ProjectsList() {
           <div className="border border-white/8 bg-white/[0.02] p-8 rounded-sm text-center">
             <Icon name="Plus" size={24} className="text-ksi-cyan/40 mx-auto mb-4" />
             <h3 className="font-oswald text-2xl font-semibold text-white mb-2">
-              Поставить задачу по своему проекту
+              Передать актив или проект в контур
             </h3>
             <p className="font-ibm text-white/40 text-sm mb-6 max-w-md mx-auto">
-              Ваш актив или проект может стать следующим обучающим кейсом виртуального девелопера.
+              Ваш актив или проект может стать следующим узлом кооперативной системы
+              и пройти через её прикладные контуры.
             </p>
-            <Link to="/early-access" className="btn-primary-ksi inline-flex px-8 py-3 text-sm rounded-sm">
-              Запросить ранний доступ
+            <Link to="/contacts" className="btn-primary-ksi inline-flex px-8 py-3 text-sm rounded-sm">
+              Передать в контур
             </Link>
           </div>
         </div>

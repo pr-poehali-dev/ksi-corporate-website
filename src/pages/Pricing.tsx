@@ -5,58 +5,58 @@ import Icon from "@/components/ui/icon";
 
 const plans = [
   {
-    id: "start",
-    label: "Старт",
-    tag: "Для первого шага",
+    id: "entry",
+    label: "Точечный вход",
+    tag: "Первое подключение",
     price: "По запросу",
-    priceNote: "Фиксированный первый этап",
+    priceNote: "Один прикладной контур",
     color: "cyan",
     features: [
-      "1 задача на аналитику или концепцию",
-      "Результат: документ / презентация",
+      "1 задача через прикладной контур системы",
+      "Подключение земельного, операторского или креативного контура",
+      "Управляющий ИИ-слой подключается под задачу",
       "Срок: до 5 рабочих дней",
-      "КриптоМетры: базовый коэффициент",
       "Закрывающие документы с НДС",
     ],
-    cta: "Начать",
+    cta: "Точечно войти в контур",
     ctaHref: "/early-access",
     highlight: false,
   },
   {
     id: "access",
-    label: "Доступ",
-    tag: "Основной формат",
+    label: "Доступ к контурам",
+    tag: "Основная конфигурация",
     price: "По запросу",
-    priceNote: "Абонентский или проектный",
+    priceNote: "Абонентский или проектный формат",
     color: "cyan",
     features: [
-      "Пакет задач на согласованный период",
+      "Пакет задач через несколько контуров системы",
       "Приоритетное рассмотрение запросов",
-      "Все типы задач: аналитика, концепция, упаковка, партнёрство",
-      "КриптоМетры: повышенный коэффициент",
-      "Персональный куратор",
+      "Земельный, операторский, креативный и управляющий ИИ-контур",
+      "Сопровождение оператором кооперативной системы",
+      "Персональный куратор внутри АО КСИ",
       "Закрывающие документы с НДС",
     ],
-    cta: "Обсудить условия",
+    cta: "Обсудить конфигурацию",
     ctaHref: "/contacts",
     highlight: true,
   },
   {
-    id: "project",
-    label: "Проектный",
-    tag: "Для девелоперов",
+    id: "partner",
+    label: "Партнёрское участие",
+    tag: "Для девелоперов и партнёров",
     price: "Индивидуально",
-    priceNote: "Контур Fee Development",
+    priceNote: "Сборка кооперативной модели",
     color: "purple",
     features: [
-      "Полное сопровождение проекта",
-      "Структурирование и переупаковка активов",
-      "Движение к модели Fee Development",
-      "КриптоМетры: максимальный коэффициент",
-      "Партнёрские механики",
+      "Полное сопровождение проекта внутри системы",
+      "Капитализация и сценарии реализации актива",
+      "Участие в развитии прикладных модулей",
+      "Совместная отработка кооперативных сценариев",
       "Индивидуальная договорная конструкция",
+      "Доступ к управляющему ИИ-контуру",
     ],
-    cta: "Обсудить проект",
+    cta: "Обсудить участие",
     ctaHref: "/contacts",
     highlight: false,
   },
@@ -74,13 +74,14 @@ export default function Pricing() {
             style={{ background: "radial-gradient(ellipse, #00d4ff 0%, transparent 70%)" }} />
         </div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <div className="section-label mb-4">◆ Стоимость доступа</div>
+          <div className="section-label mb-4">◆ Форматы входа в контур</div>
           <h1 className="font-oswald text-5xl md:text-6xl font-semibold text-white mb-6 leading-tight">
-            Вы платите<br /><span className="text-gradient-main">за интеллект,<br />не за часы</span>
+            Не прайс.<br /><span className="text-gradient-main">Конфигурации<br />входа в систему</span>
           </h1>
           <p className="font-ibm text-white/45 text-lg max-w-xl mx-auto">
-            Доступ к системе АО КСИ — это не консалтинг по часовым ставкам. 
-            Это подписка на интеллект виртуального девелопера.
+            Это не тарифы на услуги — а форматы подключения к прикладным контурам
+            кооперативной системы АО КСИ. Конфигурация определяется задачей, активом
+            или сценарием участия.
           </p>
         </div>
       </section>
@@ -90,8 +91,8 @@ export default function Pricing() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: "Brain", title: "Интеллект, не часы", desc: "Вы платите за результат и доступ к системе, а не за человеко-часы." },
-              { icon: "Coins", title: "КриптоМетры в цену включены", desc: "При любом формате участия начисляются КриптоМетры — часть ценности." },
+              { icon: "Network", title: "Вход в систему, не услуга", desc: "Это не подряд по часовым ставкам, а подключение к контуру кооперативной системы." },
+              { icon: "BrainCircuit", title: "ИИ-контур включён в любую конфигурацию", desc: "Управляющий ИИ-слой Лаборатории работает с каждой задачей внутри системы." },
               { icon: "FileCheck", title: "Полный документооборот", desc: "НДС, акты, счета-фактуры. Всё для корпоративной бухгалтерии." },
             ].map((item) => (
               <div key={item.title} className="flex gap-4">
@@ -150,8 +151,9 @@ export default function Pricing() {
           <div className="border border-white/8 bg-white/[0.02] p-6 rounded-sm text-center">
             <Icon name="Info" size={18} className="text-white/30 mx-auto mb-3" />
             <p className="font-ibm text-white/35 text-sm leading-relaxed max-w-2xl mx-auto">
-              Конкретная стоимость определяется по результатам первого разговора — исходя из задачи, 
-              объёма и формата участия. Мы не публикуем прайс-лист, потому что каждый запрос индивидуален.
+              Конкретная конфигурация и стоимость определяются по результатам первого разговора —
+              исходя из задачи, актива или сценария участия в системе. Мы не публикуем прайс-лист,
+              потому что каждый формат входа индивидуален.
             </p>
           </div>
         </div>
@@ -161,14 +163,14 @@ export default function Pricing() {
       <section className="py-16 border-t border-white/6">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="font-oswald text-3xl font-semibold text-white mb-8">
-            Что входит в любой формат
+            Что входит в любую конфигурацию
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: "Shield", text: "Договор и НДС" },
-              { icon: "Coins", text: "КриптоМетры" },
+              { icon: "BrainCircuit", text: "Управляющий ИИ-контур" },
               { icon: "FileText", text: "Документы" },
-              { icon: "MessageCircle", text: "Связь с командой" },
+              { icon: "MessageCircle", text: "Оператор системы на связи" },
             ].map((item) => (
               <div key={item.text} className="flex flex-col items-center text-center p-6 border border-white/8 bg-white/[0.02] rounded-sm gap-3">
                 <Icon name={item.icon as "Shield"} size={24} className="text-ksi-cyan/50" />
@@ -183,14 +185,15 @@ export default function Pricing() {
       <section className="py-16 border-t border-white/6">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="font-oswald text-3xl font-semibold text-white mb-4">
-            Обсудить условия напрямую
+            Обсудить вход в контур напрямую
           </h2>
           <p className="font-ibm text-white/40 text-sm mb-8">
-            Расскажите о задаче — мы предложим подходящий формат и стоимость.
+            Расскажите о задаче, активе или формате участия — мы предложим
+            подходящую конфигурацию входа в кооперативную систему.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contacts" className="btn-primary-ksi px-8 py-3.5 text-sm rounded-sm">
-              Персональное приглашение
+              Войти в контур
             </Link>
             <Link to="/early-access" className="border border-white/15 hover:border-white/30 text-white/60 hover:text-white/80 transition-all px-8 py-3.5 text-sm font-ibm rounded-sm">
               Запросить доступ

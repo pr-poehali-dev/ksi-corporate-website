@@ -32,7 +32,7 @@ export default function ProjectDetail() {
           <div className="flex items-center gap-3 mb-4">
             <Icon name={project.icon as "Waves"} size={24} className="text-ksi-cyan/60" />
             <span className="font-ibm text-ksi-cyan/60 text-xs tracking-[0.2em] uppercase">
-              Кейс обучения виртуального девелопера
+              Узел кооперативной системы АО КСИ
             </span>
           </div>
 
@@ -73,7 +73,7 @@ export default function ProjectDetail() {
               </p>
 
               <h2 className="font-oswald text-2xl font-semibold text-white mb-4">
-                Задачи, поставленные системе
+                Задачи, прошедшие через контур
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
                 {project.tasks.map((task) => (
@@ -85,7 +85,7 @@ export default function ProjectDetail() {
               </div>
 
               <h2 className="font-oswald text-2xl font-semibold text-white mb-4">
-                Что система изучила
+                Что усилило кооперативную систему
               </h2>
               <div className="space-y-3 mb-10">
                 {project.lessons.map((lesson, idx) => (
@@ -101,8 +101,9 @@ export default function ProjectDetail() {
               {/* Смысловой блок */}
               <div className="border-l-2 border-ksi-cyan/30 pl-6 mb-10">
                 <p className="font-ibm text-white/45 text-base leading-relaxed italic">
-                  Этот проект — не предложение о продаже. Это кейс, который обогатил виртуального девелопера 
-                  реальным пониманием рынка, участка и задач.
+                  Этот проект — не предложение о продаже. Это узел кооперативной системы,
+                  через который собираются данные, методология и интеллектуальный контур
+                  для последующих задач.
                 </p>
               </div>
             </div>
@@ -112,19 +113,20 @@ export default function ProjectDetail() {
               <div className="sticky top-24 space-y-4">
                 <div className="border border-ksi-cyan/20 bg-ksi-cyan/[0.03] p-6 rounded-sm">
                   <h3 className="font-oswald text-white text-lg font-medium mb-3">
-                    Поставить похожую задачу
+                    Передать похожий актив в контур
                   </h3>
                   <p className="font-ibm text-white/40 text-sm leading-relaxed mb-5">
-                    Если у вас схожий актив или задача — подключитесь к системе и получите результат.
+                    Если у вас схожий актив или сценарий — подключитесь к кооперативной системе
+                    через прикладной контур.
                   </p>
-                  <Link to="/early-access" className="btn-primary-ksi block text-center py-3 text-sm rounded-sm">
-                    Запросить доступ
+                  <Link to="/contacts" className="btn-primary-ksi block text-center py-3 text-sm rounded-sm">
+                    Войти в контур
                   </Link>
                 </div>
 
                 <div className="border border-white/8 bg-white/[0.02] p-6 rounded-sm">
                   <h3 className="font-oswald text-white text-base font-medium mb-3">
-                    Параметры кейса
+                    Параметры узла
                   </h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -155,7 +157,7 @@ export default function ProjectDetail() {
       {others.length > 0 && (
         <section className="py-16 border-t border-white/6">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="font-oswald text-2xl font-semibold text-white mb-6">Другие кейсы</h2>
+            <h2 className="font-oswald text-2xl font-semibold text-white mb-6">Другие узлы системы</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {others.map((p) => (
                 <Link key={p.slug} to={`/projects/${p.slug}`}
