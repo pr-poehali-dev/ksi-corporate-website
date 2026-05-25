@@ -75,10 +75,10 @@ export default function Login() {
             className="mb-4 h-14 w-14 object-contain"
           />
           <h1 className="font-oswald text-xl font-medium uppercase tracking-[0.15em] text-white/90">
-            Цифровая платформа КСИ
+            Кооперативная система АО КСИ
           </h1>
           <p className="mt-1 text-sm text-white/40">
-            Вход в личный кабинет
+            Вход в контур
           </p>
         </div>
 
