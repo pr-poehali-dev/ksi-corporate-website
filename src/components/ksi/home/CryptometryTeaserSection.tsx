@@ -33,7 +33,7 @@ export function CryptometryTeaserSection() {
           </span>
         </h2>
         <p className="font-ibm text-white/55 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-6">
-          Интеллектуальный и цифровой контур кооперативной системы распределённого девелопмента.
+          Интеллектуальный и цифровой контур интеллектуальной системы кооперативного девелопмента.
         </p>
         <p className="font-ibm text-white/40 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto mb-12">
           КриптоМетры собирают прикладные модули, внутренние контуры и модели участия

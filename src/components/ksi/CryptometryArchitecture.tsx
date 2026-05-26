@@ -28,7 +28,7 @@ export default function CryptometryArchitecture() {
           </h2>
           <p className="font-ibm text-white/45 text-base md:text-lg leading-relaxed">
             КриптоМетры — интеллектуальный и цифровой контур, через который участники, активы,
-            прикладные модули и ИИ-слой собираются в единую кооперативную архитектуру распределённого
+            прикладные модули и ИИ-слой собираются в интеллектуальную систему кооперативного
             девелопмента.
           </p>
         </div>
@@ -190,8 +190,8 @@ export default function CryptometryArchitecture() {
             <h3
               className="font-oswald text-white text-2xl md:text-3xl font-semibold tracking-wide leading-tight"
             >
-              Кооперативная система<br />
-              <span className="text-gradient-main">распределённого девелопмента</span>
+              Интеллектуальная система<br />
+              <span className="text-gradient-main">кооперативного девелопмента</span>
             </h3>
             <p className="font-ibm text-white/35 text-sm leading-relaxed mt-4 max-w-2xl mx-auto">
               Управляемая среда, в которой проекты, участники и интеллектуальные контуры работают

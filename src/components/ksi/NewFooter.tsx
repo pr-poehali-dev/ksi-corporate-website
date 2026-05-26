@@ -16,7 +16,7 @@ export function NewFooter() {
               <span className="font-oswald text-white font-semibold tracking-wide">АО КСИ</span>
             </Link>
             <p className="font-ibm text-white/30 text-sm leading-relaxed">
-              Оператор кооперативной системы распределённого девелопмента. Вход в контур —
+              Оператор интеллектуальной системы кооперативного девелопмента. Вход в контур —
               для юридических лиц.
             </p>
           </div>

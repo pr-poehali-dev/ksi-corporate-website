@@ -122,14 +122,14 @@ export function HeroSection() {
             className="font-oswald font-bold text-white leading-[0.9] tracking-tight"
             style={{ fontSize: "clamp(42px, 6.5vw, 96px)" }}
           >
-            Оператор кооперативной системы
+            Оператор интеллектуальной системы
             <br />
             <span style={{
               background: "linear-gradient(90deg, #00d4ff 0%, #7b2fff 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}>
-              распределённого девелопмента
+              кооперативного девелопмента
             </span>
           </h1>
         </div>
@@ -147,7 +147,7 @@ export function HeroSection() {
             className="font-ibm text-white/55 leading-relaxed mx-auto mb-5"
             style={{ fontSize: "clamp(15px, 1.6vw, 19px)", maxWidth: 720 }}
           >
-            АО КСИ развивает кооперативную систему нового поколения для работы с недвижимостью и девелоперскими проектами, объединяя прикладные ИИ-решения, цифровые контуры, внутренние модули и модели коллективного участия в единую инфраструктуру.
+            АО КСИ развивает интеллектуальную систему кооперативного девелопмента для работы с недвижимостью и девелоперскими проектами, объединяя прикладные ИИ-решения, цифровые контуры, внутренние модули и модели коллективного участия в единую инфраструктуру.
           </p>
           <p
             className="font-ibm font-medium mx-auto"

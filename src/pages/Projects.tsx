@@ -82,7 +82,7 @@ export default function Projects() {
                     </div>
                     <div>
                       <h2 className="font-oswald text-3xl md:text-4xl font-semibold text-white group-hover:text-ksi-cyan transition-colors">КриптоМетры</h2>
-                      <div className="font-ibm text-white/25 text-xs tracking-widest uppercase mt-1">Интеллектуальная система распределённого девелопмента</div>
+                      <div className="font-ibm text-white/25 text-xs tracking-widest uppercase mt-1">Интеллектуальная система кооперативного девелопмента</div>
                     </div>
                   </div>
                   <p className="font-ibm text-white/55 text-base leading-relaxed mb-6">
