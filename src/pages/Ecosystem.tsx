@@ -1,6 +1,47 @@
 import PageLayout from "@/components/ksi/PageLayout";
 import Icon from "@/components/ui/icon";
 
+const ROLES = [
+  {
+    who: "АО КСИ",
+    title: "Оператор системы",
+    desc: "Управляет архитектурой, развитием и операционной логикой. Без оператора кооперативная модель остаётся идеей — АО КСИ собирает её в управляемую систему.",
+    icon: "Building2",
+    accent: "#00d4ff",
+  },
+  {
+    who: "КриптоМетры",
+    title: "Интеллектуальный и цифровой контур",
+    desc: "Связывают участников, активы, прикладные модули и ИИ-слой в одну среду. Это контур, через который система разговаривает с пользователем и маршрутизирует задачи.",
+    icon: "Hexagon",
+    accent: "#00d4ff",
+    href: "/cryptometry",
+  },
+  {
+    who: "Лаборатория ИИ",
+    title: "Единый управляющий контур",
+    desc: "ИИ-слой не отдельный сервис, а связывающий и усиливающий контур: обучается на реальных задачах системы и поэтапно повышает качество всех остальных элементов.",
+    icon: "BrainCircuit",
+    accent: "#7b2fff",
+    href: "/directions/ai-lab",
+  },
+  {
+    who: "Внутренние контуры",
+    title: "Прикладные модули системы",
+    desc: "Земельный поиск, реализация активов, проектный креатив — это не отдельные службы, а прикладные контуры одной системы, через которые она работает с конкретным типом задач.",
+    icon: "Puzzle",
+    accent: "#00d4ff",
+    href: "/directions",
+  },
+  {
+    who: "Участники",
+    title: "Активы, спрос и сценарии",
+    desc: "Девелоперы, владельцы активов, землевладельцы и партнёры — внешний контур системы. Их задачи, активы и сценарии реализации становятся материалом, на котором система работает и обучается.",
+    icon: "Users",
+    accent: "#7b2fff",
+  },
+];
+
 const LAYERS = [
   { label: "ОПЕРАТОР СИСТЕМЫ", name: "АО КСИ", desc: "Оператор интеллектуальной системы кооперативного девелопмента", color: "#00d4ff", primary: true },
   { label: "ИНТЕЛЛЕКТУАЛЬНЫЙ КОНТУР", name: "КриптоМетры", desc: "Интеллектуальный и цифровой контур кооперативной системы", color: "#00d4ff", href: "/cryptometry" },
@@ -26,9 +67,9 @@ const SYNERGY = [
 ];
 
 const PRINCIPLES = [
-  { icon: "Layers", title: "Кооперативная архитектура", desc: "Каждая служба — не изолированный отдел, а прикладной контур кооперативной системы." },
+  { icon: "Layers", title: "Кооперативная архитектура", desc: "Каждая служба — не изолированный отдел, а прикладной контур одной системы." },
   { icon: "RefreshCw", title: "Обратная связь", desc: "Опыт каждой задачи возвращается в систему — данные, методология и точность растут с каждым запросом." },
-  { icon: "GitBranch", title: "Распределённая логика", desc: "Задачи решаются через подключение нужных контуров, а не через жёсткую маршрутизацию." },
+  { icon: "GitMerge", title: "Кооперативная маршрутизация", desc: "Задачи решаются через подключение нужных контуров системы, а не через жёсткую вертикаль." },
   { icon: "BrainCircuit", title: "Единый управляющий контур", desc: "ИИ внутри системы — не автономный сервис, а связывающий и усиливающий слой для всех элементов." },
 ];
 
@@ -43,17 +84,117 @@ export default function Ecosystem() {
         </div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-3xl">
-            <div className="section-label mb-5">◆ Архитектура системы</div>
+            <div className="section-label mb-5">◆ Как устроена система</div>
             <h1 className="font-oswald text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
-              Архитектура<br />
-              <span className="text-gradient-cyan">кооперативной системы</span>
+              Из чего собирается<br />
+              <span className="text-gradient-cyan">интеллектуальная система<br />кооперативного девелопмента</span>
             </h1>
-            <p className="font-ibm text-white/55 text-xl leading-relaxed">
-              АО КСИ — оператор интеллектуальной системы кооперативного девелопмента.
-              КриптоМетры — её интеллектуальный и цифровой контур. Внутренние службы —
-              прикладные контуры, через которые система работает с участниками, активами
-              и сценариями реализации.
+            <p className="font-ibm text-white/60 text-xl leading-relaxed mb-5">
+              Это не отдельный сервис и не набор продуктов. Это управляемая среда,
+              в которой оператор, интеллектуальный контур, ИИ-слой и прикладные контуры
+              работают как одна система — над активами, проектами и задачами участников.
             </p>
+            <p className="font-ibm text-white/40 text-base leading-relaxed">
+              Ниже — как именно собрана архитектура: пять ролей, через которые система работает.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Пять ролей — направляющий блок сразу после hero */}
+      <section className="py-20 border-t border-ksi-border/30"
+        style={{ background: "linear-gradient(to bottom, rgba(10,10,15,1), rgba(12,12,22,1), rgba(10,10,15,1))" }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="section-label mb-5">◆ Пять ролей</div>
+          <h2 className="font-oswald text-4xl font-semibold text-white mb-4">
+            Кто и за что отвечает<br /><span className="text-gradient-cyan">внутри системы</span>
+          </h2>
+          <p className="font-ibm text-white/45 text-base leading-relaxed max-w-2xl mb-12">
+            Архитектура читается через пять ролей. Каждая из них — не отдельный продукт,
+            а функциональный контур одной системы.
+          </p>
+
+          <div className="space-y-3">
+            {ROLES.map((r, i) => {
+              const accent = r.accent;
+              return (
+                <div
+                  key={i}
+                  className="grid md:grid-cols-[180px_1fr_auto] gap-5 md:gap-8 items-start p-6 rounded-sm"
+                  style={{
+                    background: "rgba(255,255,255,0.015)",
+                    border: `1px solid ${accent}22`,
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0"
+                      style={{
+                        background: `${accent}10`,
+                        border: `1px solid ${accent}30`,
+                      }}
+                    >
+                      <Icon name={r.icon} size={16} style={{ color: accent, opacity: 0.85 }} />
+                    </div>
+                    <div>
+                      <div className="font-mono text-[10px] tracking-[0.22em] uppercase" style={{ color: `${accent}cc` }}>
+                        Роль {String(i + 1).padStart(2, "0")}
+                      </div>
+                      <div className="font-oswald text-white/90 text-base font-medium tracking-wide">
+                        {r.who}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-oswald text-white/95 text-lg font-medium mb-1.5">
+                      {r.title}
+                    </div>
+                    <p className="font-ibm text-white/55 text-sm leading-relaxed">
+                      {r.desc}
+                    </p>
+                  </div>
+                  {r.href && (
+                    <a
+                      href={r.href}
+                      className="font-ibm text-xs tracking-widest uppercase whitespace-nowrap flex items-center gap-2 self-center transition-colors"
+                      style={{ color: `${accent}b0` }}
+                    >
+                      Подробнее <Icon name="ArrowRight" size={12} />
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Как собирается в единую модель */}
+          <div
+            className="mt-8 p-6 md:p-8 rounded-sm flex flex-col md:flex-row md:items-center gap-5 md:gap-8"
+            style={{
+              background: "linear-gradient(135deg, rgba(0,212,255,0.05) 0%, rgba(123,47,255,0.05) 100%)",
+              border: "1px solid rgba(0,212,255,0.25)",
+            }}
+          >
+            <div
+              className="w-12 h-12 rounded-sm flex items-center justify-center flex-shrink-0"
+              style={{
+                background: "rgba(0,212,255,0.1)",
+                border: "1px solid rgba(0,212,255,0.3)",
+              }}
+            >
+              <Icon name="GitMerge" size={20} className="text-ksi-cyan" />
+            </div>
+            <div className="flex-1">
+              <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-ksi-cyan/70 mb-1.5">
+                Как роли собираются в единую модель
+              </div>
+              <p className="font-ibm text-white/70 text-base leading-relaxed">
+                АО КСИ управляет, КриптоМетры связывают, ИИ-слой усиливает, прикладные
+                контуры работают с конкретными задачами. Вместе они работают как одна
+                интеллектуальная система кооперативного девелопмента — а не как набор
+                независимых сервисов.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -61,11 +202,11 @@ export default function Ecosystem() {
       {/* Слои архитектуры */}
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="section-label mb-5">◆ Структура</div>
-          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">Слои системы</h2>
+          <div className="section-label mb-5">◆ Развёрнутая структура</div>
+          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">Слои системы по элементам</h2>
           <p className="font-ibm text-white/42 text-base mb-12 max-w-2xl">
-            Кооперативная система собирается послойно: оператор → интеллектуальный и цифровой
-            контур (КриптоМетры) → управляющий слой ИИ → прикладные контуры внутренних служб.
+            Те же пять ролей — но с раскрытием каждого внутреннего контура отдельно:
+            от оператора и интеллектуального контура до конкретных прикладных служб.
           </p>
 
           <div className="space-y-1">
