@@ -23,47 +23,47 @@ export default function About() {
               <span className="text-white/75">кооперативного девелопмента</span>
             </h2>
             <p className="font-ibm text-white/50 text-lg leading-relaxed mb-5">
-              АО КСИ развивает интеллектуальную систему кооперативного девелопмента для работы
-              с активами и девелоперскими проектами, объединяя прикладные контуры, внутренние
-              службы, ИИ-контур и модели коллективного участия в единую инфраструктуру. Ключевой
-              проект компании — КриптоМетры, интеллектуальный и цифровой контур этой системы.
+              АО КСИ — оператор и субъект, стоящий за развитием интеллектуальной системы
+              кооперативного девелопмента. Компания отвечает за стратегию, архитектуру и
+              стандарт работы системы. Это не сервис и не разовый проект — это длинная
+              операторская задача с долгим горизонтом.
             </p>
             <p className="font-ibm text-white/30 text-base leading-relaxed mb-8">
               Акционерное общество, зарегистрированное по российскому корпоративному законодательству.
               Запущена в 2026 году. Москва.
             </p>
             <div className="flex flex-wrap gap-3">
-              <a href="/cryptometry" className="btn-primary-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Проект КриптоМетры</a>
-              <a href="/directions" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Внутренние службы</a>
+              <a href="/ecosystem" className="btn-primary-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Как устроена система</a>
+              <a href="/cryptometry" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Проект КриптоМетры</a>
               <a href="/roadmap" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>Roadmap</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Миссия */}
+      {/* Кто такие АО КСИ */}
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
-              <div className="section-label mb-5">◆ Замысел</div>
+              <div className="section-label mb-5">◆ Кто такие АО КСИ</div>
               <h2 className="font-oswald text-4xl font-semibold text-white leading-tight mb-6">
-                Что стоит за<br />
-                <span className="text-gradient-cyan">АО КСИ</span>
+                Компания, которая<br />
+                <span className="text-gradient-cyan">строит систему</span>
               </h2>
               <p className="font-ibm text-white/55 text-lg leading-relaxed mb-5">
-                Оператор интеллектуальной системы кооперативного девелопмента.
-                АО КСИ строит инфраструктуру, в которой участники, активы, прикладные модули
-                и интеллектуальный контур собираются в единую управляемую среду.
+                АО «КриптоСтройИнвест» — российское акционерное общество, оператор
+                интеллектуальной системы кооперативного девелопмента. Компания отвечает
+                за стратегию, развитие архитектуры и операционную работу системы.
               </p>
               <p className="font-ibm text-white/40 text-base leading-relaxed mb-5">
-                ИИ внутри системы — не отдельный сервис, а единый управляющий и усиливающий слой.
-                Каждая внутренняя служба, каждый обученный контур — это движение к новой
-                кооперативной архитектуре работы с недвижимостью.
+                Фокус — не отдельный продукт и не разовый проект. АО КСИ строит длинную
+                инфраструктуру, в которой профессионалы рынка, активы и интеллектуальные
+                контуры могут работать вместе по новым правилам.
               </p>
               <p className="font-ibm text-white/30 text-base leading-relaxed">
-                Горизонт работы — долгий. Модель — кооперативная и системная.
-                Ценность накапливается в инфраструктуре, данных, участниках и профессиональных компетенциях.
+                Горизонт — долгий. Модель — кооперативная и операторская. Ценность
+                накапливается в инфраструктуре, данных, участниках и профессиональных компетенциях.
               </p>
             </div>
 
@@ -72,8 +72,8 @@ export default function About() {
                 {[
                   { label: "Год запуска", value: "2026", color: "cyan" },
                   { label: "Правовая форма", value: "АО", color: "purple" },
-                  { label: "Внутренние службы", value: "4", color: "cyan" },
-                  { label: "Ключевой проект", value: "КМ", color: "purple" },
+                  { label: "Юрисдикция", value: "РФ", color: "cyan" },
+                  { label: "Горизонт работы", value: "10+", color: "purple" },
                 ].map((item, i) => (
                   <div key={i} className="p-6 rounded-sm text-center" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <div className={`font-oswald text-3xl font-bold mb-2 ${item.color === "cyan" ? "text-gradient-cyan" : "text-gradient-purple"}`}>{item.value}</div>
@@ -82,13 +82,13 @@ export default function About() {
                 ))}
               </div>
               <div className="p-6 rounded-sm" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                <div className="font-mono-ibm text-ksi-cyan/40 text-xs mb-3 tracking-widest">ПОЗИЦИОНИРОВАНИЕ</div>
+                <div className="font-mono-ibm text-ksi-cyan/40 text-xs mb-3 tracking-widest">КОРОТКО О КОМПАНИИ</div>
                 <div className="space-y-2">
                   {[
                     "Оператор интеллектуальной системы кооперативного девелопмента",
-                    "Кооперативный девелопмент нового поколения",
-                    "ИИ — единый управляющий контур",
-                    "КриптоМетры — интеллектуальный и цифровой контур",
+                    "Профессиональный фокус на девелопменте и активах",
+                    "Долгий горизонт и системная модель работы",
+                    "Прозрачная стадия каждого контура",
                   ].map((p, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 rounded-full bg-ksi-cyan/40 flex-shrink-0" />
@@ -102,55 +102,43 @@ export default function About() {
         </div>
       </section>
 
-      {/* Что строит компания */}
+      {/* Роль оператора */}
       <section className="py-20 border-t border-ksi-border/30"
         style={{ background: "linear-gradient(to bottom, rgba(10,10,15,1), rgba(14,14,26,1), rgba(10,10,15,1))" }}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="section-label mb-5">◆ Логика проекта</div>
+          <div className="section-label mb-5">◆ Роль оператора</div>
           <h2 className="font-oswald text-4xl font-semibold text-white mb-4">
-            Как устроен<br /><span className="text-gradient-main">проект АО КСИ</span>
+            Что АО КСИ делает<br /><span className="text-gradient-main">как оператор системы</span>
           </h2>
-          <p className="font-ibm text-white/42 text-base mb-12 max-w-2xl">
-            Компания собирает кооперативную систему послойно: от оператора и интеллектуального
-            контура — к прикладным модулям, через которые работают участники.
+          <p className="font-ibm text-white/45 text-base mb-12 max-w-2xl">
+            Без оператора кооперативная модель остаётся идеей. АО КСИ собирает её в управляемую
+            систему — отвечает за стратегию, архитектуру, развитие и операционный контур.
           </p>
 
-          <div className="space-y-1">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { level: "Оператор системы", name: "АО КриптоСтройИнвест", desc: "Стратегия, управление и операторский контур кооперативной системы", color: "#00d4ff" },
-              { level: "Интеллектуальный контур", name: "КриптоМетры", desc: "Интеллектуальный и цифровой контур интеллектуальной системы кооперативного девелопмента", color: "#00d4ff" },
-              { level: "Управляющий слой ИИ", name: "Лаборатория ИИ", desc: "Единый управляющий контур: нейронные модели, обучение и развитие системы", color: "#7b2fff" },
-              { level: "Прикладной контур", name: "Центр реализации активов", desc: "Капитализация, упаковка и вывод активов в реализацию внутри кооперативной системы", color: "#00d4ff" },
-              { level: "Земельный контур", name: "Служба земельного поиска", desc: "Поиск, анализ площадок и работа с земельно-имущественными активами внутри системы", color: "#7b2fff" },
-              { level: "Креативный контур", name: "Студия проектного креатива", desc: "Визуальная, концептуальная и презентационная упаковка проектов и активов", color: "#00d4ff" },
-            ].map((item, i) => (
-              <div key={i} className="flex items-stretch group"
-                style={{ borderBottom: i < 5 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                <div className="w-0.5 flex-shrink-0" style={{ background: item.color, opacity: 0.35 }} />
-                <div className="flex items-center px-4 flex-shrink-0 w-10"
-                  style={{ background: "rgba(255,255,255,0.01)" }}>
-                  <span className="font-ibm text-[9px]" style={{ color: item.color, opacity: 0.5 }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+              { icon: "Compass", title: "Стратегия", desc: "Задаёт направление развития системы, рамку и приоритеты на горизонте лет." },
+              { icon: "Layers", title: "Архитектура", desc: "Определяет, как устроены контуры, как они связаны и как масштабируются." },
+              { icon: "Activity", title: "Операционный контур", desc: "Ведёт ежедневную работу системы, координирует контуры и участников." },
+              { icon: "Sparkles", title: "Развитие", desc: "Развивает интеллектуальный контур, методологию и стандарты работы." },
+            ].map((item, i) => {
+              const accent = i % 2 === 0 ? "#00d4ff" : "#7b2fff";
+              return (
+                <div key={i} className="p-6 rounded-sm" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div className="w-10 h-10 rounded-sm flex items-center justify-center mb-4"
+                    style={{ background: `${accent}10`, border: `1px solid ${accent}25` }}>
+                    <Icon name={item.icon} size={18} style={{ color: accent, opacity: 0.8 }} />
+                  </div>
+                  <div className="font-oswald text-white/85 font-medium text-base mb-2">{item.title}</div>
+                  <p className="font-ibm text-white/40 text-sm leading-relaxed">{item.desc}</p>
                 </div>
-                <div className="flex-1 grid md:grid-cols-3 gap-4 py-4 pr-6" style={{ paddingLeft: i * 12 }}>
-                  <div className="flex items-center">
-                    <span className="font-ibm text-[10px] tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.25)" }}>{item.level}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="font-oswald text-white font-medium text-sm group-hover:text-ksi-cyan transition-colors">{item.name}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="font-ibm text-white/38 text-xs">{item.desc}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="mt-10 flex gap-4">
-            <a href="/directions" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Подробнее о службах</a>
-            <a href="/cryptometry" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>О проекте КриптоМетры</a>
+          <div className="mt-10 flex flex-wrap gap-4">
+            <a href="/ecosystem" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer">Как устроена система →</a>
+            <a href="/directions" className="btn-outline-ksi px-6 py-2.5 rounded-sm text-sm cursor-pointer" style={{ borderColor: "rgba(123,47,255,0.4)", color: "#a070ff" }}>Внутренние службы</a>
           </div>
         </div>
       </section>
@@ -158,17 +146,17 @@ export default function About() {
       {/* Принципы */}
       <section className="py-20 border-t border-ksi-border/30">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="section-label mb-5">◆ Принципы</div>
-          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">На чём строится проект</h2>
+          <div className="section-label mb-5">◆ Подход</div>
+          <h2 className="font-oswald text-4xl font-semibold text-white mb-3">На чём строится работа компании</h2>
           <p className="font-ibm text-white/40 text-base mb-12 max-w-2xl">
             Не декларации. Операционные ограничения, которым следует команда при каждом решении.
           </p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
-              { icon: "Layers", title: "Кооперативная архитектура", desc: "Каждое решение — часть единой системы. Компания строится как интеллектуальная система кооперативного девелопмента, а не набор проектов.", color: "#00d4ff" },
-              { icon: "Clock", title: "Долгий горизонт", desc: "Кооперативная система не появится за ночь. Ценность создаётся через инфраструктуру, участников и компетенции, которые накапливаются.", color: "#7b2fff" },
-              { icon: "UserCheck", title: "Профессиональный стандарт", desc: "Работаем с профессиональными участниками рынка. Уровень диалога и качество результата соответствуют.", color: "#00d4ff" },
-              { icon: "Eye", title: "Прозрачность стадии", desc: "Публично обозначаем стадию каждого контура. Активна, Beta, R&D — без преувеличения готовности.", color: "#7b2fff" },
+              { icon: "Clock", title: "Долгий горизонт", desc: "Система не появится за ночь. Компания работает на длинной дистанции — ценность создаётся через инфраструктуру, участников и компетенции.", color: "#00d4ff" },
+              { icon: "UserCheck", title: "Профессиональный стандарт", desc: "АО КСИ работает с профессиональными участниками рынка. Уровень диалога и качество результата соответствуют.", color: "#7b2fff" },
+              { icon: "Eye", title: "Прозрачность стадии", desc: "Публично обозначаем стадию каждого контура. Активна, Beta, R&D — без преувеличения готовности.", color: "#00d4ff" },
+              { icon: "ShieldCheck", title: "Операторская ответственность", desc: "Компания не передаёт критические решения вовне. За архитектуру, развитие и стандарт работы отвечает оператор.", color: "#7b2fff" },
             ].map((v, i) => (
               <div key={i} className="p-6 rounded-sm" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <div className="w-10 h-10 rounded-sm flex items-center justify-center mb-4"
@@ -183,27 +171,27 @@ export default function About() {
         </div>
       </section>
 
-      {/* Философия */}
+      {/* Почему именно АО КСИ */}
       <section className="py-20 border-t border-ksi-border/30"
         style={{ background: "linear-gradient(to bottom, rgba(10,10,15,1), rgba(13,13,22,1), rgba(10,10,15,1))" }}>
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <div className="section-label mb-4 justify-center flex">◆ Замысел</div>
+          <div className="section-label mb-4 justify-center flex">◆ Почему именно АО КСИ</div>
           <h2 className="font-oswald text-3xl md:text-4xl font-semibold text-white leading-tight mb-8">
-            Почему<br /><span className="text-gradient-main">кооперативная система</span>
+            Почему эта компания —<br /><span className="text-gradient-main">оператор системы</span>
           </h2>
           <p className="font-ibm text-white/48 text-base leading-relaxed mb-5">
-            Классический девелопмент концентрирует риск, капитал и управление в ограниченном
-            числе точек. Десятки участников, сотни решений, тысячи документов — и при этом
-            критически мало инфраструктуры, которая собирает это в управляемую среду.
+            Кооперативная система не появляется сама. Чтобы она работала, нужен оператор —
+            субъект, который отвечает за архитектуру, стандарты, развитие и операционный контур.
+            АО КСИ занимает именно эту роль.
           </p>
           <p className="font-ibm text-white/35 text-base leading-relaxed mb-5">
-            АО КСИ создаётся для того, чтобы построить интеллектуальную систему кооперативного
-            девелопмента. Не заменить людей алгоритмами — а связать профессионалов, активы,
-            прикладные модули и интеллектуальный контур в новую архитектуру работы.
+            Компания создавалась не как сервис и не как продуктовая команда. Это
+            юридическое лицо с долгим горизонтом, профессиональным фокусом на девелопменте
+            и недвижимости и операторской ответственностью за систему.
           </p>
           <p className="font-ibm text-white/22 text-sm leading-relaxed">
-            Это долгий путь. Но каждый день работы — это шаг к системе,
-            которая однажды изменит способ работы с недвижимостью.
+            Без такого оператора любая кооперативная модель остаётся идеей.
+            С ним — она становится управляемой системой.
           </p>
         </div>
       </section>
