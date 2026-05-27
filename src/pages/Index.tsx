@@ -17,11 +17,11 @@ export default function Index() {
     <div className="min-h-screen bg-ksi-dark text-white">
       <NavBar />
       <HeroSection />
+      <NewLogicSection />
       <ValueTodaySection />
       <ModulesShowcaseSection />
       <HowWeWorkSection />
       <SpeedSection />
-      <NewLogicSection />
       <InternalContoursSection />
       <CryptometryTeaserSection />
       <PartnershipSection />

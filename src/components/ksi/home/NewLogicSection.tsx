@@ -44,18 +44,19 @@ export function NewLogicSection() {
       <div className="relative max-w-6xl mx-auto px-6">
         <div className="max-w-3xl mb-16">
           <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[#00d4ff]/45 mb-5">
-            ◆ Стратегическая рамка
+            ◆ Что это такое
           </p>
           <h2
             className="font-oswald text-white font-semibold leading-[1.05] mb-6"
             style={{ fontSize: "clamp(32px, 4vw, 56px)" }}
           >
-            Новая логика освоения<br />сложных активов
+            Интеллектуальная система<br />кооперативного девелопмента
           </h2>
           <p className="font-ibm text-white/45 text-base sm:text-lg leading-relaxed max-w-2xl">
-            Классический девелопмент требует высокой концентрации капитала, риска и управления в одной точке.
-            АО КСИ развивает интеллектуальную систему кооперативного девелопмента, в которой участие, компетенции,
-            спрос и интеллектуальные контуры могут быть собраны в новую модель коллективного освоения проектов.
+            Классический девелопмент требует концентрации капитала, риска и управления в одной точке.
+            АО КСИ собирает другую модель: участники, активы, прикладные модули, спрос и
+            интеллектуальные контуры работают вместе в одной управляемой среде —
+            интеллектуальной системе кооперативного девелопмента.
           </p>
         </div>
 
@@ -132,6 +133,36 @@ export function NewLogicSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* ИИ как управляющий контур */}
+        <div
+          className="relative mt-10 p-7 sm:p-9 rounded-sm flex flex-col md:flex-row md:items-center gap-5 md:gap-8"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(0,212,255,0.05) 0%, rgba(123,47,255,0.05) 100%)",
+            border: "1px solid rgba(0,212,255,0.22)",
+          }}
+        >
+          <div
+            className="flex items-center justify-center w-12 h-12 rounded-sm flex-shrink-0"
+            style={{
+              background: "rgba(0,212,255,0.1)",
+              border: "1px solid rgba(0,212,255,0.3)",
+            }}
+          >
+            <Icon name="BrainCircuit" size={20} className="text-[#00d4ff]" />
+          </div>
+          <div className="flex-1">
+            <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#00d4ff]/70 mb-2">
+              Роль ИИ внутри системы
+            </p>
+            <p className="font-ibm text-white/70 text-base leading-relaxed">
+              ИИ здесь — не отдельный сервис и не набор инструментов, а единый управляющий
+              контур: он связывает прикладные модули, обучается на реальных задачах и
+              поэтапно усиливает все элементы кооперативной системы.
+            </p>
+          </div>
         </div>
       </div>
     </section>
