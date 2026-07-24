@@ -16,7 +16,7 @@ export function NewFooter() {
               <span className="font-oswald text-white font-semibold tracking-wide">АО КСИ</span>
             </Link>
             <p className="font-ibm text-white/30 text-sm leading-relaxed">
-              Оператор интеллектуальной системы кооперативного девелопмента. Вход в контур —
+              Оператор интеллектуальной системы распределённого девелопмента. Вход в контур —
               для юридических лиц.
             </p>
           </div>
@@ -63,7 +63,7 @@ export function NewFooter() {
           <div>
             <div className="font-ibm text-white/20 text-xs tracking-[0.15em] uppercase mb-4">Начать</div>
             <p className="font-ibm text-white/35 text-sm mb-4 leading-relaxed">
-              Вход в кооперативную систему открыт. Только для юридических лиц.
+              Вход в контур АО КСИ открыт. Только для юридических лиц.
             </p>
             <Link to="/early-access" className="btn-primary-ksi inline-flex px-5 py-2.5 text-sm rounded-sm">
               Запросить вход

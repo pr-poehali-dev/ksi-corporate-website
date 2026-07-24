@@ -24,12 +24,12 @@ export default function CryptometryArchitecture() {
           <div className="section-label mb-4 justify-center flex">◆ Архитектура системы</div>
           <h2 className="font-oswald text-4xl md:text-5xl font-semibold text-white leading-tight mb-5">
             Как собирается<br />
-            <span className="text-gradient-main">кооперативная система</span>
+            <span className="text-gradient-main">распределённая система</span>
           </h2>
           <p className="font-ibm text-white/45 text-base md:text-lg leading-relaxed">
-            КриптоМетры — интеллектуальный и цифровой контур, через который участники, активы,
-            прикладные модули и ИИ-слой собираются в интеллектуальную систему кооперативного
-            девелопмента.
+            КриптоМетры — ключевой цифровой и интеллектуальный контур, через который участники,
+            активы, прикладные модули и ИИ-backend собираются в интеллектуальную систему
+            распределённого девелопмента.
           </p>
         </div>
 
@@ -123,8 +123,8 @@ export default function CryptometryArchitecture() {
                   </h3>
                   <p className="font-ibm text-white/55 text-sm md:text-base leading-relaxed max-w-xl">
                     Связывают участников, активы, прикладные модули и интеллектуальный слой в одну
-                    управляемую среду. ИИ внутри КриптоМетров — единый управляющий контур, который
-                    усиливает и координирует все элементы системы.
+                    управляемую среду. ИИ внутри КриптоМетров — интеллектуальный backend, который
+                    маршрутизирует задачи и связывает все элементы системы.
                   </p>
                 </div>
                 <div className="flex justify-center lg:justify-end">
@@ -191,7 +191,7 @@ export default function CryptometryArchitecture() {
               className="font-oswald text-white text-2xl md:text-3xl font-semibold tracking-wide leading-tight"
             >
               Интеллектуальная система<br />
-              <span className="text-gradient-main">кооперативного девелопмента</span>
+              <span className="text-gradient-main">распределённого девелопмента</span>
             </h3>
             <p className="font-ibm text-white/35 text-sm leading-relaxed mt-4 max-w-2xl mx-auto">
               Управляемая среда, в которой проекты, участники и интеллектуальные контуры работают

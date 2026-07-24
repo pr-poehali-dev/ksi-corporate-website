@@ -95,7 +95,7 @@ export function ProjectsSection() {
               Операционное ядро <span className="text-gradient-cyan">проекта</span>
             </h2>
             <p className="font-ibm text-white/45 text-base max-w-sm">
-              Единственный ключевой проект АО КСИ — интеллектуальная система кооперативного девелопмента
+              Единственный ключевой проект АО КСИ — интеллектуальная система распределённого девелопмента
             </p>
           </div>
         </div>

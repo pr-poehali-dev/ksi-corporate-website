@@ -32,10 +32,10 @@ export function InternalContoursSection() {
           </p>
           <h2 className="font-oswald text-white font-semibold leading-[1.05] mb-6"
             style={{ fontSize: "clamp(32px, 4vw, 56px)" }}>
-            Внутренние контуры<br />АО КСИ
+            Прикладные контуры<br />АО КСИ
           </h2>
           <p className="font-ibm text-white/45 text-base sm:text-lg leading-relaxed max-w-2xl">
-            Из этих внутренних контуров поэтапно собирается интеллектуальная система кооперативного девелопмента нового поколения.
+            Из этих прикладных контуров поэтапно собирается интеллектуальная система распределённого девелопмента.
           </p>
         </div>
 

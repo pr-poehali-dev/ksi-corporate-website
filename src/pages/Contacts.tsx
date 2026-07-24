@@ -107,7 +107,7 @@ export default function Contacts() {
             <span className="text-gradient-main">Это вход в систему.</span>
           </h1>
           <p className="font-ibm text-white/45 text-lg max-w-xl">
-            АО КСИ — оператор интеллектуальной системы кооперативного девелопмента.
+            АО КСИ — оператор интеллектуальной системы распределённого девелопмента.
             Опишите задачу, актив или сценарий участия — и команда предложит формат
             подключения к контуру.
           </p>
@@ -123,7 +123,7 @@ export default function Contacts() {
               {!sent ? (
                 <div className="border border-white/10 bg-white/[0.02] p-8 rounded-sm">
                   <div className="font-ibm text-white/20 text-xs tracking-[0.2em] uppercase mb-6">
-                    Форма входа в кооперативную систему
+                    Форма обращения в АО КСИ
                   </div>
 
                   {/* Роль */}
@@ -192,7 +192,7 @@ export default function Contacts() {
                       value={form.message}
                       onChange={e => setForm({ ...form, message: e.target.value })}
                       rows={4}
-                      placeholder="Опишите задачу, актив или формат участия в кооперативной системе. Чем конкретнее — тем предметнее наш ответ."
+                      placeholder="Опишите задачу, актив или формат участия. Чем конкретнее — тем предметнее наш ответ."
                       className="w-full bg-ksi-dark border border-ksi-border rounded-sm px-4 py-3 font-ibm text-white/80 text-sm placeholder-white/20 focus:outline-none focus:border-ksi-cyan/40 transition-colors resize-none"
                     />
                   </div>
@@ -272,7 +272,7 @@ export default function Contacts() {
                 <div className="space-y-4">
                   {[
                     { step: "01", text: "Запрос принимает оператор АО КСИ и сверяет контекст" },
-                    { step: "02", text: "Подключается нужный прикладной контур и управляющий ИИ-слой" },
+                    { step: "02", text: "Подключается нужный прикладной контур и интеллектуальный ИИ-backend" },
                     { step: "03", text: "Возвращаем формат входа: задача, актив или сценарий участия" },
                   ].map((s) => (
                     <div key={s.step} className="flex items-start gap-3">

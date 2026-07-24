@@ -56,7 +56,7 @@ export default function DirectionDetail({ slug }: Props) {
                   style={{ background: "rgba(0,212,255,0.7)", boxShadow: "0 0 6px rgba(0,212,255,0.5)" }}
                 />
                 <span className="font-mono-ibm text-[9.5px] tracking-[0.22em] uppercase text-white/40 group-hover:text-white/65 transition-colors">
-                  Контур кооперативной системы АО КСИ
+                  Контур системы АО КСИ
                 </span>
               </a>
               <div className="flex items-center gap-3 mb-5">

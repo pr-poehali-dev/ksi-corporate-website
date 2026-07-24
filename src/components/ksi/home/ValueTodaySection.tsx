@@ -4,7 +4,7 @@ const VALUES = [
   {
     icon: "Map",
     title: "Земля",
-    text: "Поиск, анализ и подготовка площадок под девелоперский сценарий внутри кооперативной модели.",
+    text: "Поиск, анализ и подготовка площадок под девелоперский сценарий внутри распределённой системы.",
   },
   {
     icon: "Building2",
@@ -19,7 +19,7 @@ const VALUES = [
   {
     icon: "BrainCircuit",
     title: "ИИ-контуры",
-    text: "Единый управляющий слой: нейронные модели и интеллектуальная логика связывают все элементы системы.",
+    text: "Интеллектуальный backend: модели структурируют запросы, маршрутизируют задачи и связывают все элементы системы.",
   },
 ];
 
@@ -29,7 +29,7 @@ export function ValueTodaySection() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="max-w-3xl mb-16">
           <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[#00d4ff]/45 mb-5">
-            ◆ Что уже работает внутри кооперативной системы
+            ◆ Что уже работает внутри системы
           </p>
           <h2 className="font-oswald text-white font-semibold leading-[1.05] mb-6"
             style={{ fontSize: "clamp(32px, 4vw, 56px)" }}>
@@ -37,7 +37,7 @@ export function ValueTodaySection() {
           </h2>
           <p className="font-ibm text-white/45 text-base sm:text-lg leading-relaxed max-w-2xl">
             АО КСИ уже сейчас развивает прикладные контуры, которые дают рынку реальный результат
-            и одновременно собираются в интеллектуальную систему кооперативного девелопмента нового поколения.
+            и одновременно собираются в интеллектуальную систему распределённого девелопмента.
           </p>
         </div>
 

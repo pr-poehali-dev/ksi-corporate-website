@@ -32,7 +32,7 @@ export default function ProjectDetail() {
           <div className="flex items-center gap-3 mb-4">
             <Icon name={project.icon as "Waves"} size={24} className="text-ksi-cyan/60" />
             <span className="font-ibm text-ksi-cyan/60 text-xs tracking-[0.2em] uppercase">
-              Узел кооперативной системы АО КСИ
+              Узел системы АО КСИ
             </span>
           </div>
 
@@ -85,7 +85,7 @@ export default function ProjectDetail() {
               </div>
 
               <h2 className="font-oswald text-2xl font-semibold text-white mb-4">
-                Что усилило кооперативную систему
+                Что усилило систему
               </h2>
               <div className="space-y-3 mb-10">
                 {project.lessons.map((lesson, idx) => (
@@ -101,7 +101,7 @@ export default function ProjectDetail() {
               {/* Смысловой блок */}
               <div className="border-l-2 border-ksi-cyan/30 pl-6 mb-10">
                 <p className="font-ibm text-white/45 text-base leading-relaxed italic">
-                  Этот проект — не предложение о продаже. Это узел кооперативной системы,
+                  Этот проект — не предложение о продаже. Это узел системы,
                   через который собираются данные, методология и интеллектуальный контур
                   для последующих задач.
                 </p>
@@ -116,7 +116,7 @@ export default function ProjectDetail() {
                     Передать похожий актив в контур
                   </h3>
                   <p className="font-ibm text-white/40 text-sm leading-relaxed mb-5">
-                    Если у вас схожий актив или сценарий — подключитесь к кооперативной системе
+                    Если у вас схожий актив или сценарий — подключитесь к контуру АО КСИ
                     через прикладной контур.
                   </p>
                   <Link to="/contacts" className="btn-primary-ksi block text-center py-3 text-sm rounded-sm">

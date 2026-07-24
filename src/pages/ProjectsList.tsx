@@ -16,13 +16,13 @@ export default function ProjectsList() {
             style={{ background: "radial-gradient(ellipse, #00d4ff 0%, transparent 70%)" }} />
         </div>
         <div className="max-w-5xl mx-auto px-6 relative z-10">
-          <div className="section-label mb-4">◆ Узлы кооперативной системы</div>
+          <div className="section-label mb-4">◆ Узлы системы</div>
           <h1 className="font-oswald text-5xl md:text-6xl font-semibold text-white mb-6 leading-tight">
             Проекты АО КСИ —<br /><span className="text-gradient-main">узлы системы,<br />не портфель</span>
           </h1>
           <p className="font-ibm text-white/45 text-lg max-w-2xl">
             Каждый проект — это актив, сценарий или задача, прошедшая через прикладные контуры
-            кооперативной системы. Через них собираются данные, методология и интеллектуальный
+            системы. Через них собираются данные, методология и интеллектуальный
             контур КриптоМетров.
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function ProjectsList() {
               Передать актив или проект в контур
             </h3>
             <p className="font-ibm text-white/40 text-sm mb-6 max-w-md mx-auto">
-              Ваш актив или проект может стать следующим узлом кооперативной системы
+              Ваш актив или проект может стать следующим узлом системы
               и пройти через её прикладные контуры.
             </p>
             <Link to="/contacts" className="btn-primary-ksi inline-flex px-8 py-3 text-sm rounded-sm">

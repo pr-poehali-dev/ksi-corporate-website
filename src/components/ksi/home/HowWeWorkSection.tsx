@@ -34,14 +34,14 @@ export function HowWeWorkSection() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="max-w-3xl mb-16">
           <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[#00d4ff]/45 mb-5">
-            ◆ Кооперативный интеллектуальный контур
+            ◆ Интеллектуальный контур системы
           </p>
           <h2 className="font-oswald text-white font-semibold leading-[1.05] mb-6"
             style={{ fontSize: "clamp(32px, 4vw, 56px)" }}>
             Как мы работаем<br />уже сегодня
           </h2>
           <p className="font-ibm text-white/45 text-base sm:text-lg leading-relaxed max-w-2xl">
-            На текущем этапе АО КСИ уже решает прикладные задачи через кооперативный интеллектуальный контур,
+            На текущем этапе АО КСИ уже решает прикладные задачи через интеллектуальный контур системы,
             в котором живые специалисты, нейронные модели и внутренние модули работают вместе.
           </p>
         </div>

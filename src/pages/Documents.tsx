@@ -13,7 +13,7 @@ export default function Documents() {
             </h1>
             <p className="font-ibm text-white/50 text-lg leading-relaxed">
               Документы, реквизиты и правовые оговорки оператора интеллектуальной системы
-              кооперативного девелопмента.
+              распределённого девелопмента.
             </p>
           </div>
         </div>
